@@ -3,7 +3,7 @@
 # indicate as parameter the DTN2 source dir
 # eg: ./compile.sh /home/user/dtn/DTN2/
 
-gcc -I$1 -I$1/DTN2/ -c src/*.c src/bp_implementations/*.c -ldtnapi 
+gcc -I$1 -I$1/applib/ -c src/*.c src/bp_implementations/*.c -ldtnapi 
 
 
 ar crs libbp_abstraction_layer.a *.o
