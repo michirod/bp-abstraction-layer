@@ -10,7 +10,7 @@
 
 static bp_implementation_t bp_implementation = BP_NONE;
 
-bp_implementation_t bp_find_implementation()
+bp_implementation_t bp_get_implementation()
 {
 	if (bp_implementation == BP_NONE)
 	{
@@ -29,7 +29,7 @@ bp_error_t bp_open(bp_handle_t* handle)
 	if (handle == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_find_implementation())
+	switch (bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_open(handle);
@@ -47,7 +47,7 @@ bp_error_t bp_open_with_ip(char *daemon_api_IP,int daemon_api_port,bp_handle_t* 
 	if (handle == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_find_implementation())
+	switch (bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_open_with_IP(daemon_api_IP, daemon_api_port, handle);
@@ -62,7 +62,7 @@ bp_error_t bp_open_with_ip(char *daemon_api_IP,int daemon_api_port,bp_handle_t* 
 
 bp_error_t bp_errno(bp_handle_t handle)
 {
-	switch (bp_find_implementation())
+	switch (bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_errno(handle);
@@ -83,7 +83,7 @@ bp_error_t bp_build_local_eid(bp_handle_t handle,
 	if (local_eid == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_find_implementation())
+	switch (bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_build_local_eid(handle, local_eid, service_tag);
@@ -106,7 +106,7 @@ bp_error_t bp_register(bp_handle_t handle,
 	if (newregid == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_find_implementation())
+	switch (bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_register(handle, reginfo, newregid);
@@ -132,7 +132,7 @@ bp_error_t bp_send(bp_handle_t handle,
 	if (id == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_find_implementation())
+	switch (bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_send(handle, regid, spec, payload, id);
@@ -156,7 +156,7 @@ bp_error_t bp_recv(bp_handle_t handle,
 	if (payload == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_find_implementation())
+	switch (bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_recv(handle, spec, location, payload, timeout);
@@ -171,7 +171,7 @@ bp_error_t bp_recv(bp_handle_t handle,
 
 bp_error_t bp_close(bp_handle_t handle)
 {
-	switch (bp_find_implementation())
+	switch (bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_close(handle);
@@ -189,7 +189,7 @@ bp_error_t bp_parse_eid_string(bp_endpoint_id_t* eid, const char* str)
 	if (eid == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_find_implementation())
+	switch (bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_parse_eid_string(eid, str);
@@ -204,7 +204,7 @@ bp_error_t bp_parse_eid_string(bp_endpoint_id_t* eid, const char* str)
 
 void bp_copy_eid(bp_endpoint_id_t* dst, bp_endpoint_id_t* src)
 {
-	switch (bp_find_implementation())
+	switch (bp_get_implementation())
 	{
 	case BP_DTN:
 		bp_dtn_copy_eid(dst, src);
@@ -226,7 +226,7 @@ bp_error_t bp_set_payload(bp_bundle_payload_t* payload,
 	if (payload == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_find_implementation())
+	switch (bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_set_payload(payload, location, val, len);
@@ -241,7 +241,7 @@ bp_error_t bp_set_payload(bp_bundle_payload_t* payload,
 
 void bp_free_payload(bp_bundle_payload_t* payload)
 {
-	switch (bp_find_implementation())
+	switch (bp_get_implementation())
 	{
 	case BP_DTN:
 		bp_dtn_free_payload(payload);

@@ -12,7 +12,7 @@
 /**
  * Find the underlying implementation of bundle protocol
  */
-bp_implementation_t bp_find_implementation();
+bp_implementation_t bp_get_implementation();
 
 /**
  * Open a new connection to the router.
