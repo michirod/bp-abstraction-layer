@@ -4,6 +4,7 @@
  */
 #include "bp_dtn_conversions.h"
 
+
 dtn_handle_t bp_dtn_handle(bp_handle_t handle)
 {
 	return (dtn_handle_t) handle;
@@ -72,6 +73,7 @@ bp_reg_id_t dtn_bp_reg_id(dtn_reg_id_t reg_id)
 dtn_reg_info_t bp_dtn_reg_info(bp_reg_info_t reg_info)
 {
 	dtn_reg_info_t dtn_reginfo;
+	memset(&dtn_reginfo, 0, sizeof(dtn_reg_info_t));
 	dtn_reginfo.endpoint = bp_dtn_endpoint_id(reg_info.endpoint);
 	dtn_reginfo.regid = bp_dtn_reg_id(reg_info.regid);
 	dtn_reginfo.flags = reg_info.flags;
@@ -94,6 +96,7 @@ dtn_reg_info_t bp_dtn_reg_info(bp_reg_info_t reg_info)
 bp_reg_info_t dtn_bp_reg_info(dtn_reg_info_t reg_info)
 {
 	bp_reg_info_t bp_reginfo;
+	memset(&bp_reginfo, 0, sizeof(bp_reg_info_t));
 	bp_reginfo.endpoint = dtn_bp_endpoint_id(reg_info.endpoint);
 	bp_reginfo.regid = dtn_bp_reg_id(reg_info.regid);
 	bp_reginfo.flags = reg_info.flags;
@@ -145,6 +148,7 @@ bp_bundle_priority_t dtn_bp_bundle_priority(dtn_bundle_priority_t bundle_priorit
 dtn_bundle_spec_t bp_dtn_bundle_spec(bp_bundle_spec_t bundle_spec)
 {
 	dtn_bundle_spec_t dtn_bundle_spec;
+	memset(&dtn_bundle_spec, 0, sizeof(dtn_bundle_spec));
 	dtn_bundle_spec.source = bp_dtn_endpoint_id(bundle_spec.source);
 	dtn_bundle_spec.dest = bp_dtn_endpoint_id(bundle_spec.dest);
 	dtn_bundle_spec.replyto = bp_dtn_endpoint_id(bundle_spec.replyto);
@@ -158,6 +162,7 @@ dtn_bundle_spec_t bp_dtn_bundle_spec(bp_bundle_spec_t bundle_spec)
 bp_bundle_spec_t dtn_bp_bundle_spec(dtn_bundle_spec_t bundle_spec)
 {
 	bp_bundle_spec_t bp_bundle_spec;
+	memset(&bp_bundle_spec, 0, sizeof(bp_bundle_spec));
 	bp_bundle_spec.source = dtn_bp_endpoint_id(bundle_spec.source);
 	bp_bundle_spec.dest = dtn_bp_endpoint_id(bundle_spec.dest);
 	bp_bundle_spec.replyto = dtn_bp_endpoint_id(bundle_spec.replyto);
@@ -218,6 +223,7 @@ bp_bundle_id_t dtn_bp_bundle_id(dtn_bundle_id_t bundle_id)
 dtn_bundle_status_report_t bp_dtn_bundle_status_report(bp_bundle_status_report_t bundle_status_report)
 {
 	dtn_bundle_status_report_t dtn_bundle_status_report;
+	memset(&dtn_bundle_status_report, 0, sizeof(dtn_bundle_status_report_t));
 	dtn_bundle_status_report.bundle_id = bp_dtn_bundle_id(bundle_status_report.bundle_id);
 	dtn_bundle_status_report.reason = bp_dtn_status_report_reason(bundle_status_report.reason);
 	dtn_bundle_status_report.flags = bp_dtn_status_report_flags(bundle_status_report.flags);
@@ -232,6 +238,7 @@ dtn_bundle_status_report_t bp_dtn_bundle_status_report(bp_bundle_status_report_t
 bp_bundle_status_report_t dtn_bp_bundle_status_report(dtn_bundle_status_report_t bundle_status_report)
 {
 	bp_bundle_status_report_t bp_bundle_status_report;
+	memset(&bp_bundle_status_report, 0, sizeof(bp_bundle_status_report_t));
 	bp_bundle_status_report.bundle_id = dtn_bp_bundle_id(bundle_status_report.bundle_id);
 	bp_bundle_status_report.reason = dtn_bp_status_report_reason(bundle_status_report.reason);
 	bp_bundle_status_report.flags = dtn_bp_status_report_flags(bundle_status_report.flags);
@@ -286,9 +293,10 @@ bp_bundle_payload_t dtn_bp_bundle_payload(dtn_bundle_payload_t bundle_payload)
 	memset(&bp_bundle_payload, 0, sizeof(bp_bundle_payload));
 	bp_bundle_payload.location = dtn_bp_bundle_payload_location(bundle_payload.location);
 	bp_bundle_payload.filename.filename_len = bundle_payload.filename.filename_len;
-	if (bundle_payload.filename.filename_len == 0)
+	if (bundle_payload.filename.filename_len == 0 || bundle_payload.filename.filename_val == NULL)
 	{
 		bp_bundle_payload.filename.filename_val = NULL;
+		bp_bundle_payload.filename.filename_len = 0;
 	}
 	else
 	{
@@ -296,8 +304,9 @@ bp_bundle_payload_t dtn_bp_bundle_payload(dtn_bundle_payload_t bundle_payload)
 		strncpy(bp_bundle_payload.filename.filename_val, bundle_payload.filename.filename_val, bundle_payload.filename.filename_len + 1);
 	}
 	bp_bundle_payload.buf.buf_len = bundle_payload.buf.buf_len;
-	if (bundle_payload.buf.buf_len == 0)
+	if (bundle_payload.buf.buf_len == 0 || bundle_payload.buf.buf_val == NULL)
 	{
+		bp_bundle_payload.buf.buf_len = 0;
 		bp_bundle_payload.buf.buf_val = NULL;
 	}
 	else

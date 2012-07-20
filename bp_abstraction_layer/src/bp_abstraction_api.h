@@ -165,12 +165,12 @@ bp_error_t bp_bundle_free(bp_bundle_object_t * bundle_object);
 /**
  * Get bundle id
  */
-bp_error_t bp_bundle_get_id(bp_bundle_object_t bundle_object, bp_bundle_id_t * bundle_id);
+bp_error_t bp_bundle_get_id(bp_bundle_object_t bundle_object, bp_bundle_id_t ** bundle_id);
 
 /**
  * Get Bundle payload location
  */
-bp_error_t bp_bundle_get_payload_location(bp_bundle_object_t bundle_object, bp_bundle_payload_location_t location);
+bp_error_t bp_bundle_get_payload_location(bp_bundle_object_t bundle_object, bp_bundle_payload_location_t * location);
 
 /**
  * Get payload size
@@ -186,7 +186,7 @@ bp_error_t bp_bundle_get_payload_file(bp_bundle_object_t bundle_object, char_t *
 /**
  * Get pointer of payload buffer
  */
-bp_error_t bp_bundle_get_payload_mem(bp_bundle_object_t bundle_object, char * buf, u32_t * buf_len);
+bp_error_t bp_bundle_get_payload_mem(bp_bundle_object_t bundle_object, char ** buf, u32_t * buf_len);
 
 /**
  * Set payload from a file

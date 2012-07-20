@@ -304,6 +304,7 @@ bp_error_t bp_bundle_send(bp_handle_t handle,
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
+	memset(bundle_object->id, 0, sizeof(bp_bundle_id_t));
 	return bp_send(handle, regid, bundle_object->spec, bundle_object->payload, bundle_object->id);
 }
 
@@ -312,6 +313,8 @@ bp_error_t bp_bundle_receive(bp_handle_t handle,
 		bp_bundle_payload_location_t payload_location,
 		bp_timeval_t timeout)
 {
+	bp_free_payload(bundle_object.payload);
+	memset(bundle_object.spec, 0, sizeof(bp_bundle_spec_t));
 	return bp_recv(handle, bundle_object.spec, payload_location, bundle_object.payload, timeout);
 }
 
@@ -338,20 +341,20 @@ bp_error_t bp_bundle_free(bp_bundle_object_t * bundle_object)
 	return BP_SUCCESS;
 }
 
-bp_error_t bp_bundle_get_id(bp_bundle_object_t bundle_object, bp_bundle_id_t * bundle_id)
+bp_error_t bp_bundle_get_id(bp_bundle_object_t bundle_object, bp_bundle_id_t ** bundle_id)
 {
 	if (bundle_object.id == NULL)
 		return BP_ENULLPNTR;
-	bundle_id = bundle_object.id;
+	*bundle_id = bundle_object.id;
 	return BP_SUCCESS;
 }
 
-bp_error_t bp_bundle_get_payload_location(bp_bundle_object_t bundle_object, bp_bundle_payload_location_t location)
+bp_error_t bp_bundle_get_payload_location(bp_bundle_object_t bundle_object, bp_bundle_payload_location_t * location)
 {
 	if (bundle_object.payload == NULL)
 		return BP_ENULLPNTR;
 
-	location = bundle_object.payload->location;
+	* location = bundle_object.payload->location;
 
 	return BP_SUCCESS;
 }
@@ -412,13 +415,13 @@ bp_error_t bp_bundle_get_payload_file(bp_bundle_object_t bundle_object, char_t *
 		return BP_EINVAL;
 }
 
-bp_error_t bp_bundle_get_payload_mem(bp_bundle_object_t bundle_object, char * buf, u32_t * buf_len)
+bp_error_t bp_bundle_get_payload_mem(bp_bundle_object_t bundle_object, char ** buf, u32_t * buf_len)
 {
 	if (bundle_object.payload->location == BP_PAYLOAD_MEM)
 	{
 		if (bundle_object.payload->buf.buf_val != NULL)
 		{
-			buf = bundle_object.payload->buf.buf_val;
+			*buf = bundle_object.payload->buf.buf_val;
 			*buf_len = bundle_object.payload->buf.buf_len;
 			return BP_SUCCESS;
 		}

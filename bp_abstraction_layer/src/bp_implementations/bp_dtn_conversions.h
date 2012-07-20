@@ -7,8 +7,8 @@
 
 #ifndef BP_DTN_CONVERSIONS_H_
 #define BP_DTN_CONVERSIONS_H_
-#include <dtn_api.h>
 #include <dtn_types.h>
+#include <dtn_api.h>
 
 #include "../bp_types.h"
 
