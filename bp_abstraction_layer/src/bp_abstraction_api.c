@@ -463,8 +463,6 @@ bp_error_t bp_bundle_set_payload_mem(bp_bundle_object_t * bundle_object, char * 
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
-	if (buf == NULL )
-		return BP_ENULLPNTR;
 	if (buf_len < 0)
 		return BP_EINVAL;
 
