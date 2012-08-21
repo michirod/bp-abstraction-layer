@@ -14,8 +14,8 @@ bp_implementation_t bp_get_implementation()
 {
 	if (bp_implementation == BP_NONE)
 	{
-		char* find_dtnd = "ps ax | grep dtnd | grep -v grep";
-		char* find_ion = "ps ax | grep ion | grep -v grep";
+		char* find_dtnd = "ps ax | grep -w dtnd | grep -v grep";
+		char* find_ion = "ps ax | grep -w ion | grep -v grep";
 		if (system(find_dtnd) == 0)
 			bp_implementation = BP_DTN;
 		else if (system(find_ion) == 0)
