@@ -58,6 +58,15 @@ bp_error_t bp_register(bp_handle_t handle,
                         bp_reg_id_t* newregid);
 
 /**
+ * Check for an existing registration on the given endpoint id,
+ * returning BP_SUCCSS and filling in the registration id if it
+ * exists, or returning ENOENT if it doesn't.
+ */
+bp_error_t bp_find_registration(bp_handle_t handle,
+		bp_endpoint_id_t * eid,
+		bp_reg_id_t * newregid);
+
+/**
  * Send a bundle either from memory or from a file.
  */
 bp_error_t bp_send(bp_handle_t handle,

@@ -32,6 +32,10 @@ bp_error_t bp_dtn_register(bp_handle_t handle,
                         bp_reg_info_t* reginfo,
                         bp_reg_id_t* newregid);
 
+bp_error_t bp_dtn_find_registration(bp_handle_t handle,
+						bp_endpoint_id_t * eid,
+						bp_reg_id_t * newregid);
+
 bp_error_t bp_dtn_send(bp_handle_t handle,
                     bp_reg_id_t regid,
                     bp_bundle_spec_t* spec,

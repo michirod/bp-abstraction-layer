@@ -119,6 +119,26 @@ bp_error_t bp_register(bp_handle_t handle,
 	}
 }
 
+bp_error_t bp_find_registration(bp_handle_t handle,
+		bp_endpoint_id_t * eid,
+		bp_reg_id_t * newregid)
+{
+	if (eid == NULL)
+		return BP_ENULLPNTR;
+
+	switch (bp_get_implementation())
+		{
+		case BP_DTN:
+			return bp_dtn_find_registration(handle, eid, newregid);
+
+		case BP_ION:
+			return bp_ion_find_registration(handle, eid, newregid);
+
+		default: // cannot find bundle protocol implementation
+			return BP_ENOBPI;
+		}
+}
+
 bp_error_t bp_send(bp_handle_t handle,
 		bp_reg_id_t regid,
 		bp_bundle_spec_t* spec,

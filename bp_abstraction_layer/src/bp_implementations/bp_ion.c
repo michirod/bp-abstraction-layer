@@ -37,6 +37,13 @@ bp_error_t bp_ion_register(bp_handle_t handle,
 	return BP_ENOTIMPL;
 }
 
+bp_error_t bp_ion_find_registration(bp_handle_t handle,
+						bp_endpoint_id_t * eid,
+						bp_reg_id_t * newregid)
+{
+	return BP_ENOTIMPL;
+}
+
 bp_error_t bp_ion_send(bp_handle_t handle,
                     bp_reg_id_t regid,
                     bp_bundle_spec_t* spec,

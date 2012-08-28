@@ -58,6 +58,20 @@ bp_error_t bp_dtn_register(bp_handle_t handle,
 	return bp_dtn_error(result);
 }
 
+bp_error_t bp_dtn_find_registration(bp_handle_t handle,
+						bp_endpoint_id_t * eid,
+						bp_reg_id_t * newregid)
+{
+	dtn_handle_t dtn_handle = bp_dtn_handle(handle);
+	dtn_endpoint_id_t dtn_eid = bp_dtn_endpoint_id(*eid);
+	dtn_reg_id_t dtn_newregid = bp_dtn_reg_id(*newregid);
+	int result = dtn_find_registration(dtn_handle, & dtn_eid, & dtn_newregid);
+	handle = dtn_bp_handle(dtn_handle);
+	* eid = dtn_bp_endpoint_id(dtn_eid);
+	*newregid = dtn_bp_reg_id(dtn_newregid);
+	return bp_dtn_error(result);
+}
+
 bp_error_t bp_dtn_send(bp_handle_t handle,
                     bp_reg_id_t regid,
                     bp_bundle_spec_t* spec,
