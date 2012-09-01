@@ -239,6 +239,21 @@ void bp_copy_eid(bp_endpoint_id_t* dst, bp_endpoint_id_t* src)
 	}
 }
 
+bp_error_t bp_get_none_endpoint(bp_endpoint_id_t * eid_none)
+{
+	switch (bp_get_implementation())
+	{
+	case BP_DTN:
+		return bp_dtn_parse_eid_string(eid_none, "dtn:none");
+
+	case BP_ION:
+		return bp_ion_parse_eid_string(eid_none, "dtn:none");
+
+	default: // cannot find bundle protocol implementation
+		return BP_ENOBPI;
+	}
+}
+
 bp_error_t bp_set_payload(bp_bundle_payload_t* payload,
 		bp_bundle_payload_location_t location,
 		char* val, int len)
@@ -261,6 +276,7 @@ bp_error_t bp_set_payload(bp_bundle_payload_t* payload,
 
 void bp_free_payload(bp_bundle_payload_t* payload)
 {
+	payload->status_report = NULL;
 	switch (bp_get_implementation())
 	{
 	case BP_DTN:
@@ -376,6 +392,17 @@ bp_error_t bp_bundle_get_payload_location(bp_bundle_object_t bundle_object, bp_b
 
 	* location = bundle_object.payload->location;
 
+	return BP_SUCCESS;
+}
+
+bp_error_t bp_bundle_set_payload_location(bp_bundle_object_t * bundle_object, bp_bundle_payload_location_t location)
+{
+	if (bundle_object == NULL)
+		return BP_ENULLPNTR;
+	if (bundle_object->payload == NULL)
+		return BP_ENULLPNTR;
+
+	bundle_object->payload->location = location;
 	return BP_SUCCESS;
 }
 
@@ -629,6 +656,12 @@ bp_error_t bp_bundle_set_delivery_opts(bp_bundle_object_t * bundle_object, bp_bu
 	if(bundle_object->spec == NULL)
 		return BP_ENULLPNTR;
 	bundle_object->spec->dopts = dopts;
+	return BP_SUCCESS;
+}
+
+bp_error_t bp_bundle_get_status_report(bp_bundle_object_t bundle_object, bp_bundle_status_report_t ** status_report)
+{
+	*status_report = bundle_object.payload->status_report;
 	return BP_SUCCESS;
 }
 

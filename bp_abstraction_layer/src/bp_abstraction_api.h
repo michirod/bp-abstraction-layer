@@ -118,6 +118,11 @@ void bp_copy_eid(bp_endpoint_id_t* dst, bp_endpoint_id_t* src);
 bp_error_t bp_parse_eid_string(bp_endpoint_id_t* eid, const char* str);
 
 /**
+ * Returns the null endpoint
+ */
+bp_error_t bp_get_none_endpoint(bp_endpoint_id_t * eid_none);
+
+/**
  * Sets the value of the given payload structure to either a memory
  * buffer or a file location.
  *
@@ -179,6 +184,12 @@ bp_error_t bp_bundle_get_id(bp_bundle_object_t bundle_object, bp_bundle_id_t ** 
 /**
  * Get Bundle payload location
  */
+
+bp_error_t bp_bundle_set_payload_location(bp_bundle_object_t * bundle_object, bp_bundle_payload_location_t location);
+/**
+ * Get Bundle payload location
+ */
+
 bp_error_t bp_bundle_get_payload_location(bp_bundle_object_t bundle_object, bp_bundle_payload_location_t * location);
 
 /**
@@ -274,5 +285,13 @@ bp_error_t bp_bundle_get_delivery_opts(bp_bundle_object_t bundle_object, bp_bund
  */
 bp_error_t bp_bundle_set_delivery_opts(bp_bundle_object_t * bundle_object, bp_bundle_delivery_opts_t dopts);
 
+/**
+ * Get status report.
+ * If bundle_object is a status report, status_report is filled with a pointer to the status report structure
+ * Otherwise status_report is set to NULL.
+ * Returns BP_SUCCESS.
+ * Returns BP_EINTERNAL if the bundle is malformed
+ */
+bp_error_t bp_bundle_get_status_report(bp_bundle_object_t bundle_object, bp_bundle_status_report_t ** status_report);
 
 #endif /* BP_ABSTRACTION_API_H_ */
