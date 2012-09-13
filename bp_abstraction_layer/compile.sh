@@ -12,3 +12,5 @@ gcc -I$1 -I$1/applib/ -c src/*.c src/bp_implementations/*.c -ldtnapi
 
 ar crs libbp_abstraction_layer.a *.o
 
+rm *.o
+
