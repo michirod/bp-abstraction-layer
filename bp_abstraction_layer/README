@@ -1,0 +1,92 @@
+bp_abstraction_layer README file
+created on 20/10/2012
+last modified on 20/10/2012
+
+                        ************************
+                        * bp_abstraction_layer *
+                        *                      *
+                        *         infos        *
+                        ************************
+                        
+The library bp_abstraction_layer was created to provide a middle layer 
+between the Bundle Protocol implementation and the application.
+It was created to permit the dtnperf_3 application to run in the same 
+way on DTN2 an on ION, but I think that it can be useful to every application
+that want to run indipendently of the running BP implementation.
+
+The library at runtime gets the BP implementation running on the node and
+it interfaces with the BP calling the right API.
+
+Actually it was implemented only the DTN2 support, but the ION support should
+be implemented in the next few months.
+
+
+         ---------------        COMPILE         ---------------
+         
+To compile the library it is provided a script file compile.sh
+To compile it is necessary to tell the compiler where are the headers of
+the DTN2 or ION code, or both.
+
+---- Compile with DTN2 support
+
+Simply do the following command:
+
+$ sh compile.sh DTN2 /path/to/DTN2/headers/
+
+The first argument tells the script that you are compiling for DTN2 support.
+The second argument tells the compiler where to find the DTN2 headers.
+In the most cases header of DTN2 are in the source directory of DTN2.
+
+Make sure to do
+
+$./configure
+
+in the DTN2 source code directory and in the oasys one to generate the headers.
+
+If the compiler throws errors regarding the file "oasys-config.h", make a
+symbolic link to the file oasys-src/oasys-config.h in the dir DTN2-src/oasys/
+
+Example:
+$ ls 
+	oasys-src DTN2-src
+	
+$ cd oasys-src
+
+$ ./configure
+
+$ cd ../DTN2-src
+
+$ ./configure
+
+$ cd oasys
+
+$ ln -s ../../oasys-src/oasys-config.h
+
+
+-------- Compile with ION support
+
+TO BE DEFINED
+
+-------- Compile with both DTN2 and ION support
+
+TO BE DEFINED
+
+
+
+         ---------------         INSTALL        ---------------
+
+To install the library in the system simply do the following command with 
+root privileges:
+
+# install libbp_abstraction_layer.so -m 644 /usr/lib/
+
+or / and
+
+# install libbp_abstraction_layer.a -m 644 /usr/lib/
+
+
+
+If you found bugs or any issue contact me at michirod@gmail.com
+Thank you :)
+
+Michele Rodolfi

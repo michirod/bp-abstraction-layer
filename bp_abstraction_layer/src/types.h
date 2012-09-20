@@ -40,8 +40,6 @@ typedef unsigned char u8_t;
 
 typedef unsigned short u16_t;
 
-typedef unsigned int uint_t;
-
 typedef unsigned long long u64_t;
 
 typedef signed short s16_t;
