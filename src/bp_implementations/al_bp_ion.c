@@ -208,8 +208,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	BpExtendedCOS extendedCOS = { 0, 0, 0 };
 
 	/* Set option bundle */
-	if(strcmp(spec->replyto.uri,"dtn:none") != 0 && spec->replyto.uri != NULL)
-		reportEid = al_ion_endpoint_id(spec->replyto);
+	reportEid = al_ion_endpoint_id(spec->replyto);
 	lifespan = (int) spec->expiration;
 	classOfService;
 	custodySwitch = NoCustodyRequested;
@@ -233,10 +232,11 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	classOfService = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
 	if(classOfService == 0)
 		return BP_EINVAL;
-
+	printf("destEid: %s - reportEid: %s\n",destEid,reportEid);
 	/* Send Bundle*/
 	result = bp_send(bpSap,BP_NONBLOCKING,destEid,reportEid,lifespan,classOfService,
 			custodySwitch,srrFlags,ackRequested,&extendedCOS,adu,&newBundleObj);
+
 	if(result == 0)
 		return BP_ENOSPACE;
 	if(result == -1)
@@ -244,7 +244,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	//Free resource
 	free(destEid);
 	free(reportEid);
-
+	printf("\tEndsend\n");
 	return BP_SUCCESS;
 }
 
@@ -266,9 +266,12 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 		return BP_ETIMEOUT;
 	if(dlv.result == BpReceptionInterrupted)
 		return BP_ERECVINT;
+	//Set Bundle
 	spec->creation_ts = ion_al_timestamp(dlv.bundleCreationTime);
 	spec->source = ion_al_endpoint_id(dlv.bundleSourceEid);
-	// Set Bundle
+	char * tmp = "dtn:none";
+	spec->replyto = ion_al_endpoint_id(tmp);
+	// Payload
 	Sdr bpSdr = bp_get_sdr();
 	Payload ion_payload;
 	ion_payload.content = dlv.adu;
@@ -278,7 +281,6 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	sprintf(filename,"./dtnperf_payload_%s_%lu",dlv.bundleSourceEid,dlv.bundleCreationTime.seconds);
 	(*payload)  = ion_al_bundle_payload(ion_payload,location,filename);
 	free(filename);
-
 	// Status Report
 	BpStatusRpt statusRpt;
 	BpCtSignal ctSignal;
