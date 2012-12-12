@@ -156,7 +156,8 @@ al_bp_status_report_reason_t ion_al_status_report_reason(BpSrReason status_repor
 	return (al_bp_status_report_reason_t) status_report_reason;
 }
 
-BpStatusRpt al_ion_bundle_status_report(al_bp_bundle_status_report_t bundle_status_report){
+BpStatusRpt al_ion_bundle_status_report(al_bp_bundle_status_report_t bundle_status_report)
+{
 	BpStatusRpt ion_statusRpt;
 	memset(&ion_statusRpt,0,sizeof(BpStatusRpt));
 	ion_statusRpt.acceptanceTime = al_ion_timeval(bundle_status_report.ack_by_app_ts.secs);
@@ -174,7 +175,8 @@ BpStatusRpt al_ion_bundle_status_report(al_bp_bundle_status_report_t bundle_stat
 	ion_statusRpt.sourceEid = al_ion_endpoint_id(bundle_status_report.bundle_id.source);
 	return ion_statusRpt;
 }
-al_bp_bundle_status_report_t ion_al_bundle_status_report(BpStatusRpt bundle_status_report){
+al_bp_bundle_status_report_t ion_al_bundle_status_report(BpStatusRpt bundle_status_report)
+{
 	al_bp_bundle_status_report_t bp_statusRpt;
 	memset(&bp_statusRpt,0,sizeof(al_bp_bundle_status_report_t));
 	bp_statusRpt.custody_ts.secs = ion_al_timeval(bundle_status_report.acceptanceTime);
@@ -195,14 +197,17 @@ al_bp_bundle_status_report_t ion_al_bundle_status_report(BpStatusRpt bundle_stat
  * The name of the catalog is the buffer's valor, if is in the memory
  * if the payload is in a file, there isn't any cataloging
  */
-Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload){
+Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
+{
 	Payload payload;
 	memset(&payload,0,sizeof(Payload));
 	Sdr bpSdr = bp_get_sdr();
 	sdr_begin_xn(bpSdr);
-	if(bundle_payload.location == BP_PAYLOAD_MEM){
+	if(bundle_payload.location == BP_PAYLOAD_MEM)
+	{
 		Object	buff = sdr_find(bpSdr, bundle_payload.buf.buf_val, NULL);
-		if(buff == 0) {
+		if(buff == 0)
+		{
 			buff = sdr_malloc(bpSdr, bundle_payload.buf.buf_len);
 			sdr_write(bpSdr, buff, bundle_payload.buf.buf_val, bundle_payload.buf.buf_len);
 			char * nameCat = (char *) malloc(sizeof(char)*MAX_SDR_NAME);
@@ -215,7 +220,8 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload){
 		payload.content = zco_create(bpSdr, ZcoSdrSource, buff, 0, bundle_payload.buf.buf_len);
 		payload.length = zco_length(bpSdr,payload.content);
 	}
-	else {
+	else
+	{
 		u32_t dimFile = 0;
 		struct stat st;
 		memset(&st, 0, sizeof(st));
@@ -232,25 +238,26 @@ al_bp_bundle_payload_t ion_al_bundle_payload(Payload bundle_payload,
 								al_bp_bundle_payload_location_t location,char * filename){
 	al_bp_bundle_payload_t payload;
 	memset(&payload,0,sizeof(al_bp_bundle_payload_t));
-	char *buffer;
+	char *buffer = (char*) malloc(sizeof(char) * bundle_payload.length);
 	ZcoReader zcoReader;
 	memset(&zcoReader,0,sizeof(ZcoReader));
 	Sdr bpSdr = bp_get_sdr();
 	sdr_begin_xn(bpSdr);
 	Object cloneZco = zco_clone(bpSdr,bundle_payload.content,0,bundle_payload.length);
 	zcoReader.zco = cloneZco;
-	buffer =(char*) malloc(sizeof(char) * bundle_payload.length);
 	zco_start_receiving(bundle_payload.content,&zcoReader);
 	zco_receive_source(bpSdr,&zcoReader,bundle_payload.length,buffer);
 	zco_destroy(bpSdr,cloneZco);
 	sdr_end_xn(bpSdr);
 	payload.location = location;
-	if(location == BP_PAYLOAD_MEM){
+	if(location == BP_PAYLOAD_MEM)
+	{
 		payload.buf.buf_len = bundle_payload.length;
 		payload.buf.buf_val = (char *)malloc(sizeof(char)*bundle_payload.length);
 		memcpy(payload.buf.buf_val,buffer,bundle_payload.length);
 	}
-	else {
+	else
+	{
 		int fd = open(filename,O_CREAT|O_WRONLY);
 		write(fd,buffer,bundle_payload.length);
 		close(fd);

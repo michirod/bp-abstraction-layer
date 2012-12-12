@@ -407,20 +407,14 @@ al_bp_error_t al_bp_bundle_receive(al_bp_handle_t handle,
 
 al_bp_error_t al_bp_bundle_create(al_bp_bundle_object_t * bundle_object)
 {
-	printf("Io ci sono\n");
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
-	printf("Non è null punt\n");
 	bundle_object->id = (al_bp_bundle_id_t*) malloc(sizeof(al_bp_bundle_id_t));
-	printf("malloc id ok\n");
 	bundle_object->spec = (al_bp_bundle_spec_t*) malloc(sizeof(al_bp_bundle_spec_t));
-	printf("malloc id spec\n");
 	bundle_object->payload = (al_bp_bundle_payload_t*) malloc(sizeof(al_bp_bundle_payload_t));
-	printf("malloc id payload\n");
 	memset(bundle_object->id, 0, sizeof(al_bp_bundle_id_t));
 	memset(bundle_object->spec, 0, sizeof(al_bp_bundle_spec_t));
 	memset(bundle_object->payload, 0, sizeof(al_bp_bundle_payload_t));
-	printf("memset ok\n");
 	return BP_SUCCESS;
 }
 al_bp_error_t al_bp_bundle_free(al_bp_bundle_object_t * bundle_object)

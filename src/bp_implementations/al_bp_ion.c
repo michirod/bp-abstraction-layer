@@ -23,7 +23,9 @@ al_bp_error_t bp_ion_attach(){
 	int result;
 	result = bp_attach();
 	if(result == -1)
+	{
 		return BP_EATTACH;
+	}
 	return BP_SUCCESS;
 }
 
@@ -49,10 +51,13 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 	PsmAddress psmAddress;
 	eidString = (char *)malloc(sizeof(char)*AL_BP_MAX_ENDPOINT_ID);
 /*Client*/
-	if(strcmp(type,"Client") == 0){
-		if(strncmp(eid_destination,CBHESCHEMENAME,3) == 0){
+	if(strcmp(type,"Client") == 0)
+	{
+		if(strncmp(eid_destination,CBHESCHEMENAME,3) == 0)
+		{
 			findScheme(CBHESCHEMENAME,&scheme,&psmAddress);
-			if(psmAddress == 0){
+			if(psmAddress == 0)
+			{
 				/*Unknow scheme*/
 				result = addScheme(CBHESCHEMENAME,"ipnfw","ipnadmin");
 				if(result == 0)
@@ -62,9 +67,11 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 						CBHESCHEMENAME,getOwnNodeNbr(),getpid());
 			(*local_eid) = ion_al_endpoint_id(eidString);
 		}
-		else {
+		else
+		{
 			findScheme(DTN2SCHEMENAME,&scheme,&psmAddress);
-			if(psmAddress == 0){
+			if(psmAddress == 0)
+			{
 				/*Unknow scheme*/
 				result = addScheme(DTN2SCHEMENAME,"dtn2fw","dtn2admin");
 				if(result == 0)
@@ -75,9 +82,11 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 		}
 	}
 /* Server and Monitor CBHE*/
-	else if(strcmp(type,"Server-CBHE")==0 || strcmp(type,"Monitor-CBHE") == 0){
+	else if(strcmp(type,"Server-CBHE")==0 || strcmp(type,"Monitor-CBHE") == 0)
+	{
 		findScheme(CBHESCHEMENAME,&scheme,&psmAddress);
-		if(psmAddress == 0){
+		if(psmAddress == 0)
+		{
 			/*Unknow scheme*/
 			result = addScheme(CBHESCHEMENAME,"ipnfw","ipnadmin");
 			if(result == 0)
@@ -88,9 +97,11 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 		(*local_eid) = ion_al_endpoint_id(eidString);
 	}
 /* Server and Monitor DTN*/
-	else if(strcmp(type,"Server-DTN")==0 || strcmp(type,"Monitor-DTN") == 0){
+	else if(strcmp(type,"Server-DTN")==0 || strcmp(type,"Monitor-DTN") == 0)
+	{
 		findScheme(DTN2SCHEMENAME,&scheme,&psmAddress);
-		if(psmAddress == 0){
+		if(psmAddress == 0)
+		{
 			/*Unknow scheme*/
 			result = addScheme(DTN2SCHEMENAME,"dtn2fw","dtn2admin");
 			if(result == 0)
@@ -116,8 +127,8 @@ al_bp_error_t bp_ion_register(al_bp_handle_t * handle,
 	BpRecvRule rule;
 	bpSap = al_ion_handle(*handle);
 	eid = al_ion_endpoint_id(reginfo->endpoint);
-
-	switch(reginfo->flags){
+	switch(reginfo->flags)
+	{
 		case BP_REG_DEFER: rule = EnqueueBundle;break;
 		case BP_REG_DROP: rule = DiscardBundle;break;
 		default: return BP_EINVAL;
@@ -156,22 +167,27 @@ al_bp_error_t bp_ion_find_registration(al_bp_handle_t handle,
 	if(psmAddress == 0)
 		return BP_ENOTFOUND;
 	if (sm_TaskExists(veid->appPid))
+	{
 		if (veid->appPid != sm_TaskIdSelf())
 				return BP_EBUSY;
+	}
 	//Free resource
 	free(schemeName);
 	free(endpoint);
-	free(vscheme);
-	free(veid);
+//	free(vscheme);
+//	free(veid);
 	return BP_SUCCESS;
 }
 
-al_bp_error_t bp_ion_unregister(al_bp_endpoint_id_t eid) {
+al_bp_error_t bp_ion_unregister(al_bp_endpoint_id_t eid)
+{
 	char * ion_eid = al_ion_endpoint_id(eid);
 	int result = removeEndpoint(ion_eid);
 	free(ion_eid);
 	if(result != 1)
+	{
 		return BP_EUNREG;
+	}
 	return BP_SUCCESS;
 
 }
@@ -182,21 +198,23 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 					al_bp_bundle_payload_t* payload,
 					al_bp_bundle_id_t* id)
 {
-	int result;
-	int tmpCustody;
-	int tmpPriority;
-	int tmpOrdinal;
 	BpSAP bpSap = al_ion_handle(handle);
 	char * destEid = al_ion_endpoint_id(spec->dest);
 	char * reportEid = NULL;
+	char * tokenClassOfService = NULL;
+	int result, tmpCustody, tmpPriority, tmpOrdinal,lifespan,classOfService, ackRequested;
+	unsigned char srrFlags;
+	BpCustodySwitch custodySwitch;
+	BpExtendedCOS extendedCOS = { 0, 0, 0 };
+
+	/* Set option bundle */
 	if(strcmp(spec->replyto.uri,"dtn:none") != 0 && spec->replyto.uri != NULL)
 		reportEid = al_ion_endpoint_id(spec->replyto);
-	int lifespan = (int) spec->expiration;
-	int classOfService;
-	BpCustodySwitch custodySwitch = NoCustodyRequested;
-	unsigned char srrFlags = al_ion_bundle_srrFlags(spec->dopts);
-	int ackRequested = 0;
-	BpExtendedCOS extendedCOS = { 0, 0, 0 };
+	lifespan = (int) spec->expiration;
+	classOfService;
+	custodySwitch = NoCustodyRequested;
+	srrFlags = al_ion_bundle_srrFlags(spec->dopts);
+	ackRequested = 0;
 	Payload ion_payload = al_ion_bundle_payload((*payload));
 	Object adu = ion_payload.content;
 	Object newBundleObj;
@@ -206,7 +224,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 			tmpCustody = 0;
 	else
 			tmpCustody = 1;
-	char * tokenClassOfService =(char *)malloc(sizeof(int)*6);
+	tokenClassOfService =(char *)malloc(sizeof(int)*6);
 	tmpPriority = al_ion_bundle_priority(spec->priority);
 	if(tmpPriority == -1)
 		return BP_EINVAL;
@@ -260,17 +278,20 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	sprintf(filename,"./dtnperf_payload_%s_%lu",dlv.bundleSourceEid,dlv.bundleCreationTime.seconds);
 	(*payload)  = ion_al_bundle_payload(ion_payload,location,filename);
 	free(filename);
+
 	// Status Report
 	BpStatusRpt statusRpt;
 	BpCtSignal ctSignal;
 	void * acsptr;
-	if(albp_parseAdminRecord(&dlv.adminRecord,&statusRpt,&ctSignal,&acsptr,dlv.adu) == 1){
+	if(albp_parseAdminRecord(&dlv.adminRecord,&statusRpt,&ctSignal,&acsptr,dlv.adu) == 1)
+	{
 		al_bp_bundle_status_report_t bp_statusRpt = ion_al_bundle_status_report(statusRpt);
 		if(payload->status_report == NULL)
+		{
 			payload->status_report = (al_bp_bundle_status_report_t *) malloc(sizeof(al_bp_bundle_status_report_t));
+		}
 		(*payload->status_report) = bp_statusRpt;
 	}
-	free(acsptr);
 	return BP_SUCCESS;
 }
 
@@ -307,7 +328,6 @@ al_bp_error_t bp_ion_parse_eid_string(al_bp_endpoint_id_t* eid, const char* str)
 		return BP_EPARSEEID;
 	(*eid) = ion_al_endpoint_id((char *)str);
 	free(endpoint);
-	free(vscheme);
 	return BP_SUCCESS;
 }
 
@@ -317,12 +337,14 @@ al_bp_error_t bp_ion_set_payload(al_bp_bundle_payload_t* payload,
 {
 	memset(payload,0,sizeof(al_bp_bundle_payload_t));
 	payload->location = location;
-	if(location == BP_PAYLOAD_MEM){
+	if(location == BP_PAYLOAD_MEM)
+	{
 		payload->buf.buf_len = len;
 		payload->buf.buf_val = (char *)malloc(sizeof(char)*len);
 		memcpy(payload->buf.buf_val,val,len);
 	}
-	else {
+	else
+	{
 		payload->filename.filename_len = len;
 		payload->filename.filename_val = (char *)malloc(sizeof(char)*len);
 		memcpy(payload->filename.filename_val,val,len);
@@ -332,10 +354,15 @@ al_bp_error_t bp_ion_set_payload(al_bp_bundle_payload_t* payload,
 
 void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 {
-	Sdr bpSdr = bp_get_sdr();
-	Payload ion_payload = al_ion_bundle_payload((*payload));
-	zco_destroy(bpSdr, ion_payload.content);
-	free(payload);
+	if(payload->filename.filename_len != 0 || payload->buf.buf_len != 0)
+	{
+		Sdr bpSdr = bp_get_sdr();
+		sdr_begin_xn(bpSdr);
+		Payload ion_payload = al_ion_bundle_payload((*payload));
+		zco_destroy(bpSdr, ion_payload.content);
+		sdr_end_xn(bpSdr);
+		free(payload);
+	}
 }
 
 al_bp_error_t bp_ion_error(int err)
