@@ -421,9 +421,10 @@ al_bp_error_t al_bp_bundle_free(al_bp_bundle_object_t * bundle_object)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
-	free(bundle_object->id);
-	free(bundle_object->spec);
-	free(bundle_object->payload);
+	free(bundle_object->id);printf("yes\n");
+	free(bundle_object->spec);printf("yes\n");
+	al_bp_free_payload(bundle_object->payload);printf("yes\n");
+	free(bundle_object->payload);printf("yes\n");
 	return BP_SUCCESS;
 }
 

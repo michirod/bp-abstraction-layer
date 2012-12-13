@@ -174,8 +174,7 @@ al_bp_error_t bp_ion_find_registration(al_bp_handle_t handle,
 	//Free resource
 	free(schemeName);
 	free(endpoint);
-//	free(vscheme);
-//	free(veid);
+
 	return BP_SUCCESS;
 }
 
@@ -273,9 +272,11 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	spec->replyto = ion_al_endpoint_id(tmp);
 	// Payload
 	Sdr bpSdr = bp_get_sdr();
+	sdr_begin_xn(bpSdr);
 	Payload ion_payload;
 	ion_payload.content = dlv.adu;
 	ion_payload.length = zco_length(bpSdr, dlv.adu);
+	sdr_end_xn(bpSdr);
 	//File Name if payload is saved in a file
 	char * filename = (char *) malloc(sizeof(char)*256);
 	sprintf(filename,"./dtnperf_payload_%s_%lu",dlv.bundleSourceEid,dlv.bundleCreationTime.seconds);
@@ -362,8 +363,23 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 		sdr_begin_xn(bpSdr);
 		Payload ion_payload = al_ion_bundle_payload((*payload));
 		zco_destroy(bpSdr, ion_payload.content);
-		sdr_end_xn(bpSdr);
-		free(payload);
+		sdr_end_xn(bpSdr);printf("no\n");
+		if(payload->filename.filename_len != 0)
+		{
+			printf("file\n");
+			free(payload->filename.filename_val);printf("file\n");
+		}
+		else
+		{
+			printf("buf\n");
+			free(payload->buf.buf_val);printf("buf\n");
+		}
+		if(payload->status_report != NULL)
+		{
+			free(payload->status_report);
+		}
+
+		printf("terminato\n");
 	}
 }
 
