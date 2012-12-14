@@ -421,10 +421,10 @@ al_bp_error_t al_bp_bundle_free(al_bp_bundle_object_t * bundle_object)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
-	free(bundle_object->id);printf("yes\n");
-	free(bundle_object->spec);printf("yes\n");
-	al_bp_free_payload(bundle_object->payload);printf("yes\n");
-	free(bundle_object->payload);printf("yes\n");
+	free(bundle_object->id);
+	free(bundle_object->spec);
+	al_bp_free_payload(bundle_object->payload);
+	free(bundle_object->payload);
 	return BP_SUCCESS;
 }
 
@@ -477,7 +477,6 @@ al_bp_error_t al_bp_bundle_get_payload_size(al_bp_bundle_object_t bundle_object,
 	{
 		if (bundle_object.payload->filename.filename_val == NULL) // filename is null
 			return BP_ENULLPNTR;
-
 		struct stat st;
 		memset(&st, 0, sizeof(st));
 		if (stat(bundle_object.payload->filename.filename_val, &st) < 0)
@@ -504,7 +503,8 @@ al_bp_error_t al_bp_bundle_get_payload_file(al_bp_bundle_object_t bundle_object,
 		if (bundle_object.payload->filename.filename_len <= 0) // filename size error
 			return BP_EINTERNAL;
 		* filename_len = bundle_object.payload->filename.filename_len;
-		* filename = bundle_object.payload->filename.filename_val;
+		(* filename) = (char *)(malloc(sizeof(char)*bundle_object.payload->filename.filename_len));
+		strncpy(* filename,bundle_object.payload->filename.filename_val,bundle_object.payload->filename.filename_len);
 		return BP_SUCCESS;
 	}
 	else // bundle location is not file
@@ -516,8 +516,10 @@ al_bp_error_t al_bp_bundle_get_payload_mem(al_bp_bundle_object_t bundle_object, 
 	{
 		if (bundle_object.payload->buf.buf_val != NULL)
 		{
-			*buf = bundle_object.payload->buf.buf_val;
 			*buf_len = bundle_object.payload->buf.buf_len;
+			(*buf) = (char *) (malloc(sizeof(char)*bundle_object.payload->buf.buf_len));
+			memcpy(*buf,bundle_object.payload->buf.buf_val,bundle_object.payload->buf.buf_len);
+
 			return BP_SUCCESS;
 		}
 		else

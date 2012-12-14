@@ -254,7 +254,7 @@ al_bp_bundle_payload_t ion_al_bundle_payload(Payload bundle_payload,
 	{
 		payload.buf.buf_len = bundle_payload.length;
 		payload.buf.buf_val = (char *)malloc(sizeof(char)*bundle_payload.length);
-		strncpy(payload.buf.buf_val,buffer,bundle_payload.length);
+		memcpy(payload.buf.buf_val,buffer,bundle_payload.length);
 	}
 	else
 	{

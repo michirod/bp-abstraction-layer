@@ -231,19 +231,30 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	classOfService = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
 	if(classOfService == 0)
 		return BP_EINVAL;
-	printf("destEid: %s - reportEid: %s\n",destEid,reportEid);
+
 	/* Send Bundle*/
 	result = bp_send(bpSap,BP_NONBLOCKING,destEid,reportEid,lifespan,classOfService,
 			custodySwitch,srrFlags,ackRequested,&extendedCOS,adu,&newBundleObj);
-
 	if(result == 0)
-		return BP_ENOSPACE;
-	if(result == -1)
-		return BP_ESEND;
+			return BP_ENOSPACE;
+		if(result == -1)
+			return BP_ESEND;
+	/* Set Bundle Sent*/
+	Sdr bpSdr = bp_get_sdr();
+	sdr_begin_xn(bpSdr);
+	Bundle bundleION;
+	sdr_read(bpSdr,(char*)&bundleION,(SdrAddress) newBundleObj,sizeof(Bundle));
+	sdr_end_xn(bpSdr);
+	char * tmpEidSource;
+	printEid(&(bundleION.id.source),retrieveDictionary(&bundleION),&tmpEidSource);
+	id->source = ion_al_endpoint_id(tmpEidSource);
+	id->creation_ts = ion_al_timestamp(bundleION.id.creationTime);
+	id->frag_offset = bundleION.id.fragmentOffset;
+	id->orig_length = bundleION.totalAduLength;
+
 	//Free resource
 	free(destEid);
 	free(reportEid);
-	printf("\tEndsend\n");
 	return BP_SUCCESS;
 }
 
@@ -279,7 +290,7 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	sdr_end_xn(bpSdr);
 	//File Name if payload is saved in a file
 	char * filename = (char *) malloc(sizeof(char)*256);
-	sprintf(filename,"./dtnperf_payload_%s_%lu",dlv.bundleSourceEid,dlv.bundleCreationTime.seconds);
+	sprintf(filename,"./ionPayload_%s_%lu",dlv.bundleSourceEid,dlv.bundleCreationTime.seconds);
 	(*payload)  = ion_al_bundle_payload(ion_payload,location,filename);
 	free(filename);
 	// Status Report
@@ -350,7 +361,7 @@ al_bp_error_t bp_ion_set_payload(al_bp_bundle_payload_t* payload,
 	{
 		payload->filename.filename_len = len;
 		payload->filename.filename_val = (char *)malloc(sizeof(char)*len);
-		memcpy(payload->filename.filename_val,val,len);
+		strcpy(payload->filename.filename_val,val);
 	}
 	return BP_SUCCESS;
 }
@@ -363,23 +374,19 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 		sdr_begin_xn(bpSdr);
 		Payload ion_payload = al_ion_bundle_payload((*payload));
 		zco_destroy(bpSdr, ion_payload.content);
-		sdr_end_xn(bpSdr);printf("no\n");
+		sdr_end_xn(bpSdr);
 		if(payload->filename.filename_len != 0)
 		{
-			printf("file\n");
-			free(payload->filename.filename_val);printf("file\n");
+			free(payload->filename.filename_val);
 		}
 		else
 		{
-			printf("buf\n");
-			free(payload->buf.buf_val);printf("buf\n");
+			free(payload->buf.buf_val);
 		}
 		if(payload->status_report != NULL)
 		{
 			free(payload->status_report);
 		}
-
-		printf("terminato\n");
 	}
 }
 
