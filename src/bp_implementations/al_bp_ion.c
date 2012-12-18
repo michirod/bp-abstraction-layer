@@ -251,6 +251,8 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	id->creation_ts = ion_al_timestamp(bundleION.id.creationTime);
 	id->frag_offset = bundleION.id.fragmentOffset;
 	id->orig_length = bundleION.totalAduLength;
+	//
+	handle = ion_al_handle(bpSap);
 
 	//Free resource
 	free(destEid);
@@ -306,6 +308,9 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 		}
 		(*payload->status_report) = bp_statusRpt;
 	}
+	//
+	handle = ion_al_handle(bpSap);
+
 	return BP_SUCCESS;
 }
 
@@ -313,6 +318,7 @@ al_bp_error_t bp_ion_close(al_bp_handle_t handle)
 {
 	BpSAP bpSap  = al_ion_handle(handle);
 	bp_close(bpSap);
+	handle = ion_al_handle(bpSap);
 	return BP_SUCCESS;
 }
 
@@ -354,14 +360,12 @@ al_bp_error_t bp_ion_set_payload(al_bp_bundle_payload_t* payload,
 	if(location == BP_PAYLOAD_MEM)
 	{
 		payload->buf.buf_len = len;
-		payload->buf.buf_val = (char *)malloc(sizeof(char)*len);
-		memcpy(payload->buf.buf_val,val,len);
+		payload->buf.buf_val= val;
 	}
 	else
 	{
 		payload->filename.filename_len = len;
-		payload->filename.filename_val = (char *)malloc(sizeof(char)*len);
-		strcpy(payload->filename.filename_val,val);
+		payload->filename.filename_val = val;
 	}
 	return BP_SUCCESS;
 }
@@ -370,19 +374,11 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 {
 	if(payload->filename.filename_len != 0 || payload->buf.buf_len != 0)
 	{
-		Sdr bpSdr = bp_get_sdr();
+	/*	Sdr bpSdr = bp_get_sdr();
 		sdr_begin_xn(bpSdr);
 		Payload ion_payload = al_ion_bundle_payload((*payload));
 		zco_destroy(bpSdr, ion_payload.content);
-		sdr_end_xn(bpSdr);
-		if(payload->filename.filename_len != 0)
-		{
-			free(payload->filename.filename_val);
-		}
-		else
-		{
-			free(payload->buf.buf_val);
-		}
+		sdr_end_xn(bpSdr);*/
 		if(payload->status_report != NULL)
 		{
 			free(payload->status_report);

@@ -247,7 +247,7 @@ al_bp_bundle_payload_t ion_al_bundle_payload(Payload bundle_payload,
 	zcoReader.zco = cloneZco;
 	zco_start_receiving(bundle_payload.content,&zcoReader);
 	zco_receive_source(bpSdr,&zcoReader,bundle_payload.length,buffer);
-	zco_destroy(bpSdr,cloneZco);
+	//zco_destroy(bpSdr,cloneZco);
 	sdr_end_xn(bpSdr);
 	payload.location = location;
 	if(location == BP_PAYLOAD_MEM)

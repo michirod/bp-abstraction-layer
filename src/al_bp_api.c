@@ -499,12 +499,13 @@ al_bp_error_t al_bp_bundle_get_payload_file(al_bp_bundle_object_t bundle_object,
 			|| bundle_object.payload->location == BP_PAYLOAD_TEMP_FILE)
 	{
 		if (bundle_object.payload->filename.filename_val == NULL) // filename is null
+		{
 			return BP_ENULLPNTR;
+		}
 		if (bundle_object.payload->filename.filename_len <= 0) // filename size error
 			return BP_EINTERNAL;
 		* filename_len = bundle_object.payload->filename.filename_len;
-		(* filename) = (char *)(malloc(sizeof(char)*bundle_object.payload->filename.filename_len));
-		strncpy(* filename,bundle_object.payload->filename.filename_val,bundle_object.payload->filename.filename_len);
+		(* filename) = bundle_object.payload->filename.filename_val;
 		return BP_SUCCESS;
 	}
 	else // bundle location is not file
@@ -517,9 +518,7 @@ al_bp_error_t al_bp_bundle_get_payload_mem(al_bp_bundle_object_t bundle_object, 
 		if (bundle_object.payload->buf.buf_val != NULL)
 		{
 			*buf_len = bundle_object.payload->buf.buf_len;
-			(*buf) = (char *) (malloc(sizeof(char)*bundle_object.payload->buf.buf_len));
-			memcpy(*buf,bundle_object.payload->buf.buf_val,bundle_object.payload->buf.buf_len);
-
+			(*buf) = bundle_object.payload->buf.buf_val;
 			return BP_SUCCESS;
 		}
 		else
