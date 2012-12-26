@@ -205,7 +205,6 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	unsigned char srrFlags;
 	BpCustodySwitch custodySwitch;
 	BpExtendedCOS extendedCOS = { 0, 0, 0 };
-	printf("AL: Before Option\n");
 	/* Set option bundle */
 	reportEid = al_ion_endpoint_id(spec->replyto);
 	lifespan = (int) spec->expiration;
@@ -215,7 +214,6 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	Payload ion_payload = al_ion_bundle_payload((*payload));
 	Object adu = ion_payload.content;
 	Object newBundleObj;
-	printf("AL: Before class of service\n");
 	/* Create String for parse class of service */
 	if(spec->dopts != BP_DOPTS_CUSTODY)
 			tmpCustody = 0;
@@ -230,7 +228,6 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	classOfService = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
 	if(classOfService == 0)
 		return BP_EINVAL;
-	printf("AL: Before Send\n");
 	/* Send Bundle*/
 	result = bp_send(bpSap,BP_NONBLOCKING,destEid,reportEid,lifespan,classOfService,
 			custodySwitch,srrFlags,ackRequested,&extendedCOS,adu,&newBundleObj);
@@ -238,7 +235,6 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 			return BP_ENOSPACE;
 	if(result == -1)
 			return BP_ESEND;
-	printf("AL: Before Set Id\n");
 	/* Set Id Bundle Sent*/
 	Bundle bundleION;
 	Sdr bpSdr = bp_get_sdr();
@@ -251,10 +247,8 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	id->creation_ts = ion_al_timestamp(bundleION.id.creationTime);
 	id->frag_offset = bundleION.id.fragmentOffset;
 	id->orig_length = bundleION.totalAduLength;
-	printf("AL: Before Handle \n");
 	//
 	handle = ion_al_handle(bpSap);
-	printf("AL: Before Free\n");
 	//Free resource
 	free(destEid);
 	free(reportEid);
@@ -378,7 +372,6 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 	{
 		free(payload->status_report);
 	}
-	printf("\tFREE\n");
 }
 
 al_bp_error_t bp_ion_error(int err)
