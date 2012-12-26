@@ -260,6 +260,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	//Free resource
 	free(destEid);
 	free(reportEid);
+	free(tokenClassOfService);
 	return BP_SUCCESS;
 }
 
