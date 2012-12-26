@@ -221,8 +221,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 			tmpCustody = 0;
 	else
 			tmpCustody = 1;
-	if(tokenClassOfService == NULL)
-		tokenClassOfService =(char *)malloc(sizeof(int)*6);
+	tokenClassOfService =(char *)malloc(sizeof(int)*6);
 	tmpPriority = al_ion_bundle_priority(spec->priority);
 	if(tmpPriority == -1)
 		return BP_EINVAL;
@@ -231,6 +230,8 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	classOfService = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
 	if(classOfService == 0)
 		return BP_EINVAL;
+	printf("AL: Before free tokenClassOfService");
+	free(tokenClassOfService);
 	printf("AL: Before Send\n");
 	/* Send Bundle*/
 	result = bp_send(bpSap,BP_NONBLOCKING,destEid,reportEid,lifespan,classOfService,
