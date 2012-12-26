@@ -221,7 +221,8 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 			tmpCustody = 0;
 	else
 			tmpCustody = 1;
-	tokenClassOfService =(char *)malloc(sizeof(int)*6);
+	if(tokeClassOfService == NULL)
+		tokenClassOfService =(char *)malloc(sizeof(int)*6);
 	tmpPriority = al_ion_bundle_priority(spec->priority);
 	if(tmpPriority == -1)
 		return BP_EINVAL;
@@ -258,7 +259,6 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	//Free resource
 	free(destEid);
 	free(reportEid);
-	free(tokenClassOfService);
 	return BP_SUCCESS;
 }
 
