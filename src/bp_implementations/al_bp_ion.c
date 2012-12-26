@@ -225,7 +225,11 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	if(tmpPriority == -1)
 		return BP_EINVAL;
 	tmpOrdinal = spec->priority.ordinal;
+	printf("Here\n");
+	free(tokenClassOfService);
+	printf("Dopo free\n");
 	tokenClassOfService = (char *)malloc(sizeof(int)*6);
+	printf("Dopo malloc\n");
 	sprintf(tokenClassOfService,"%11u.%11u.%11u",tmpCustody,tmpPriority,tmpOrdinal);
 	classOfService = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
 	if(classOfService == 0)
