@@ -216,6 +216,7 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 			else
 				strncpy(nameCat,bundle_payload.buf.buf_val,bundle_payload.buf.buf_len);
 			sdr_catlg(bpSdr,nameCat,0,buff);
+			free(nameCat);
 		}
 		payload.content = zco_create(bpSdr, ZcoSdrSource, buff, 0, bundle_payload.buf.buf_len);
 		payload.length = zco_length(bpSdr,payload.content);
@@ -247,7 +248,6 @@ al_bp_bundle_payload_t ion_al_bundle_payload(Payload bundle_payload,
 	zcoReader.zco = cloneZco;
 	zco_start_receiving(bundle_payload.content,&zcoReader);
 	zco_receive_source(bpSdr,&zcoReader,bundle_payload.length,buffer);
-	//zco_destroy(bpSdr,cloneZco);
 	sdr_end_xn(bpSdr);
 	payload.location = location;
 	if(location == BP_PAYLOAD_MEM)

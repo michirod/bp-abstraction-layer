@@ -201,7 +201,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	char * destEid = al_ion_endpoint_id(spec->dest);
 	char * reportEid = NULL;
 	char * tokenClassOfService = NULL;
-	int result, tmpCustody, tmpPriority, tmpOrdinal,lifespan,classOfService, ackRequested;
+	int result, tmpCustody, tmpPriority, tmpOrdinal, lifespan, classOfService, ackRequested;
 	unsigned char srrFlags;
 	BpCustodySwitch custodySwitch;
 	BpExtendedCOS extendedCOS = { 0, 0, 0 };
@@ -209,7 +209,6 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	/* Set option bundle */
 	reportEid = al_ion_endpoint_id(spec->replyto);
 	lifespan = (int) spec->expiration;
-	classOfService;
 	custodySwitch = NoCustodyRequested;
 	srrFlags = al_ion_bundle_srrFlags(spec->dopts);
 	ackRequested = 0;
@@ -217,7 +216,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	Object adu = ion_payload.content;
 	Object newBundleObj;
 
-/* Create String for parse class of service */
+	/* Create String for parse class of service */
 	if(spec->dopts != BP_DOPTS_CUSTODY)
 			tmpCustody = 0;
 	else
@@ -239,10 +238,10 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 			return BP_ENOSPACE;
 		if(result == -1)
 			return BP_ESEND;
-	/* Set Bundle Sent*/
+	/* Set Id Bundle Sent*/
+	Bundle bundleION;
 	Sdr bpSdr = bp_get_sdr();
 	sdr_begin_xn(bpSdr);
-	Bundle bundleION;
 	sdr_read(bpSdr,(char*)&bundleION,(SdrAddress) newBundleObj,sizeof(Bundle));
 	sdr_end_xn(bpSdr);
 	char * tmpEidSource;
@@ -278,24 +277,24 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 		return BP_ETIMEOUT;
 	if(dlv.result == BpReceptionInterrupted)
 		return BP_ERECVINT;
-	//Set Bundle
+	/* Set Bundle Spec */
 	spec->creation_ts = ion_al_timestamp(dlv.bundleCreationTime);
 	spec->source = ion_al_endpoint_id(dlv.bundleSourceEid);
 	char * tmp = "dtn:none";
 	spec->replyto = ion_al_endpoint_id(tmp);
-	// Payload
+	/* Payload */
 	Sdr bpSdr = bp_get_sdr();
 	sdr_begin_xn(bpSdr);
 	Payload ion_payload;
 	ion_payload.content = dlv.adu;
 	ion_payload.length = zco_length(bpSdr, dlv.adu);
 	sdr_end_xn(bpSdr);
-	//File Name if payload is saved in a file
+	/* File Name if payload is saved in a file */
 	char * filename = (char *) malloc(sizeof(char)*256);
 	sprintf(filename,"./ionPayload_%s_%lu",dlv.bundleSourceEid,dlv.bundleCreationTime.seconds);
 	(*payload)  = ion_al_bundle_payload(ion_payload,location,filename);
 	free(filename);
-	// Status Report
+	/* Status Report */
 	BpStatusRpt statusRpt;
 	BpCtSignal ctSignal;
 	void * acsptr;
@@ -372,18 +371,11 @@ al_bp_error_t bp_ion_set_payload(al_bp_bundle_payload_t* payload,
 
 void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 {
-	if(payload->filename.filename_len != 0 || payload->buf.buf_len != 0)
+	if(payload->status_report != NULL)
 	{
-	/*	Sdr bpSdr = bp_get_sdr();
-		sdr_begin_xn(bpSdr);
-		Payload ion_payload = al_ion_bundle_payload((*payload));
-		zco_destroy(bpSdr, ion_payload.content);
-		sdr_end_xn(bpSdr);*/
-		if(payload->status_report != NULL)
-		{
-			free(payload->status_report);
-		}
+		free(payload->status_report);
 	}
+	printf("\tFREE\n");
 }
 
 al_bp_error_t bp_ion_error(int err)
