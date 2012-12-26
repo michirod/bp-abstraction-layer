@@ -221,7 +221,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 			tmpCustody = 0;
 	else
 			tmpCustody = 1;
-	if(tokeClassOfService == NULL)
+	if(tokenClassOfService == NULL)
 		tokenClassOfService =(char *)malloc(sizeof(int)*6);
 	tmpPriority = al_ion_bundle_priority(spec->priority);
 	if(tmpPriority == -1)
