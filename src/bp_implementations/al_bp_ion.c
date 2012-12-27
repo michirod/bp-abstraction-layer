@@ -304,6 +304,8 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 		}
 		(*payload->status_report) = bp_statusRpt;
 	}
+	/* Release Delivery */
+	bp_release_delivery(&dlv, 1);
 	//
 	handle = ion_al_handle(bpSap);
 
