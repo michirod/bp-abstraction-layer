@@ -281,11 +281,9 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	spec->replyto = ion_al_endpoint_id(tmp);
 	/* Payload */
 	Sdr bpSdr = bp_get_sdr();
-	sdr_begin_xn(bpSdr);
 	Payload ion_payload;
 	ion_payload.content = dlv.adu;
 	ion_payload.length = zco_length(bpSdr, dlv.adu);
-	sdr_end_xn(bpSdr);
 	/* File Name if payload is saved in a file */
 	char * filename = (char *) malloc(sizeof(char)*256);
 	sprintf(filename,"./ionPayload_%s_%lu",dlv.bundleSourceEid,dlv.bundleCreationTime.seconds);
