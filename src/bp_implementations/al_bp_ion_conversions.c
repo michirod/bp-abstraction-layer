@@ -243,7 +243,6 @@ al_bp_bundle_payload_t ion_al_bundle_payload(Payload bundle_payload,
 	ZcoReader zcoReader;
 	memset(&zcoReader,0,sizeof(ZcoReader));
 	Sdr sdr = bp_get_sdr();
-/*	Object cloneZco = zco_clone(bpSdr,bundle_payload.content,0,bundle_payload.length);*/
 	zco_start_receiving(bundle_payload.content,&zcoReader);
 	sdr_begin_xn(sdr);
 	zco_receive_source(sdr,&zcoReader,bundle_payload.length,buffer);
