@@ -263,6 +263,7 @@ al_bp_bundle_payload_t ion_al_bundle_payload(Payload bundle_payload,
 		payload.filename.filename_val = (char *)malloc(sizeof(char)*(strlen(filename)+1));
 		strcpy(payload.filename.filename_val,filename);
 	}
+
 	free(buffer);
 	return payload;
 }
