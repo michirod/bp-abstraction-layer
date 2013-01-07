@@ -205,19 +205,20 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 	sdr_begin_xn(bpSdr);
 	if(bundle_payload.location == BP_PAYLOAD_MEM)
 	{
-		Object	buff = sdr_find(bpSdr, bundle_payload.buf.buf_val, NULL);
-		if(buff == 0)
-		{
+	//	Object	buff = sdr_find(bpSdr, bundle_payload.buf.buf_val, NULL);
+		Object	buff;
+	//	if(buff == 0)
+	//	{
 			buff = sdr_malloc(bpSdr, bundle_payload.buf.buf_len);
 			sdr_write(bpSdr, buff, bundle_payload.buf.buf_val, bundle_payload.buf.buf_len);
-			char * nameCat = (char *) malloc(sizeof(char)*MAX_SDR_NAME);
-			if( bundle_payload.buf.buf_len > MAX_SDR_NAME)
-				strncpy(nameCat,bundle_payload.buf.buf_val,MAX_SDR_NAME);
-			else
-				strncpy(nameCat,bundle_payload.buf.buf_val,bundle_payload.buf.buf_len);
-			sdr_catlg(bpSdr,nameCat,0,buff);
-			free(nameCat);
-		}
+	//		char * nameCat = (char *) malloc(sizeof(char)*MAX_SDR_NAME);
+	//		if( bundle_payload.buf.buf_len > MAX_SDR_NAME)
+	//			strncpy(nameCat,bundle_payload.buf.buf_val,MAX_SDR_NAME);
+	//		else
+	//			strncpy(nameCat,bundle_payload.buf.buf_val,bundle_payload.buf.buf_len);
+	//		sdr_catlg(bpSdr,nameCat,0,buff);
+	//		free(nameCat);
+	//	}
 		payload.content = zco_create(bpSdr, ZcoSdrSource, buff, 0, bundle_payload.buf.buf_len);
 		payload.length = zco_length(bpSdr,payload.content);
 	}
