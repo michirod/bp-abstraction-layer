@@ -192,11 +192,7 @@ al_bp_bundle_status_report_t ion_al_bundle_status_report(BpStatusRpt bundle_stat
 	bp_statusRpt.bundle_id.source = ion_al_endpoint_id(bundle_status_report.sourceEid);
 	return bp_statusRpt;
 }
-/*
- * For not duplicate payload,it is cataloged
- * The name of the catalog is the buffer's valor, if is in the memory
- * if the payload is in a file, there isn't any cataloging
- */
+
 Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 {
 	Payload payload;
@@ -205,20 +201,9 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 	sdr_begin_xn(bpSdr);
 	if(bundle_payload.location == BP_PAYLOAD_MEM)
 	{
-	//	Object	buff = sdr_find(bpSdr, bundle_payload.buf.buf_val, NULL);
 		Object	buff;
-	//	if(buff == 0)
-	//	{
-			buff = sdr_malloc(bpSdr, bundle_payload.buf.buf_len);
-			sdr_write(bpSdr, buff, bundle_payload.buf.buf_val, bundle_payload.buf.buf_len);
-	//		char * nameCat = (char *) malloc(sizeof(char)*MAX_SDR_NAME);
-	//		if( bundle_payload.buf.buf_len > MAX_SDR_NAME)
-	//			strncpy(nameCat,bundle_payload.buf.buf_val,MAX_SDR_NAME);
-	//		else
-	//			strncpy(nameCat,bundle_payload.buf.buf_val,bundle_payload.buf.buf_len);
-	//		sdr_catlg(bpSdr,nameCat,0,buff);
-	//		free(nameCat);
-	//	}
+		buff = sdr_malloc(bpSdr, bundle_payload.buf.buf_len);
+		sdr_write(bpSdr, buff, bundle_payload.buf.buf_val, bundle_payload.buf.buf_len);
 		payload.content = zco_create(bpSdr, ZcoSdrSource, buff, 0, bundle_payload.buf.buf_len);
 		payload.length = zco_length(bpSdr,payload.content);
 	}
