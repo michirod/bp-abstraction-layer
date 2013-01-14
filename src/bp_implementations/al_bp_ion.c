@@ -286,7 +286,7 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	ion_payload.length = zco_source_data_length(bpSdr, dlv.adu);
 	/* File Name if payload is saved in a file */
 	char * filename = (char *) malloc(sizeof(char)*256);
-	sprintf(filename,"./ionPayload_%s_%lu",dlv.bundleSourceEid,dlv.bundleCreationTime.seconds);
+	sprintf(filename,"/tmp/ionPayload_%s_%lu",dlv.bundleSourceEid,dlv.bundleCreationTime.seconds);
 	(*payload)  = ion_al_bundle_payload(ion_payload,location,filename);
 	free(filename);
 	/* Status Report */
