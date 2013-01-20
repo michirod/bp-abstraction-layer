@@ -133,7 +133,9 @@ al_bp_error_t bp_ion_register(al_bp_handle_t * handle,
 		case BP_REG_DROP: rule = DiscardBundle;break;
 		default: return BP_EINVAL;
 	}
-	result = addEndpoint(eid,rule,NULL);
+	//If the eid is not registrated then it will be registrated
+	if(bp_ion_find_registration(*handle,&(reginfo->endpoint),newregid) ==  BP_ENOTFOUND)
+		result = addEndpoint(eid,rule,NULL);
 	if(result == 0)
 		return BP_EREG;
 	result = bp_open(eid,&bpSap);
@@ -141,7 +143,6 @@ al_bp_error_t bp_ion_register(al_bp_handle_t * handle,
 		return BP_EREG;
 	//Free resource
 	free(eid);
-	//
 	(*handle) = ion_al_handle(bpSap);
 	return BP_SUCCESS;
 }
@@ -168,8 +169,8 @@ al_bp_error_t bp_ion_find_registration(al_bp_handle_t handle,
 		return BP_ENOTFOUND;
 	if (sm_TaskExists(veid->appPid))
 	{
-		if (veid->appPid != sm_TaskIdSelf())
-				return BP_EBUSY;
+		if (veid->appPid != -1)
+			return BP_EBUSY;
 	}
 	//Free resource
 	free(schemeName);
