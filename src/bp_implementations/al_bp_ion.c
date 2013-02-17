@@ -229,6 +229,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	classOfService = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
 	if(classOfService == 0)
 		return BP_EINVAL;
+
 	/* Send Bundle*/
 	result = bp_send(bpSap,BP_NONBLOCKING,destEid,reportEid,lifespan,classOfService,
 			custodySwitch,srrFlags,ackRequested,&extendedCOS,adu,&newBundleObj);
