@@ -237,6 +237,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 			return BP_ENOSPACE;
 	if(result == -1)
 			return BP_ESEND;
+
 	/* Set Id Bundle Sent*/
 	Bundle bundleION;
 	Sdr bpSdr = bp_get_sdr();
@@ -492,6 +493,7 @@ int	albp_parseStatusRpt(BpStatusRpt *rpt, unsigned char *cursor,int unparsedByte
 
 	if (rpt->flags & BP_DELETED_RPT)
 	{
+
 		extractSdnv(&(rpt->deletionTime.seconds), &cursor,&unparsedBytes);
 		extractSdnv(&(rpt->deletionTime.nanosec), &cursor,&unparsedBytes);
 	}
