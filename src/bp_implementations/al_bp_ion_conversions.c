@@ -132,37 +132,38 @@ int al_ion_status_report_flags(al_bp_status_report_flags_t status_repot_flags){
 al_bp_status_report_flags_t ion_al_status_report_flags(int status_repot_flags)
 {
 	al_bp_status_report_flags_t bp_statusRpt_flags = 0;
+	printf("\n\tflags al_bp: %d\n",bp_statusRpt_flags);
 	printf("\t\t\nflags ION: %d", status_repot_flags);
 	if(status_repot_flags & BP_RECEIVED_RPT)
 	{
 		bp_statusRpt_flags |= BP_STATUS_RECEIVED;
-		printf("\tRECEIVED\n");
+		printf("\tRECEIVED %d\n",bp_statusRpt_flags);
 	}
 	if(status_repot_flags & BP_CUSTODY_RPT)
 	{
 		bp_statusRpt_flags |= BP_STATUS_CUSTODY_ACCEPTED;
-		printf("\tCUSTODY\n");
+		printf("\tCUSTODY %d\n",bp_statusRpt_flags);
 	}
 	if(status_repot_flags & BP_FORWARDED_RPT)
 	{
 		bp_statusRpt_flags |= BP_STATUS_FORWARDED;
-		printf("\tFORWARDED\n");
+		printf("\tFORWARDED %d\n",bp_statusRpt_flags);
 	}
 	if(status_repot_flags & BP_DELIVERED_RPT)
 	{
 		bp_statusRpt_flags |= BP_STATUS_DELIVERED;
-		printf("\tDELIVERED\n");
+		printf("\tDELIVERED %d\n",bp_statusRpt_flags);
 	}
 	if(status_repot_flags & BP_DELETED_RPT)
 	{
 		bp_statusRpt_flags |= BP_STATUS_DELETED;
-		printf("\tDELETE\n");
+		printf("\tDELETE  %d\n",bp_statusRpt_flags);
 	}
-	if(status_repot_flags & BP_STATUS_STATS)
+/*	if(status_repot_flags & BP_STATUS_STATS)
 	{
 		bp_statusRpt_flags |= BP_STATUS_ACKED_BY_APP;
 		printf("\tACKED BY APP\n");
-	}
+	}*/
 	printf("\n\tflags al_bp: %d\n",bp_statusRpt_flags);
 	return bp_statusRpt_flags;
 }
