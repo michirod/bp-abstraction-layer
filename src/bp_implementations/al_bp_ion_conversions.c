@@ -133,17 +133,35 @@ al_bp_status_report_flags_t ion_al_status_report_flags(int status_repot_flags)
 {
 	al_bp_status_report_flags_t bp_statusRpt_flags = 0;
 	if(status_repot_flags & BP_STATUS_RECEIVE)
+	{
 		bp_statusRpt_flags |= BP_STATUS_RECEIVED;
+		printf("\tRECEIVED\n");
+	}
 	if(status_repot_flags & BP_STATUS_ACCEPT)
+	{
 		bp_statusRpt_flags |= BP_STATUS_CUSTODY_ACCEPTED;
+		printf("\tCUSTODY\n");
+	}
 	if(status_repot_flags & BP_STATUS_FORWARD)
+	{
 		bp_statusRpt_flags |= BP_STATUS_FORWARDED;
+		printf("\tFORWARDED\n");
+	}
 	if(status_repot_flags & BP_STATUS_DELIVER)
+	{
 		bp_statusRpt_flags |= BP_STATUS_DELIVERED;
+		printf("\tDELIVERED\n");
+	}
 	if(status_repot_flags & BP_STATUS_DELETE)
+	{
 		bp_statusRpt_flags |= BP_STATUS_DELETED;
+		printf("\tDELETE\n");
+	}
 	if(status_repot_flags & BP_STATUS_STATS)
+	{
 		bp_statusRpt_flags |= BP_STATUS_ACKED_BY_APP;
+		printf("\tACKED BY APP\n");
+	}
 	return bp_statusRpt_flags;
 }
 
