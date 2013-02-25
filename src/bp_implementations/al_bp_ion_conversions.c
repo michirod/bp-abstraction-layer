@@ -132,8 +132,6 @@ int al_ion_status_report_flags(al_bp_status_report_flags_t status_repot_flags){
 al_bp_status_report_flags_t ion_al_status_report_flags(int status_repot_flags)
 {
 	al_bp_status_report_flags_t bp_statusRpt_flags = 0;
-	printf("\n\tflags al_bp: %d\n",bp_statusRpt_flags);
-	printf("\t\t\nflags ION: %d", status_repot_flags);
 	if(status_repot_flags & BP_RECEIVED_RPT)
 //	{
 		bp_statusRpt_flags |= BP_STATUS_RECEIVED;
@@ -163,8 +161,8 @@ al_bp_status_report_flags_t ion_al_status_report_flags(int status_repot_flags)
 	{
 		bp_statusRpt_flags |= BP_STATUS_ACKED_BY_APP;
 		printf("\tACKED BY APP\n");
-	}*/
-	printf("\n\tflags al_bp: %d\n",bp_statusRpt_flags);
+	}
+	printf("\n\tflags al_bp: %d\n",bp_statusRpt_flags);*/
 	return bp_statusRpt_flags;
 }
 
