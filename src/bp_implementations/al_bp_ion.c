@@ -211,6 +211,17 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	lifespan = (int) spec->expiration;
 	custodySwitch = NoCustodyRequested;
 	srrFlags = al_ion_bundle_srrFlags(spec->dopts);
+	if(srrFlags & BP_RECEIVED_RPT)
+		printf("RECEIVED\n");
+	if(srrFlags & BP_CUSTODY_RPT)
+		printf("CUSTODY\n");
+	if(srrFlags & BP_DELIVERED_RPT)
+		printf("DELIVERED\n");
+	if(srrFlags & BP_FORWARDED_RPT)
+		printf("FORWARDED\n");
+	if(srrFlags & BP_DELETED_RPT)
+		printf("DELETED\n");
+
 	ackRequested = 0;
 	Payload ion_payload = al_ion_bundle_payload((*payload));
 	Object adu = ion_payload.content;
@@ -305,6 +316,13 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 		}
 		(*payload->status_report) = bp_statusRpt;
 	}
+	printf("STATUS REPORT\n");
+	printf("Delivery: %lu\n",bp_statusRpt.delivery_ts.secs);
+	printf("receipt_ts: %lu\n",bp_statusRpt.receipt_ts.secs);
+	printf("custody_ts: %lu\n",bp_statusRpt.custody_ts.secs);
+	printf("forwarding_ts: %lu\n",bp_statusRpt.forwarding_ts.secs);
+	printf("deletion_ts: %lu\n",bp_statusRpt.deletion_ts.secs);
+
 	/* Release Delivery */
 	bp_release_delivery(&dlv, 1);
 	//
