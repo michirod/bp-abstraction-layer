@@ -315,6 +315,7 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 			payload->status_report = (al_bp_bundle_status_report_t *) malloc(sizeof(al_bp_bundle_status_report_t));
 		}
 		(*payload->status_report) = bp_statusRpt;
+		printf("FLAG: %d",bp_statusRpt.flags);
 	}
 
 	/* Release Delivery */
