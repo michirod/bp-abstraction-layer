@@ -133,7 +133,7 @@ al_bp_status_report_flags_t ion_al_status_report_flags(int status_repot_flags)
 {
 	al_bp_status_report_flags_t bp_statusRpt_flags = 0;
 
-	al_bp_status_report_flags_t bp_statusRpt_flags = status_repot_flags;
+	al_bp_status_report_flags_t bp_statusRpt_flags = (al_bp_status_report_flags_t)status_repot_flags;
 /*	printf("\t\t\nflags ION: %d");
 	if(status_repot_flags & BP_RECEIVED_RPT)
 	{
