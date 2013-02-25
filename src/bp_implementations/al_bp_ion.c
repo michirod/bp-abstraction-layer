@@ -315,20 +315,6 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 			payload->status_report = (al_bp_bundle_status_report_t *) malloc(sizeof(al_bp_bundle_status_report_t));
 		}
 		(*payload->status_report) = bp_statusRpt;
-		if (bp_statusRpt.flags & BP_STATUS_DELIVERED)
-			printf("BP DELIVERED\n");
-
-		if (bp_statusRpt.flags & BP_STATUS_CUSTODY_ACCEPTED)
-			printf("BP CUSTODY\n");
-
-		if (bp_statusRpt.flags & BP_STATUS_RECEIVED)
-			printf("BP RECEIVED\n");
-
-		if (bp_statusRpt.flags & BP_STATUS_FORWARDED)
-			printf("BP FORWARDED\n");
-
-		if (bp_statusRpt.flags & BP_STATUS_DELETED)
-			printf("BP DELETEDS\n");
 	}
 
 	/* Release Delivery */

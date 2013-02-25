@@ -133,27 +133,27 @@ al_bp_status_report_flags_t ion_al_status_report_flags(int status_repot_flags)
 {
 	al_bp_status_report_flags_t bp_statusRpt_flags = 0;
 	printf("\t\t flags ION: %d");
-	if(status_repot_flags & BP_STATUS_RECEIVE)
+	if(status_repot_flags & BP_RECEIVED_RPT)
 	{
 		bp_statusRpt_flags |= BP_STATUS_RECEIVED;
 		printf("\tRECEIVED\n");
 	}
-	if(status_repot_flags & BP_STATUS_ACCEPT)
+	if(status_repot_flags & BP_CUSTODY_RPT)
 	{
 		bp_statusRpt_flags |= BP_STATUS_CUSTODY_ACCEPTED;
 		printf("\tCUSTODY\n");
 	}
-	if(status_repot_flags & BP_STATUS_FORWARD)
+	if(status_repot_flags & BP_FORWARDED_RPT)
 	{
 		bp_statusRpt_flags |= BP_STATUS_FORWARDED;
 		printf("\tFORWARDED\n");
 	}
-	if(status_repot_flags & BP_STATUS_DELIVER)
+	if(status_repot_flags & BP_DELIVERED_RPT)
 	{
 		bp_statusRpt_flags |= BP_STATUS_DELIVERED;
 		printf("\tDELIVERED\n");
 	}
-	if(status_repot_flags & BP_STATUS_DELETE)
+	if(status_repot_flags & BP_DELETED_RPT)
 	{
 		bp_statusRpt_flags |= BP_STATUS_DELETED;
 		printf("\tDELETE\n");
