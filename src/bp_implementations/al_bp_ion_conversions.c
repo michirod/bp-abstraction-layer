@@ -132,6 +132,7 @@ int al_ion_status_report_flags(al_bp_status_report_flags_t status_repot_flags){
 al_bp_status_report_flags_t ion_al_status_report_flags(int status_repot_flags)
 {
 	al_bp_status_report_flags_t bp_statusRpt_flags = 0;
+	printf("\t\t flags ION: %d");
 	if(status_repot_flags & BP_STATUS_RECEIVE)
 	{
 		bp_statusRpt_flags |= BP_STATUS_RECEIVED;
@@ -182,7 +183,7 @@ BpStatusRpt al_ion_bundle_status_report(al_bp_bundle_status_report_t bundle_stat
 	ion_statusRpt.creationTime = al_ion_timestamp(bundle_status_report.bundle_id.creation_ts);
 	ion_statusRpt.deletionTime = al_ion_timeval(bundle_status_report.deletion_ts.secs);
 	ion_statusRpt.deliveryTime = al_ion_timeval(bundle_status_report.delivery_ts.secs);
-	ion_statusRpt.flags = ion_al_status_report_flags(bundle_status_report.flags);
+	ion_statusRpt.flags = al_ion_bundle_srrFlags(bundle_status_report.flags);
 	ion_statusRpt.forwardTime = al_ion_timeval(bundle_status_report.forwarding_ts.secs);
 	if(bundle_status_report.flags & BDL_IS_FRAGMENT	)
 		ion_statusRpt.isFragment = 1;
