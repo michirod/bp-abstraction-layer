@@ -163,6 +163,7 @@ al_bp_status_report_flags_t ion_al_status_report_flags(int status_repot_flags)
 		bp_statusRpt_flags |= BP_STATUS_ACKED_BY_APP;
 		printf("\tACKED BY APP\n");
 	}
+	printf("\n\t\t\tflags al_bp: %d\n",bp_statusRpt_flags);
 	return bp_statusRpt_flags;
 }
 
