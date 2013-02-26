@@ -218,14 +218,14 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 	memset(&payload,0,sizeof(Payload));
 	Sdr bpSdr = bp_get_sdr();
 	sdr_begin_xn(bpSdr);
-	if(bundle_payload.location == BP_PAYLOAD_MEM)
-	{
+/*	if(bundle_payload.location == BP_PAYLOAD_MEM)
+	{*/
 		Object	buff;
 		buff = sdr_malloc(bpSdr, bundle_payload.buf.buf_len);
 		sdr_write(bpSdr, buff, bundle_payload.buf.buf_val, bundle_payload.buf.buf_len);
 		payload.content = zco_create(bpSdr, ZcoSdrSource, buff, 0, bundle_payload.buf.buf_len);
 		payload.length = zco_length(bpSdr,payload.content);
-	}
+/*	}
 	else
 	{
 		u32_t dimFile = 0;
@@ -236,7 +236,7 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 		Object fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, NULL);
 		payload.content = zco_create(bpSdr, ZcoFileSource, fileRef, 0, (unsigned int) dimFile);
 		payload.length = zco_length(bpSdr,payload.content);
-	}
+	}*/
 	sdr_end_xn(bpSdr);
 	return payload;
 }
