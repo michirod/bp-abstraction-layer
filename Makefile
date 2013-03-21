@@ -1,6 +1,7 @@
 # Makefile for compiling libbp_abstraction_layer.a
 
 LIB=static
+<<<<<<< HEAD
 #LIB=dynamic
 LIB_NAME_BASE=libal_bp
 CC=gcc
@@ -15,12 +16,23 @@ endif
 CFLAGS= $(DEBUG_FLAG) -Wall -fPIC -Werror
 
 ifeq ($(or $(ION_DIR),$(DTN2_DIR)),)
+=======
+LIB_NAME=libal_bp
+#LIB=dynamic
+CC=gcc
+DTN2=DTN2
+ION=ION
+DIR_BP_IMPL=./src/bp_implementations/
+
+ifeq ($(or $(ION_DIR),$(DTN_DIR)),)
+>>>>>>> 5a54538... added Makefile
 # NOTHING
 all: help
 else 
 all: lib
 endif 
 
+<<<<<<< HEAD
 LIB_NAME=$(LIB_NAME_BASE)
 
 ifeq ($(strip $(DTN2_DIR)),)
@@ -68,6 +80,35 @@ install:
 
 uninstall:
 	@if test `echo $(INSTALLED) | wc -w` -eq 1 -a -f "$(INSTALLED)"; then rm -rf $(INSTALLED); else if test -n "$(INSTALLED)"; then echo "MORE THAN 1 FILE, DELETE THEM MANUALLY: $(INSTALLED)"; else echo "NOT INSTALLED"; fi fi
+=======
+ifeq ($(strip $(DTN_DIR)),)
+# ION
+INC=-I$(ION_DIR) -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library
+OPT=-DION_IMPLEMENTATION -fPIC
+else ifeq ($(strip $(ION_DIR)),)
+# DTN
+INC=-I$(DTN_DIR) -I$(DTN_DIR)/applib/
+OPT=-DDTN_IMPLEMENTATION -fPIC
+else ifneq ($(and $(ION_DIR),$(DTN_DIR)),)
+# BOTH
+INC=-I$(DTN_DIR) -I$(DTN_DIR)/applib/ -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library
+OPT=-DION_IMPLEMENTATION -DDTN_IMPLEMENTATION -fPIC
+endif
+
+lib: objs
+ifeq ($(strip $(LIB)),static)
+	ar crs $(LIB_NAME).a *.o
+else
+	gcc -shared -o $(LIB_NAME).so *.o
+endif
+	
+install: 
+ifeq ($(strip $(LIB)),static)
+	cp $(LIB_NAME).a /usr/lib/
+else
+	cp $(LIB_NAME).so /usr/lib/
+endif
+>>>>>>> 5a54538... added Makefile
 
 objs:
 	$(CC) -I$(DIR_BP_IMPL) $(INC) $(OPT) -c src/*.c
@@ -75,11 +116,17 @@ objs:
 
 help:
 	@echo "Usage:"
+<<<<<<< HEAD
 	@echo "For DTN2:	make DTN2_DIR=<dtn2_dir>"
 	@echo "For ION:		make ION_DIR=<ion_dir> ION_VERS_UP_3.3.0=<yes|no>"
 #	@echo "For both:	make DTN2_DIR=<dtn2_dir> ION_DIR=<ion_dir> ION_VERS_UP_3.3.0=<yes|no>"
 	@echo "For both:	make DTN2_DIR=<dtn2_dir> ION_DIR=<ion_dir>"
 	@echo "To compile with debug symbols add DEBUG=1"
+=======
+	@echo "For Only DTN2 Impl: 	make DTN_DIR=<dtn2_dir>"
+	@echo "For Only ION Impl:	make ION_DIR=<ion_dir>"
+	@echo "For both Impl: 		make DTN_DIR=<dtn2_dir> ION_DIR=<ion_dir>"
+>>>>>>> 5a54538... added Makefile
 
 clean:
 	@rm -rf *.o *.so *.a
