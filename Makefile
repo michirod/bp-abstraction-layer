@@ -2,6 +2,7 @@
 
 LIB=static
 <<<<<<< HEAD
+<<<<<<< HEAD
 #LIB=dynamic
 LIB_NAME_BASE=libal_bp
 CC=gcc
@@ -18,11 +19,20 @@ CFLAGS= $(DEBUG_FLAG) -Wall -fPIC -Werror
 ifeq ($(or $(ION_DIR),$(DTN2_DIR)),)
 =======
 LIB_NAME=libal_bp
+=======
+>>>>>>> be958b3... added make uninstall target, and small fixes
 #LIB=dynamic
+LIB_NAME_BASE=libal_bp
 CC=gcc
-DTN2=DTN2
-ION=ION
 DIR_BP_IMPL=./src/bp_implementations/
+
+ifeq ($(strip $(LIB)),static)
+LIB_NAME=$(LIB_NAME_BASE).a
+LIB_CC=ar crs
+else
+LIB_NAME=$(LIB_NAME_BASE).so
+LIB_CC=gcc -shared -o
+endif
 
 ifeq ($(or $(ION_DIR),$(DTN_DIR)),)
 >>>>>>> 5a54538... added Makefile
@@ -96,19 +106,22 @@ OPT=-DION_IMPLEMENTATION -DDTN_IMPLEMENTATION -fPIC
 endif
 
 lib: objs
-ifeq ($(strip $(LIB)),static)
-	ar crs $(LIB_NAME).a *.o
-else
-	gcc -shared -o $(LIB_NAME).so *.o
-endif
+	$(LIB_CC) $(LIB_NAME) *.o
 	
 install: 
+<<<<<<< HEAD
 ifeq ($(strip $(LIB)),static)
 	cp $(LIB_NAME).a /usr/lib/
 else
 	cp $(LIB_NAME).so /usr/lib/
 endif
 >>>>>>> 5a54538... added Makefile
+=======
+	cp $(LIB_NAME) /usr/lib/
+
+uninstall: 
+	rm -rf /usr/lib/$(LIB_NAME)
+>>>>>>> be958b3... added make uninstall target, and small fixes
 
 objs:
 	$(CC) -I$(DIR_BP_IMPL) $(INC) $(OPT) -c src/*.c
