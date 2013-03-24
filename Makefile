@@ -119,7 +119,7 @@ else ifneq ($(strip $(ION_DIR)),)
 ifneq ($(strip $(DTN2_DIR)),)
 # BOTH
 LIB_NAME=$(LIB_NAME_BASE)
-INC=-I$(DTN2_DIR) -I$(DTN2_DIR)/applib/ -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library
+INC=-I$(DTN2_DIR) -I$(DTN2_DIR)/applib/ -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library -I$(ION_DIR)/ici/include
 OPT=-DION_IMPLEMENTATION -DDTN_IMPLEMENTATION -fPIC
 endif
 #else ifeq ($(and $(strip $(DTN2_DIR)), $(strip $(ION_DIR))),)
