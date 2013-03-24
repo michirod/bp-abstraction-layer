@@ -10,8 +10,10 @@
 
 #include "../al_bp_types.h"
 
+#ifdef DTN_IMPLEMENTATION
 #ifdef HAVE_CONFIG_H
 #  include <dtn-config.h>
+#endif
 #endif
 
 al_bp_error_t bp_dtn_open(al_bp_handle_t* handle);

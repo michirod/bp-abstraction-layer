@@ -3,11 +3,15 @@
 LIB=static
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9819fe9... reverted Makefile, fixed al_bp_dtn.h dtn-only includes
 #LIB=dynamic
 LIB_NAME_BASE=libal_bp
 CC=gcc
 DIR_BP_IMPL=./src/bp_implementations/
 SUFFIX=
+<<<<<<< HEAD
 DEBUG=0
 ifeq ($(DEBUG),0)
 DEBUG_FLAG= -O2
@@ -41,6 +45,10 @@ ifeq ($(or $(ION_DIR),$(DTN_DIR)),)
 =======
 ifeq ($(or $(ION_DIR),$(DTN2_DIR)),)
 >>>>>>> 1c78e19... some fixes on Makefile
+=======
+
+ifeq ($(or $(ION_DIR),$(DTN2_DIR)),)
+>>>>>>> 9819fe9... reverted Makefile, fixed al_bp_dtn.h dtn-only includes
 # NOTHING
 all: help
 else 
@@ -49,12 +57,16 @@ endif
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 1c78e19... some fixes on Makefile
+=======
+>>>>>>> 9819fe9... reverted Makefile, fixed al_bp_dtn.h dtn-only includes
 LIB_NAME=$(LIB_NAME_BASE)
 
 ifeq ($(strip $(DTN2_DIR)),)
 ifneq ($(strip $(ION_DIR)),)
+<<<<<<< HEAD
 <<<<<<< HEAD
 # ION
 #ifneq ( $(ION_VERS_UP_3.3.0), yes )
@@ -103,6 +115,8 @@ uninstall:
 ifeq ($(strip $(DTN_DIR)),)
 =======
 >>>>>>> 1c78e19... some fixes on Makefile
+=======
+>>>>>>> 9819fe9... reverted Makefile, fixed al_bp_dtn.h dtn-only includes
 # ION
 LIB_NAME=$(LIB_NAME_BASE)_vION
 INC=-I$(ION_DIR) -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library -I$(ION_DIR)/ici/include
@@ -141,6 +155,7 @@ lib: objs
 install: 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ifeq ($(strip $(LIB)),static)
 	cp $(LIB_NAME).a /usr/lib/
 else
@@ -154,11 +169,16 @@ uninstall:
 	rm -rf /usr/lib/$(LIB_NAME)
 >>>>>>> be958b3... added make uninstall target, and small fixes
 =======
+=======
+>>>>>>> 9819fe9... reverted Makefile, fixed al_bp_dtn.h dtn-only includes
 	cp $(LIB_NAME)* /usr/lib/
 
 uninstall:
 	@if test `echo $(INSTALLED) | wc -w` -eq 1 -a -f "$(INSTALLED)"; then rm -rf $(INSTALLED); else if test -n "$(INSTALLED)"; then echo "MORE THAN 1 FILE, DELETE THEM MANUALLY: $(INSTALLED)"; else echo "NOT INSTALLED"; fi fi
+<<<<<<< HEAD
 >>>>>>> 1c78e19... some fixes on Makefile
+=======
+>>>>>>> 9819fe9... reverted Makefile, fixed al_bp_dtn.h dtn-only includes
 
 objs:
 	$(CC) -I$(DIR_BP_IMPL) $(INC) $(OPT) -c src/*.c
@@ -166,6 +186,7 @@ objs:
 
 help:
 	@echo "Usage:"
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	@echo "For DTN2:	make DTN2_DIR=<dtn2_dir>"
@@ -183,6 +204,11 @@ help:
 	@echo "For ION:	make ION_DIR=<ion_dir>"
 	@echo "For both:	make DTN_DIR=<dtn2_dir> ION_DIR=<ion_dir>"
 >>>>>>> 1c78e19... some fixes on Makefile
+=======
+	@echo "For DTN2:	make DTN_DIR=<dtn2_dir>"
+	@echo "For ION:	make ION_DIR=<ion_dir>"
+	@echo "For both:	make DTN_DIR=<dtn2_dir> ION_DIR=<ion_dir>"
+>>>>>>> 9819fe9... reverted Makefile, fixed al_bp_dtn.h dtn-only includes
 
 clean:
 	@rm -rf *.o *.so *.a
