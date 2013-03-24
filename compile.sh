@@ -22,6 +22,9 @@ fi
 if [ $# = 2 -a $1 = $ION ]; then
 	#Compile source	
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8c12716... added -I/ici/include for rfx.h
 	gcc -I$DIR_BP_IMPL -I$2/bp/include -I$2/bp/library -I$2/ici/include -DION_IMPLEMENTATION -fPIC -c src/*.c
 	gcc -I$2/bp/include -I$2/bp/library -I$2/ici/include -DION_IMPLEMENTATION -fPIC -c src/bp_implementations/*.c 
 	ar crs libal_bp.a *.o
