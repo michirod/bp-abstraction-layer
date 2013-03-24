@@ -16,17 +16,20 @@ if [ $# = 2 -a $1 = $DTN2 ]; then
 	#Compile source	
 	gcc -I$DIR_BP_IMPL -I$2 -I$2/applib/ -DDTN2_IMPLEMENTATION -fPIC -c src/*.c
 	gcc -I$2 -I$2/applib/ -DDTN2_IMPLEMENTATION -fPIC -c src/bp_implementations/*.c
-	ar crs libal_bp.a *.o
-	cp ./libal_bp.a /usr/lib/
 fi
 
 #compile only with ION
 if [ $# = 2 -a $1 = $ION ]; then
 	#Compile source	
+<<<<<<< HEAD
 	gcc -I$DIR_BP_IMPL -I$2/bp/include -I$2/bp/library -I$2/ici/include -DION_IMPLEMENTATION -fPIC -c src/*.c
 	gcc -I$2/bp/include -I$2/bp/library -I$2/ici/include -DION_IMPLEMENTATION -fPIC -c src/bp_implementations/*.c 
 	ar crs libal_bp.a *.o
 	cp ./libal_bp.a /usr/lib/
+=======
+	gcc -I$DIR_BP_IMPL -I$2/bp/include -I$2/bp/library -DION_IMPLEMENTATION -fPIC -c src/*.c
+	gcc -I$2/bp/include -I$2/bp/library -DION_IMPLEMENTATION -fPIC -c src/bp_implementations/*.c 
+>>>>>>> e22bf8f... old Compile.sh
 fi
 
 #compile with DTN2 and ION
@@ -36,15 +39,12 @@ if [ $# = 4 ]; then
 	gcc -I$DIR_BP_IMPL -I$2 -I$2/applib/ -I$4/bp/include -I$4/bp/library -I$4/ici/include -DION_IMPLEMENTATION -DDTN2_IMPLEMENTATION -fPIC -c src/*.c
 	gcc -I$2 -I$2/applib/ -I$4/bp/include -I$4/bp/library -I$4/ici/include -DION_IMPLEMENTATION -DDTN2_IMPLEMENTATION -fPIC -c src/bp_implementations/*.c 
 	fi
-	ar crs libal_bp.a *.o
-	cp ./libal_bp.a /usr/lib/
 fi
 
 #create bp_abstraction_layer library static
-#	ar crs libal_bp.a *.o
-#	cp ./libal_bp.a /usr/lib/
+	ar crs libal_bp.a *.o
+	cp ./libal_bp.a /usr/lib/
 #create bp_abstraction_layer library dynamic
 	#gcc -shared -o libal_bp.so *.o
 	#cp ./libal_bp.so /usr/lib/
 exit
-
