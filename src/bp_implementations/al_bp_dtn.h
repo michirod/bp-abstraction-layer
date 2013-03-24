@@ -10,7 +10,7 @@
 
 #include "../al_bp_types.h"
 
-#ifdef DTN_IMPLEMENTATION
+#ifdef DTN2_IMPLEMENTATION
 #ifdef HAVE_CONFIG_H
 #  include <dtn-config.h>
 #endif
