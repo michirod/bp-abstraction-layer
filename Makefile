@@ -189,6 +189,7 @@ help:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@echo "For DTN2:	make DTN2_DIR=<dtn2_dir>"
 	@echo "For ION:		make ION_DIR=<ion_dir> ION_VERS_UP_3.3.0=<yes|no>"
 #	@echo "For both:	make DTN2_DIR=<dtn2_dir> ION_DIR=<ion_dir> ION_VERS_UP_3.3.0=<yes|no>"
@@ -209,6 +210,11 @@ help:
 	@echo "For ION:	make ION_DIR=<ion_dir>"
 	@echo "For both:	make DTN_DIR=<dtn2_dir> ION_DIR=<ion_dir>"
 >>>>>>> 9819fe9... reverted Makefile, fixed al_bp_dtn.h dtn-only includes
+=======
+	@echo "For DTN2:	make DTN2_DIR=<dtn2_dir>"
+	@echo "For ION:	make ION_DIR=<ion_dir>"
+	@echo "For both:	make DTN2_DIR=<dtn2_dir> ION_DIR=<ion_dir>"
+>>>>>>> dc7e51f... fixed makefile help
 
 clean:
 	@rm -rf *.o *.so *.a
