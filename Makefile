@@ -105,7 +105,7 @@ ifeq ($(strip $(DTN_DIR)),)
 >>>>>>> 1c78e19... some fixes on Makefile
 # ION
 LIB_NAME=$(LIB_NAME_BASE)_vION
-INC=-I$(ION_DIR) -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library
+INC=-I$(ION_DIR) -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library -I$(ION_DIR)/ici/include
 OPT=-DION_IMPLEMENTATION -fPIC
 endif
 else ifeq ($(strip $(ION_DIR)),)
