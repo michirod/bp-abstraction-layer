@@ -21,31 +21,16 @@ fi
 #compile only with ION
 if [ $# = 2 -a $1 = $ION ]; then
 	#Compile source	
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 8c12716... added -I/ici/include for rfx.h
-	gcc -I$DIR_BP_IMPL -I$2/bp/include -I$2/bp/library -I$2/ici/include -DION_IMPLEMENTATION -fPIC -c src/*.c
-	gcc -I$2/bp/include -I$2/bp/library -I$2/ici/include -DION_IMPLEMENTATION -fPIC -c src/bp_implementations/*.c 
-	ar crs libal_bp.a *.o
-	cp ./libal_bp.a /usr/lib/
-=======
 	gcc -I$DIR_BP_IMPL -I$2/bp/include -I$2/bp/library -DION_IMPLEMENTATION -fPIC -c src/*.c
 	gcc -I$2/bp/include -I$2/bp/library -DION_IMPLEMENTATION -fPIC -c src/bp_implementations/*.c 
->>>>>>> e22bf8f... old Compile.sh
-=======
-	gcc -I$DIR_BP_IMPL -I$2/bp/include -I$2/bp/library -DION_IMPLEMENTATION -fPIC -c src/*.c
-	gcc -I$2/bp/include -I$2/bp/library -DION_IMPLEMENTATION -fPIC -c src/bp_implementations/*.c 
->>>>>>> e22bf8f... old Compile.sh
 fi
 
 #compile with DTN2 and ION
 if [ $# = 4 ]; then
 	if [ $1 = $DTN2 -a $3 = $ION ]; then
 	#Compile source
-	gcc -I$DIR_BP_IMPL -I$2 -I$2/applib/ -I$4/bp/include -I$4/bp/library -I$4/ici/include -DION_IMPLEMENTATION -DDTN2_IMPLEMENTATION -fPIC -c src/*.c
-	gcc -I$2 -I$2/applib/ -I$4/bp/include -I$4/bp/library -I$4/ici/include -DION_IMPLEMENTATION -DDTN2_IMPLEMENTATION -fPIC -c src/bp_implementations/*.c 
+	gcc -I$DIR_BP_IMPL -I$2 -I$2/applib/ -I$4/bp/include -I$4/bp/library -DION_IMPLEMENTATION -DDTN2_IMPLEMENTATION -fPIC -c src/*.c
+	gcc -I$2 -I$2/applib/ -I$4/bp/include -I$4/bp/library -DION_IMPLEMENTATION -DDTN2_IMPLEMENTATION -fPIC -c src/bp_implementations/*.c 
 	fi
 fi
 
