@@ -294,10 +294,33 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	printf("\n\tAL_BP: Payload Len %lu\n",ion_payload.length);
 	/* File Name if payload is saved in a file */
 	char * filename = (char *) malloc(sizeof(char)*256);
-	sprintf(filename,"/tmp/ionPayload_%s_%lu_%lu",dlv.bundleSourceEid,
+	char * tmp_eid = (char *) malloc(sizeof(char) * (strlen(dlv.bundleSourceEid)+1));
+	strcpy(tmp_eid,dlv.bundleSourceEid);
+	/* Take EID from Source*/
+	if(strncmp(dlv.bundleSourceEid,"ipn",3) != 0)
+	{
+		strtok(tmp_eid,'/');
+		strtok(NULL,'/');
+		/* tmp_eid = "dtn://vm1.dtn/src_2222"
+		 * after
+		 * tmp_eid = "vm1.dtn"
+		 * */
+	}
+	else
+	{
+		strtok(tmp_eid,':');
+		/* tmp_eid = "ipn:1.2222"
+		 * after
+		 * tmp_eid = "1.2222"
+		 * */
+
+	}
+	sprintf(filename,"/tmp/ionPayload_%s_%lu_%lu",tmp_eid,
 			dlv.bundleCreationTime.seconds,dlv.bundleCreationTime.count);
+	printf("\n\tFILENAME: %s\n",filename);
 	(*payload)  = ion_al_bundle_payload(ion_payload,location,filename);
 	free(filename);
+	free(tmp_eid);
 	/* Status Report */
 	BpStatusRpt statusRpt;
 	BpCtSignal ctSignal;
