@@ -297,11 +297,11 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 		printf("tmp_eid:%s\n",tmp_eid);
 		strtok(tmp_eid, "/");
 		printf("tmp_eid:%s\n",tmp_eid);
-		strtok(NULL, "/");
+		strtok(tmp_eid, "/");
 		printf("tmp_eid:%s\n",tmp_eid);
-		strtok(NULL, "/");
+		strtok(tmp_eid, "/");
 		printf("tmp_eid:%s\n",tmp_eid);
-		strtok(NULL, "/");
+		strtok(tmp_eid, "/");
 		printf("tmp_eid:%s\n",tmp_eid);
 		/* tmp_eid = "dtn://vm1.dtn/src_2222"
 		 * after
