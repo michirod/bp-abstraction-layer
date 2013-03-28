@@ -278,12 +278,9 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 		return BP_ETIMEOUT;
 	if(dlv.result == BpReceptionInterrupted)
 		return BP_ERECVINT;
-	printf("\n\tAL_BP: Result OK\n");
 	/* Set Bundle Spec */
 	spec->creation_ts = ion_al_timestamp(dlv.bundleCreationTime);
-	printf("\n\tAL_BP: TimeStamp %lu\n",spec->creation_ts.secs);
 	spec->source = ion_al_endpoint_id(dlv.bundleSourceEid);
-	printf("\n\tAL_BP: Source %lu\n",spec->source.uri);
 	char * tmp = "dtn:none";
 	spec->replyto = ion_al_endpoint_id(tmp);
 	/* Payload */
@@ -291,7 +288,6 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	Payload ion_payload;
 	ion_payload.content = dlv.adu;
 	ion_payload.length = zco_source_data_length(bpSdr, dlv.adu);
-	printf("\n\tAL_BP: Payload Len %lu\n",ion_payload.length);
 	/* File Name if payload is saved in a file */
 	char * filename = (char *) malloc(sizeof(char)*256);
 	char * tmp_eid = (char *) malloc(sizeof(char) * (strlen(dlv.bundleSourceEid)+1));
@@ -300,6 +296,7 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	if(strncmp(dlv.bundleSourceEid,"ipn",3) != 0)
 	{
 		strtok(tmp_eid,"/");
+		strtok(NULL,"/");
 		strtok(NULL,"/");
 		/* tmp_eid = "dtn://vm1.dtn/src_2222"
 		 * after
@@ -317,7 +314,6 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	}
 	sprintf(filename,"/tmp/ionPayload_%s_%lu_%lu",tmp_eid,
 			dlv.bundleCreationTime.seconds,dlv.bundleCreationTime.count);
-	printf("\n\tFILENAME: %s\n",filename);
 	(*payload)  = ion_al_bundle_payload(ion_payload,location,filename);
 	free(filename);
 	free(tmp_eid);
