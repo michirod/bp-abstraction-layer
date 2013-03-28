@@ -295,7 +295,7 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	if(strncmp(dlv.bundleSourceEid,"ipn",3) != 0)
 	{
 		strtok(tmp_eid, "/");
-		tmp = strtok(tmp_eid, "/");
+		tmp = strtok(NULL, "/");
 		/* tmp_eid = "dtn://vm1.dtn/src_2222"
 		 * after
 		 * tmp_eid = "vm1.dtn"
@@ -304,7 +304,7 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	else
 	{
 		strtok(tmp_eid,":");
-		tmp = strtok(tmp_eid,":");
+		tmp = strtok(NULL":");
 		/* tmp_eid = "ipn:1.2222"
 		 * after
 		 * tmp_eid = "1.2222"
