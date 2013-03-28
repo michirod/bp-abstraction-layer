@@ -294,15 +294,12 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	/* Take EID from Source*/
 	if(strncmp(dlv.bundleSourceEid,"ipn",3) != 0)
 	{
-		printf("tmp_eid:%s\n",tmp_eid);
-		strtok(tmp_eid, "/");
-		printf("tmp_eid:%s\n",tmp_eid);
-		strtok(tmp_eid, "/");
-		printf("tmp_eid:%s\n",tmp_eid);
-		strtok(tmp_eid, "/");
-		printf("tmp_eid:%s\n",tmp_eid);
-		strtok(tmp_eid, "/");
-		printf("tmp_eid:%s\n",tmp_eid);
+		printf("tmp_eid:%s\n",dlv.bundleSourceEid);
+		strtok(dlv.bundleSourceEid, "/");
+		printf("tmp_eid:%s\n",dlv.bundleSourceEid);
+		strtok(NULL, "/");
+		printf("tmp_eid:%s\n",dlv.bundleSourceEid);
+		strtok(NULL, "/");
 		/* tmp_eid = "dtn://vm1.dtn/src_2222"
 		 * after
 		 * tmp_eid = "vm1.dtn"
