@@ -309,9 +309,8 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 		 * after
 		 * tmp_eid = "1.2222"
 		 * */
-
 	}
-	sprintf(filename,"/tmp/ionPayload_%s_%lu_%lu",tmp_eid,
+	sprintf(filename,"/tmp/ionPayload_%s_%lu_%lu",tmp,
 			dlv.bundleCreationTime.seconds,dlv.bundleCreationTime.count);
 	(*payload)  = ion_al_bundle_payload(ion_payload,location,filename);
 	free(filename);
