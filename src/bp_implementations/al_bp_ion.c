@@ -296,6 +296,9 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	{
 		strtok(tmp_eid, "/");
 		tmp = strtok(NULL, "/");
+		printf("tmp: %s\n");
+		tmp = strtok(NULL, "/");
+		printf("tmp: %s\n");
 		/* tmp_eid = "dtn://vm1.dtn/src_2222"
 		 * after
 		 * tmp_eid = "vm1.dtn"
