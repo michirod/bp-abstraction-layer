@@ -271,15 +271,19 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	int second_timeout = (int) ion_timeout.seconds;
 	int result;
 	result = bp_receive(bpSap,&dlv,second_timeout);
+	printf("\n\tAL_BP: Receive OK\n");
 	if(result < 0)
 		return BP_ERECV;
 	if(dlv.result == BpReceptionTimedOut)
 		return BP_ETIMEOUT;
 	if(dlv.result == BpReceptionInterrupted)
 		return BP_ERECVINT;
+	printf("\n\tAL_BP: Result OK\n");
 	/* Set Bundle Spec */
 	spec->creation_ts = ion_al_timestamp(dlv.bundleCreationTime);
+	printf("\n\tAL_BP: TimeStamp %lu\n",spec->creation_ts.secs);
 	spec->source = ion_al_endpoint_id(dlv.bundleSourceEid);
+	printf("\n\tAL_BP: Source %lu\n",spec->source.uri);
 	char * tmp = "dtn:none";
 	spec->replyto = ion_al_endpoint_id(tmp);
 	/* Payload */
@@ -287,6 +291,7 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	Payload ion_payload;
 	ion_payload.content = dlv.adu;
 	ion_payload.length = zco_source_data_length(bpSdr, dlv.adu);
+	printf("\n\tAL_BP: Payload Len %lu\n",ion_payload.length);
 	/* File Name if payload is saved in a file */
 	char * filename = (char *) malloc(sizeof(char)*256);
 	sprintf(filename,"/tmp/ionPayload_%s_%lu_%lu",dlv.bundleSourceEid,
