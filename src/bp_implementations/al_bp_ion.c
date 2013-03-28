@@ -307,7 +307,7 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	else
 	{
 		strtok(tmp_eid,":");
-		tmp = strtok(NULL":");
+		tmp = strtok(NULL,":");
 		/* tmp_eid = "ipn:1.2222"
 		 * after
 		 * tmp_eid = "1.2222"
