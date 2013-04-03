@@ -315,6 +315,7 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	(*payload)  = ion_al_bundle_payload(ion_payload,location,filename);
 	free(filename);
 	free(tmp_eid);
+	printf("SOURCE: %s\n",spec->source.uri);
 	/* Status Report */
 	BpStatusRpt statusRpt;
 	BpCtSignal ctSignal;
