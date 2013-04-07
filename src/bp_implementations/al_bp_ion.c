@@ -45,7 +45,7 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 								const char * type,
 								char * eid_destination)
 {
-	char * eidString;
+	char * eidString, * hostname;
 	int result;
 	VScheme * scheme;
 	PsmAddress psmAddress;
@@ -77,8 +77,13 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 				if(result == 0)
 					return BP_EBUILDEID;
 			}
-			sprintf(eidString,"%s://%lu.dtn%s",DTN2SCHEMENAME,getOwnNodeNbr(),service_tag);
+			hostname = (char *)malloc(sizeof(char)*50);
+			result = gethostname(hostname, sizeof(hostname));
+			if(result == -1)
+				return BP_EBUILDEID;
+			sprintf(eidString,"%s://%s.dtn%s",DTN2SCHEMENAME,hostname,service_tag);
 			(*local_eid) = ion_al_endpoint_id(eidString);
+			free(hostname);
 		}
 	}
 /* Server and Monitor CBHE*/
@@ -107,8 +112,13 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 			if(result == 0)
 				return BP_EBUILDEID;
 		}
-		sprintf(eidString,"%s://%lu.dtn%s",DTN2SCHEMENAME,getOwnNodeNbr(),service_tag);
+		hostname = (char *)malloc(sizeof(char)*50);
+		result = gethostname(hostname, sizeof(hostname));
+		if(result == -1)
+			return BP_EBUILDEID;
+		sprintf(eidString,"%s://%s.dtn%s",DTN2SCHEMENAME,hostname,service_tag);
 		(*local_eid) = ion_al_endpoint_id(eidString);
+		free(hostname);
 	}
 	else
 		return BP_EBUILDEID;
@@ -315,7 +325,6 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	(*payload)  = ion_al_bundle_payload(ion_payload,location,filename);
 	free(filename);
 	free(tmp_eid);
-	printf("SOURCE: %s\n",spec->source.uri);
 	/* Status Report */
 	BpStatusRpt statusRpt;
 	BpCtSignal ctSignal;
