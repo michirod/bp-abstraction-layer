@@ -492,7 +492,7 @@ int albp_parseAdminRecord(int *adminRecordType, BpStatusRpt *rpt, BpCtSignal *cs
  * */
 int	albp_parseStatusRpt(BpStatusRpt *rpt, unsigned char *cursor,int unparsedBytes, int isFragment)
 {
-	unsigned long	eidLength;
+	unsigned int	eidLength;
 	memset((char *) rpt, 0, sizeof(BpStatusRpt));
 	rpt->isFragment = isFragment;
 	if (unparsedBytes < 1)
