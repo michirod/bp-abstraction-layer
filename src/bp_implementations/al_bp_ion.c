@@ -72,8 +72,11 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 				if(result == 0)
 					return BP_EBUILDEID;
 			}
-			sprintf(eidString, "%s:%lu.%u",
-						CBHESCHEMENAME,getOwnNodeNbr(),getpid());
+			long int service_num = getpid();
+			sprintf(eidString, "%s:%lu",
+							CBHESCHEMENAME,getOwnNodeNbr());
+			sprintf(eidString, "%s.%u",
+							eidString,service_num);
 			(*local_eid) = ion_al_endpoint_id(eidString);
 		}
 		else
