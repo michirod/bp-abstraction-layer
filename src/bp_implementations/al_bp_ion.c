@@ -106,7 +106,7 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 			if(result == 0)
 				return BP_EBUILDEID;
 		}
-		long int test = strtol(service_tag,NULL,10));
+		long int test = strtol(service_tag,NULL,10);
 		printf("AL_BP: %lu\n",test);
 		sprintf(eidString, "%s:%lu.%lu",
 								CBHESCHEMENAME,getOwnNodeNbr(),strtol(service_tag,NULL,10));
