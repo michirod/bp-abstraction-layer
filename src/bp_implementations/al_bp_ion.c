@@ -106,7 +106,7 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 			if(result == 0)
 				return BP_EBUILDEID;
 		}
-		long int service_num = 2000;
+		long int service_num = 1;
 		printf("\nAL_BP: %lu\n",service_num);
 		printf("\nAL_BP: %lu\n",getOwnNodeNbr());
 		sprintf(eidString, "%s:%lu.%lu",
