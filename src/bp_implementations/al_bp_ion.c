@@ -250,7 +250,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 		return BP_EINVAL;
 
 	/* Send Bundle*/
-	result = bp_send(bpSap,BP_NONBLOCKING,destEid,reportEid,lifespan,classOfService,
+	result = bp_send(bpSap,destEid,reportEid,lifespan,classOfService,
 			custodySwitch,srrFlags,ackRequested,&extendedCOS,adu,&newBundleObj);
 	if(result == 0)
 			return BP_ENOSPACE;
