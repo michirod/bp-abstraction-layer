@@ -506,44 +506,44 @@ int	albp_parseStatusRpt(BpStatusRpt *rpt, unsigned char *cursor,int unparsedByte
 	unparsedBytes -= 2;
 	if (isFragment)
 	{
-		extractSdnv(&(rpt->fragmentOffset), &cursor, &unparsedBytes);
-		extractSdnv(&(rpt->fragmentLength), &cursor, &unparsedBytes);
+		extractSmallSdnv(&(rpt->fragmentOffset), &cursor, &unparsedBytes);
+		extractSmallSdnv(&(rpt->fragmentLength), &cursor, &unparsedBytes);
 	}
 
 	if (rpt->flags & BP_RECEIVED_RPT)
 	{
-		extractSdnv(&(rpt->receiptTime.seconds), &cursor,&unparsedBytes);
-		extractSdnv(&(rpt->receiptTime.nanosec), &cursor,&unparsedBytes);
+		extractSmallSdnv(&(rpt->receiptTime.seconds), &cursor,&unparsedBytes);
+		extractSmallSdnv(&(rpt->receiptTime.nanosec), &cursor,&unparsedBytes);
 	}
 
 	if (rpt->flags & BP_CUSTODY_RPT)
 	{
-		extractSdnv(&(rpt->acceptanceTime.seconds), &cursor,&unparsedBytes);
-		extractSdnv(&(rpt->acceptanceTime.nanosec), &cursor,&unparsedBytes);
+		extractSmallSdnv(&(rpt->acceptanceTime.seconds), &cursor,&unparsedBytes);
+		extractSmallSdnv(&(rpt->acceptanceTime.nanosec), &cursor,&unparsedBytes);
 	}
 
 	if (rpt->flags & BP_FORWARDED_RPT)
 	{
-		extractSdnv(&(rpt->forwardTime.seconds), &cursor,&unparsedBytes);
-		extractSdnv(&(rpt->forwardTime.nanosec), &cursor,&unparsedBytes);
+		extractSmallSdnv(&(rpt->forwardTime.seconds), &cursor,&unparsedBytes);
+		extractSmallSdnv(&(rpt->forwardTime.nanosec), &cursor,&unparsedBytes);
 	}
 
 	if (rpt->flags & BP_DELIVERED_RPT)
 	{
-		extractSdnv(&(rpt->deliveryTime.seconds), &cursor,&unparsedBytes);
-		extractSdnv(&(rpt->deliveryTime.nanosec), &cursor,&unparsedBytes);
+		extractSmallSdnv(&(rpt->deliveryTime.seconds), &cursor,&unparsedBytes);
+		extractSmallSdnv(&(rpt->deliveryTime.nanosec), &cursor,&unparsedBytes);
 	}
 
 	if (rpt->flags & BP_DELETED_RPT)
 	{
 
-		extractSdnv(&(rpt->deletionTime.seconds), &cursor,&unparsedBytes);
-		extractSdnv(&(rpt->deletionTime.nanosec), &cursor,&unparsedBytes);
+		extractSmallSdnv(&(rpt->deletionTime.seconds), &cursor,&unparsedBytes);
+		extractSmallSdnv(&(rpt->deletionTime.nanosec), &cursor,&unparsedBytes);
 	}
 
-	extractSdnv(&(rpt->creationTime.seconds), &cursor, &unparsedBytes);
-	extractSdnv(&(rpt->creationTime.count), &cursor, &unparsedBytes);
-	extractSdnv(&eidLength, &cursor, &unparsedBytes);
+	extractSmallSdnv(&(rpt->creationTime.seconds), &cursor, &unparsedBytes);
+	extractSmallSdnv(&(rpt->creationTime.count), &cursor, &unparsedBytes);
+	extractSmallSdnv(&eidLength, &cursor, &unparsedBytes);
 	if (unparsedBytes != eidLength)
 	{
 		return 0;
