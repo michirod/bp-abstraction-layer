@@ -108,6 +108,7 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 		}
 		sprintf(eidString, "%s:%lu.%lu",
 								CBHESCHEMENAME,getOwnNodeNbr(),strtol(service_tag,NULL,10));
+		printf("AL_BP: %s\n",eidString);
 		(*local_eid) = ion_al_endpoint_id(eidString);
 	}
 /* Server and Monitor DTN*/
