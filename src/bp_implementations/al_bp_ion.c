@@ -106,11 +106,11 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 			if(result == 0)
 				return BP_EBUILDEID;
 		}
-		long int test = strtol(service_tag,NULL,10);
-		printf("AL_BP: %lu\n",test);
+		long int service_num = strtol(service_tag,NULL,10);
+		printf("\nAL_BP: %lu\n",service_num);
 		sprintf(eidString, "%s:%lu.%lu",
-								CBHESCHEMENAME,getOwnNodeNbr(),test);
-
+								CBHESCHEMENAME,getOwnNodeNbr(),service_num);
+		printf("\nAL_BP: %s\n",eidString);
 		(*local_eid) = ion_al_endpoint_id(eidString);
 	}
 /* Server and Monitor DTN*/
