@@ -109,8 +109,8 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 		long int service_num = strtol(service_tag,NULL,10);
 		printf("\nAL_BP: %lu\n",service_num);
 		printf("\nAL_BP: %lu\n",getOwnNodeNbr());
-		sprintf(eidString, "%s:%lu.%d",
-								CBHESCHEMENAME,getOwnNodeNbr(),service_num);
+		sprintf(eidString, "%s:%lu.%lu",
+								CBHESCHEMENAME,service_num,getOwnNodeNbr());
 		printf("\nAL_BP: %s\n",eidString);
 		(*local_eid) = ion_al_endpoint_id(eidString);
 	}
