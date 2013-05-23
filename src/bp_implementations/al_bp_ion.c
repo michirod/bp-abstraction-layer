@@ -425,8 +425,9 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 	}
 	if(payload->location != BP_PAYLOAD_MEM)
 	{
-		Sdr bpSdr = bp_get_sdr();
-		zco_create_file_ref(bpSdr,payload->filename.filename_val ,"");
+	//	Sdr bpSdr = bp_get_sdr();
+		printf("\nPID: %d\n", getpid());
+	//	zco_create_file_ref(bpSdr,payload->filename.filename_val ,);
 	}
 }
 
