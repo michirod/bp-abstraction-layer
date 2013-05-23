@@ -423,7 +423,7 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 	{
 		free(payload->status_report);
 	}
-	if(payload->location != BP_PAYLOAD_MEM)
+	if(payload->location != BP_PAYLOAD_MEM && payload->filename.filename_val != NULL)
 	{
 		Sdr bpSdr = bp_get_sdr();
 		char clearupScript[30];
