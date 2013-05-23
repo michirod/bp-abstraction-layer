@@ -423,8 +423,7 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 	{
 		free(payload->status_report);
 	}
-	payload->location = location;
-	if(location != BP_PAYLOAD_MEM)
+	if(payload->location != BP_PAYLOAD_MEM)
 	{
 		Sdr bpSdr = bp_get_sdr();
 		zco_create_file_ref(bpSdr,payload->filename.filename_val ,"");
