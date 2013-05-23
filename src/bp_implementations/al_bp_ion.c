@@ -424,7 +424,9 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 		free(payload->status_report);
 	}
 	Sdr bpSdr = bp_get_sdr();
-	zco_destroy(bpSdr,"");
+	zco_create_file_ref(bpSdr,
+					"",
+					"");
 
 }
 
