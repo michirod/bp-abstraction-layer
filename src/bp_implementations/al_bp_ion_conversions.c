@@ -224,7 +224,6 @@ al_bp_bundle_status_report_t ion_al_bundle_status_report(BpStatusRpt bundle_stat
 Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 {
 	Payload payload;
-	char nameCatlg[255];
 	memset(&payload,0,sizeof(Payload));
 	Sdr bpSdr = bp_get_sdr();
 	sdr_begin_xn(bpSdr);
@@ -243,11 +242,16 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 		memset(&st, 0, sizeof(st));
 		stat(bundle_payload.filename.filename_val, &st);
 		dimFile = st.st_size;
-		Object fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "");
+		Object fileRef = sdr_find(bpSdr, payload->filename.filename_val, &type);
+		if(fileRef == NULL)
+		{
+			printf("\n\tno CATALOGATO\n");
+			fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "");
+			sdr_catlg(bpSdr, bundle_payload.filename.filename_val, 0, fileRef);
+		}
 		payload.content = zco_create(bpSdr, ZcoFileSource, fileRef, 0, (unsigned int) dimFile);
 		payload.length = zco_length(bpSdr,payload.content);
 		//
-		sdr_catlg(bpSdr, bundle_payload.filename.filename_val, 0, fileRef);
 	}
 	sdr_end_xn(bpSdr);
 	return payload;
