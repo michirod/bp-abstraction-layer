@@ -248,7 +248,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	tmpPriority = al_ion_bundle_priority(spec->priority);
 	if(tmpPriority == -1)
 		return BP_EINVAL;
-	tokenClassOfService = (char *)malloc(sizeof(char)*50);
+	tokenClassOfService = (char *)malloc(sizeof(char)*255);
 	sprintf(tokenClassOfService,"%11u.%11u.%11u.%11u.%11u",tmpCustody,tmpPriority,
 			spec->priority.ordinal, spec->unreliable, spec->critical, spec->flow_label);
 	printf("\n\t YESSSS\n");
