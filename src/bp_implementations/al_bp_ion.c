@@ -160,7 +160,7 @@ al_bp_error_t bp_ion_register(al_bp_handle_t * handle,
 	}
 	//If the eid is not registrated then it will be registrated
 	if(bp_ion_find_registration(*handle,&(reginfo->endpoint),newregid) ==  BP_ENOTFOUND)
-		result = addEndpoint(eid,rule,NULL);
+		result = addEndpoint(eid,EnqueueBundle,NULL);
 	if(result == 0)
 		return BP_EREG;
 	result = bp_open(eid,&bpSap);
