@@ -170,6 +170,7 @@ enum al_bp_bundle_priority_enum {
 	BP_PRIORITY_RESERVED = 3,
 };
 typedef enum al_bp_bundle_priority_enum al_bp_bundle_priority_enum;
+
 struct al_bp_bundle_priority_t {
 	al_bp_bundle_priority_enum priority;
 	u32_t ordinal;
@@ -177,7 +178,7 @@ struct al_bp_bundle_priority_t {
 typedef struct al_bp_bundle_priority_t al_bp_bundle_priority_t;
 
 /**
- * Bundle metadata. The delivery_regid is ignored when sending
+ * Bundle specifications. The delivery_regid is ignored when sending
  * bundles, but is filled in by the daemon with the registration
  * id where the bundle was received.
  */

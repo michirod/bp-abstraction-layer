@@ -230,7 +230,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	int result, tmpCustody, tmpPriority, tmpOrdinal, lifespan, classOfService, ackRequested;
 	unsigned char srrFlags;
 	BpCustodySwitch custodySwitch;
-	BpExtendedCOS extendedCOS = { spec->unreliable, spec->critical, spec->flow_label };
+	BpExtendedCOS extendedCOS = { 0, 0, 0 };
 	/* Set option bundle */
 	reportEid = al_ion_endpoint_id(spec->replyto);
 	lifespan = (int) spec->expiration;
@@ -248,9 +248,9 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	tmpPriority = al_ion_bundle_priority(spec->priority);
 	if(tmpPriority == -1)
 		return BP_EINVAL;
-	tmpOrdinal = spec->priority.ordinal;
 	tokenClassOfService = (char *)malloc(sizeof(char)*50);
-	sprintf(tokenClassOfService,"%11u.%11u.%11u",tmpCustody,tmpPriority,tmpOrdinal);
+	sprintf(tokenClassOfService,"%11u.%11u.%11u.%11u.%11u",tmpCustody,tmpPriority,
+			spec->priority.ordinal, spec->unreliable, spec->critical, spec->flow_label);
 	classOfService = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
 	if(classOfService == 0)
 		return BP_EINVAL;

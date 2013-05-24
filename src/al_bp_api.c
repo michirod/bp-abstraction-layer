@@ -658,6 +658,60 @@ al_bp_error_t al_bp_bundle_set_priority(al_bp_bundle_object_t * bundle_object, a
 	return BP_SUCCESS;
 }
 
+al_bp_error_t al_bp_bundle_set_unreliable(al_bp_bundle_object_t * bundle_object, boolean_t unreliable)
+{
+	if (bundle_object == NULL)
+		return BP_ENULLPNTR;
+	if(bundle_object->spec == NULL)
+		return BP_ENULLPNTR;
+	bundle_object->spec->unreliable = unreliable;
+		return BP_SUCCESS;
+}
+
+al_bp_error_t al_bp_bundle_get_unreliable(al_bp_bundle_object_t * bundle_object, boolean_t * unreliable)
+{
+	if (bundle_object.spec == NULL)
+		return BP_ENULLPNTR;
+	*unreliable = bundle_object.spec->unreliable;
+	return BP_SUCCESS;
+}
+
+al_bp_error_t al_bp_bundle_set_critical(al_bp_bundle_object_t * bundle_object, boolean_t critical)
+{
+	if (bundle_object == NULL)
+		return BP_ENULLPNTR;
+	if(bundle_object->spec == NULL)
+		return BP_ENULLPNTR;
+	bundle_object->spec->critical = critical;
+		return BP_SUCCESS;
+}
+
+al_bp_error_t al_bp_bundle_get_critical(al_bp_bundle_object_t * bundle_object, boolean_t * critical)
+{
+	if (bundle_object.spec == NULL)
+		return BP_ENULLPNTR;
+	*critical = bundle_object.spec->critical;
+	return BP_SUCCESS;
+}
+
+al_bp_error_t al_bp_bundle_set_flow_label(al_bp_bundle_object_t * bundle_object, u32_t flow_label)
+{
+	if (bundle_object == NULL)
+		return BP_ENULLPNTR;
+	if(bundle_object->spec == NULL)
+		return BP_ENULLPNTR;
+	bundle_object->spec->flow_label = flow_label;
+		return BP_SUCCESS;
+}
+
+al_bp_error_t al_bp_bundle_get_flow_label(al_bp_bundle_object_t * bundle_object, u32_t * flow_label)
+{
+	if (bundle_object.spec == NULL)
+		return BP_ENULLPNTR;
+	*flow_label = bundle_object.spec->flow_label;
+	return BP_SUCCESS;
+}
+
 al_bp_error_t al_bp_bundle_get_expiration(al_bp_bundle_object_t bundle_object, al_bp_timeval_t * exp)
 {
 	if (bundle_object.spec == NULL)

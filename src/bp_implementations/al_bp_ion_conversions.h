@@ -51,7 +51,7 @@ al_bp_bundle_delivery_opts_t ion_al_bundle_srrFlags(unsigned char ssrFlag);
 
 /* *
  * This conversion convert only the al_bundle_priority_enum
- * The ordinal number is used into the ExtendCOS of the Bundle
+ * The ordinal number is setted in bp_ion_send()
  * */
 
 int al_ion_bundle_priority(al_bp_bundle_priority_t bundle_priority);
