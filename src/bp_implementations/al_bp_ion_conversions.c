@@ -247,7 +247,7 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 		if(fileRef == 0)
 		{
 			char clearupScript[50];
-			sprintf(clearupScript,"rm /tmp/dtnperfbuf_%d*", getpid());
+			sprintf(clearupScript,"rm /tmp/dtnperfbuf_%d", getpid());
 			fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, clearupScript);
 			sdr_catlg(bpSdr, bundle_payload.filename.filename_val, 0, fileRef);
 		}
