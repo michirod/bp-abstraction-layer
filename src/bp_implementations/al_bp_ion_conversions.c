@@ -246,14 +246,11 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 		Object fileRef = sdr_find(bpSdr, bundle_payload.filename.filename_val, &type);
 		if(fileRef == 0)
 		{
-			char clearupScript[50];
-			sprintf(clearupScript,"echo PID: %d*", getpid());
-			fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, clearupScript);
+			fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "");
 			sdr_catlg(bpSdr, bundle_payload.filename.filename_val, 0, fileRef);
 		}
 		payload.content = zco_create(bpSdr, ZcoFileSource, fileRef, 0, (unsigned int) dimFile);
 		payload.length = zco_length(bpSdr,payload.content);
-		//
 	}
 	sdr_end_xn(bpSdr);
 	return payload;
