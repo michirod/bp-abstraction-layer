@@ -670,7 +670,7 @@ al_bp_error_t al_bp_bundle_set_unreliable(al_bp_bundle_object_t * bundle_object,
 
 al_bp_error_t al_bp_bundle_get_unreliable(al_bp_bundle_object_t * bundle_object, boolean_t * unreliable)
 {
-	if (bundle_object.spec == NULL)
+	if (bundle_object->spec == NULL)
 		return BP_ENULLPNTR;
 	*unreliable = bundle_object.spec->unreliable;
 	return BP_SUCCESS;
