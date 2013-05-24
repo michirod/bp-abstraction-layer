@@ -242,7 +242,7 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 		memset(&st, 0, sizeof(st));
 		stat(bundle_payload.filename.filename_val, &st);
 		dimFile = st.st_size;
-		Object fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, NULL);
+		Object fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "");
 		payload.content = zco_create(bpSdr, ZcoFileSource, fileRef, 0, (unsigned int) dimFile);
 		payload.length = zco_length(bpSdr,payload.content);
 	}

@@ -423,7 +423,7 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 	{
 		free(payload->status_report);
 	}
-	if(payload->location != BP_PAYLOAD_MEM && payload->filename.filename_val != NULL)
+/*	if(payload->location != BP_PAYLOAD_MEM && payload->filename.filename_val != NULL)
 	{
 		Sdr bpSdr = bp_get_sdr();
 		char clearupScript[30];
@@ -432,7 +432,7 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 		sdr_begin_xn(bpSdr);
 		zco_create_file_ref(bpSdr,payload->filename.filename_val,"");
 		sdr_end_xn(bpSdr);
-	}
+	}*/
 }
 
 al_bp_error_t bp_ion_error(int err)
