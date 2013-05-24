@@ -243,7 +243,7 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 		memset(&st, 0, sizeof(st));
 		stat(bundle_payload.filename.filename_val, &st);
 		dimFile = st.st_size;
-		Object fileRef = sdr_find(bpSdr, payload.filename.filename_val, &type);
+		Object fileRef = sdr_find(bpSdr, bundle_payload.filename.filename_val, &type);
 		if(fileRef == NULL)
 		{
 			printf("\n\tno CATALOGATO\n");
