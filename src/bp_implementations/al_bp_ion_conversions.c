@@ -244,7 +244,7 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 		stat(bundle_payload.filename.filename_val, &st);
 		dimFile = st.st_size;
 		Object fileRef = sdr_find(bpSdr, bundle_payload.filename.filename_val, &type);
-		if(fileRef == NULL)
+		if(fileRef == 0)
 		{
 			printf("\n\tno CATALOGATO\n");
 			fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "");

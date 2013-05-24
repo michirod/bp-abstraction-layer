@@ -429,7 +429,7 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 		Sdr bpSdr = bp_get_sdr();
 		sdr_begin_xn(bpSdr);
 		Object fileRef = sdr_find(bpSdr, payload->filename.filename_val, &type);
-		if(fileRef != NULL)
+		if(fileRef != 0)
 			zco_destroy_file_ref(bpSdr, fileRef);
 		sdr_end_xn(bpSdr);
 	}
