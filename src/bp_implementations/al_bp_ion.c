@@ -227,7 +227,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	char * destEid = al_ion_endpoint_id(spec->dest);
 	char * reportEid = NULL;
 	char * tokenClassOfService;
-	int result, tmpCustody, tmpPriority, tmpOrdinal, lifespan, classOfService, ackRequested;
+	int result, tmpCustody, tmpPriority, lifespan, classOfService, ackRequested;
 	unsigned char srrFlags;
 	BpCustodySwitch custodySwitch;
 	BpExtendedCOS extendedCOS = { 0, 0, 0 };
@@ -251,6 +251,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	tokenClassOfService = (char *)malloc(sizeof(char)*50);
 	sprintf(tokenClassOfService,"%11u.%11u.%11u.%11u.%11u",tmpCustody,tmpPriority,
 			spec->priority.ordinal, spec->unreliable, spec->critical, spec->flow_label);
+	printf("\n\t YESSSS\n");
 	classOfService = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
 	if(classOfService == 0)
 		return BP_EINVAL;
