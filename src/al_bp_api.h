@@ -297,7 +297,7 @@ al_bp_error_t al_bp_bundle_set_unreliable(al_bp_bundle_object_t * bundle_object,
 /**
  * Get bundle unreliable
  */
-al_bp_error_t al_bp_bundle_get_unreliable(al_bp_bundle_object_t * bundle_object, boolean_t * unreliable);
+al_bp_error_t al_bp_bundle_get_unreliable(al_bp_bundle_object_t bundle_object, boolean_t * unreliable);
 
 /**
  * Set bundle critical
@@ -307,7 +307,7 @@ al_bp_error_t al_bp_bundle_set_critical(al_bp_bundle_object_t * bundle_object, b
 /**
  * Get bundle critical
  */
-al_bp_error_t al_bp_bundle_get_critical(al_bp_bundle_object_t * bundle_object, boolean_t * critical);
+al_bp_error_t al_bp_bundle_get_critical(al_bp_bundle_object_t bundle_object, boolean_t * critical);
 
 /**
  * Set bundle flow label
@@ -317,7 +317,7 @@ al_bp_error_t al_bp_bundle_set_flow_label(al_bp_bundle_object_t * bundle_object,
 /**
  * Get bundle flow label
  */
-al_bp_error_t al_bp_bundle_get_flow_label(al_bp_bundle_object_t * bundle_object, u32_t * flow_label);
+al_bp_error_t al_bp_bundle_get_flow_label(al_bp_bundle_object_t bundle_object, u32_t * flow_label);
 
 /**
  * Get bundle expiration time
