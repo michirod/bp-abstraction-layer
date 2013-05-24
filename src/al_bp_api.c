@@ -672,7 +672,7 @@ al_bp_error_t al_bp_bundle_get_unreliable(al_bp_bundle_object_t * bundle_object,
 {
 	if (bundle_object.spec == NULL)
 		return BP_ENULLPNTR;
-	*unreliable = bundle_object->spec->unreliable;
+	*unreliable = bundle_object.spec->unreliable;
 	return BP_SUCCESS;
 }
 
@@ -690,7 +690,7 @@ al_bp_error_t al_bp_bundle_get_critical(al_bp_bundle_object_t * bundle_object, b
 {
 	if (bundle_object.spec == NULL)
 		return BP_ENULLPNTR;
-	*critical = bundle_object->spec->critical;
+	*critical = bundle_object.spec->critical;
 	return BP_SUCCESS;
 }
 
@@ -708,7 +708,7 @@ al_bp_error_t al_bp_bundle_get_flow_label(al_bp_bundle_object_t * bundle_object,
 {
 	if (bundle_object.spec == NULL)
 		return BP_ENULLPNTR;
-	*flow_label = bundle_object->spec->flow_label;
+	*flow_label = bundle_object.spec->flow_label;
 	return BP_SUCCESS;
 }
 
