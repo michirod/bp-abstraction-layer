@@ -239,6 +239,7 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 	{
 		u32_t dimFile = 0;
 		struct stat st;
+		int type = 0;
 		memset(&st, 0, sizeof(st));
 		stat(bundle_payload.filename.filename_val, &st);
 		dimFile = st.st_size;
