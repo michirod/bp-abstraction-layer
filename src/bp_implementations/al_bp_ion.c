@@ -426,11 +426,8 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 /*	if(payload->location != BP_PAYLOAD_MEM && payload->filename.filename_val != NULL)
 	{
 		Sdr bpSdr = bp_get_sdr();
-		char clearupScript[30];
-	//	sprintf(clearupScript,"rm /tmp/dtnperfbuf_%d*", getpid());
-//		printf("File: %s\nClearupScript: %s\n",payload->filename.filename_val,clearupScript);
 		sdr_begin_xn(bpSdr);
-		zco_create_file_ref(bpSdr,payload->filename.filename_val,"");
+
 		sdr_end_xn(bpSdr);
 	}*/
 }
