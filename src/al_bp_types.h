@@ -191,6 +191,9 @@ struct al_bp_bundle_spec_t {
 	al_bp_timeval_t expiration;
 	al_bp_timestamp_t creation_ts;
 	al_bp_reg_id_t delivery_regid;
+	boolean_t unreliable;
+	boolean_t critical;
+	u32_t flow_label;
 };
 typedef struct al_bp_bundle_spec_t al_bp_bundle_spec_t;
 
