@@ -163,7 +163,10 @@ al_bp_bundle_priority_t dtn_al_bundle_priority(dtn_bundle_priority_t bundle_prio
 dtn_bundle_spec_t al_dtn_bundle_spec(al_bp_bundle_spec_t bundle_spec)
 {
 	dtn_bundle_spec_t dtn_bundle_spec;
+	int i;
+	al_bp_extension_block_t dtn_bundle_block;
 	memset(&dtn_bundle_spec, 0, sizeof(dtn_bundle_spec));
+	memset(&dtn_bundle_block, 0, sizeof(dtn_bundle_block));
 	dtn_bundle_spec.source = al_dtn_endpoint_id(bundle_spec.source);
 	dtn_bundle_spec.dest = al_dtn_endpoint_id(bundle_spec.dest);
 	dtn_bundle_spec.replyto = al_dtn_endpoint_id(bundle_spec.replyto);
@@ -179,22 +182,23 @@ dtn_bundle_spec_t al_dtn_bundle_spec(al_bp_bundle_spec_t bundle_spec)
 	else
 	{
 		dtn_bundle_spec.blocks.blocks_val =
-	    (dtn_extension_block_t*) malloc(bundle_spec.blocks.blocks_len);
+				(dtn_extension_block_t*) malloc(bundle_spec.blocks.blocks_len);
 	    for(i=0; i<bundle_spec.blocks.blocks_len; i++)
 	    {
-	    	block = bundle_spec.blocks.blocks_val[i];
-	        dtn_bundle_spec.blocks.blocks_val[i].type = block.type;
-	        dtn_bundle_spec.blocks.blocks_val[i].flags = block.flags;
-	        dtn_bundle_spec.blocks.blocks_val[i].data.data_len = block.data.data_len;
-	        if(block.data.data_len == 0)
+	    	dtn_bundle_block = bundle_spec.blocks.blocks_val[i];
+	        dtn_bundle_spec.blocks.blocks_val[i].type = dtn_bundle_block.type;
+	        dtn_bundle_spec.blocks.blocks_val[i].flags = dtn_bundle_block.flags;
+	        dtn_bundle_spec.blocks.blocks_val[i].data.data_len = dtn_bundle_block.data.data_len;
+	        if(dtn_bundle_block.data.data_len == 0)
 	        	dtn_bundle_spec.blocks.blocks_val[i].data.data_val = NULL;
 	        else
 	        {
 	        	dtn_bundle_spec.blocks.blocks_val[i].data.data_val =
-	            (char*) malloc(block.data.data_len + 1);
+	        			(char*) malloc(dtn_bundle_block.data.data_len + 1);
 	            memcpy(dtn_bundle_spec.blocks.blocks_val[i].data.data_val,
-	            block.data.data_val, (block.data.data_len) + 1);
-	            dtn_bundle_spec.blocks.blocks_val[i].data.data_val = (char*)block.data.data_val;
+	            		dtn_bundle_block.data.data_val, (dtn_bundle_block.data.data_len) + 1);
+	            dtn_bundle_spec.blocks.blocks_val[i].data.data_val =
+	            		(char*)dtn_bundle_block.data.data_val;
 	        }
 	    }
 	}
@@ -203,22 +207,23 @@ dtn_bundle_spec_t al_dtn_bundle_spec(al_bp_bundle_spec_t bundle_spec)
 	else
 	{
 		dtn_bundle_spec.metadata.metadata_val =
-	    (dtn_extension_block_t*) malloc(bundle_spec.metadata.metadata_len);
+				(dtn_extension_block_t*) malloc(bundle_spec.metadata.metadata_len);
 	    for(i=0; i<bundle_spec.metadata.metadata_len; i++)
 	    {
-	    	block = bundle_spec.metadata.metadata_val[i];
-	        dtn_bundle_spec.metadata.metadata_val[i].type = block.type;
-	        dtn_bundle_spec.metadata.metadata_val[i].flags = block.flags;
-	        dtn_bundle_spec.metadata.metadata_val[i].data.data_len = block.data.data_len;
+	    	dtn_bundle_block = bundle_spec.metadata.metadata_val[i];
+	        dtn_bundle_spec.metadata.metadata_val[i].type = dtn_bundle_block.type;
+	        dtn_bundle_spec.metadata.metadata_val[i].flags = dtn_bundle_block.flags;
+	        dtn_bundle_spec.metadata.metadata_val[i].data.data_len = dtn_bundle_block.data.data_len;
 	        if(block.data.data_len == 0)
 	        	dtn_bundle_spec.metadata.metadata_val[i].data.data_val = NULL;
 	        else
 	        {
 	        	dtn_bundle_spec.metadata.metadata_val[i].data.data_val =
-	            (char*) malloc(block.data.data_len + 1);
+	        			(char*) malloc(dtn_bundle_block.data.data_len + 1);
 	            memcpy(dtn_bundle_spec.metadata.metadata_val[i].data.data_val,
-	            block.data.data_val, (block.data.data_len) + 1);
-	            dtn_bundle_spec.metadata.metadata_val[i].data.data_val = (char*)block.data.data_val;
+	            		dtn_bundle_block.data.data_val, (dtn_bundle_block.data.data_len) + 1);
+	            dtn_bundle_spec.metadata.metadata_val[i].data.data_val =
+	            		(char*)dtn_bundle_block.data.data_val;
 	        }
 	    }
 	}
