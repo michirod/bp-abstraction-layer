@@ -152,15 +152,15 @@ al_bp_error_t bp_ion_register(al_bp_handle_t * handle,
 	BpRecvRule rule;
 	bpSap = al_ion_handle(*handle);
 	eid = al_ion_endpoint_id(reginfo->endpoint);
-	switch(reginfo->flags)
+/*	switch(reginfo->flags)
 	{
 		case BP_REG_DEFER: rule = EnqueueBundle;break;
 		case BP_REG_DROP: rule = DiscardBundle;break;
 		default: return BP_EINVAL;
-	}
+	}*/
 	//If the eid is not registrated then it will be registrated
 	if(bp_ion_find_registration(*handle,&(reginfo->endpoint),newregid) ==  BP_ENOTFOUND)
-		result = addEndpoint(eid,EnqueueBundle,NULL);
+		result = addEndpoint(eid, EnqueueBundle ,NULL);
 	if(result == 0)
 		return BP_EREG;
 	result = bp_open(eid,&bpSap);

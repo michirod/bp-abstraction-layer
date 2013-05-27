@@ -154,6 +154,18 @@ al_bp_error_t al_bp_set_payload(al_bp_bundle_payload_t* payload,
                            char* val, int len);
 
 /**
+ * Frees dynamic storage allocated by the xdr for a bundle extension blocks in
+ * bp_recv.
+ */
+void al_bp_free_extension_blocks(al_bp_bundle_spec_t* spec);
+
+/**
+ * Frees dynamic storage allocated by the xdr for a bundle metadata blocks in
+ * bp_recv.
+ */
+void al_bp_free_metadata_blocks(al_bp_bundle_spec_t* spec);
+
+/**
  * Frees dynamic storage allocated by the xdr for a bundle payload in
  * bp_recv.
  */

@@ -1,6 +1,6 @@
 /********************************************************
  **  Authors: Michele Rodolfi, michele.rodolfi@studio.unibo.it
- **           Anna d'Amico, anna.damico@studio.unibo.it
+ **           Anna d'Amico, anna.damico2@studio.unibo.it
  **           Carlo Caini (DTNperf_3 project supervisor), carlo.caini@unibo.it
  **
  **
@@ -300,6 +300,40 @@ al_bp_error_t al_bp_set_payload(al_bp_bundle_payload_t* payload,
 	}
 }
 
+void al_bp_free_extension_blocks(al_bp_bundle_spec_t* spec)
+{
+        switch (al_bp_get_implementation())
+	{
+	case BP_DTN:
+		bp_dtn_free_extension_blocks(spec);
+		break;
+
+	case BP_ION:
+                // NOT IMPLEMENTED
+		break;
+
+	default: // cannot find bundle protocol implementation
+		return ;
+	}
+}
+
+void al_bp_free_metadata_blocks(al_bp_bundle_spec_t* spec)
+{
+        switch (al_bp_get_implementation())
+	{
+	case BP_DTN:
+		bp_dtn_free_metadata_blocks(spec);
+		break;
+
+	case BP_ION:
+                // NOT IMPLEMENTED
+		break;
+
+	default: // cannot find bundle protocol implementation
+		return ;
+	}
+}
+
 void al_bp_free_payload(al_bp_bundle_payload_t* payload)
 {
 	payload->status_report = NULL;
@@ -410,6 +444,10 @@ al_bp_error_t al_bp_bundle_receive(al_bp_handle_t handle,
 		al_bp_timeval_t timeout)
 {
 	al_bp_free_payload(bundle_object.payload);
+	al_bp_free_extension_blocks(bundle_object.spec);
+	al_bp_free_metadata_blocks(bundle_object.spec);
+	memset(bundle_object.id, 0, sizeof(al_bp_bundle_id_t));
+	memset(bundle_object.payload, 0, sizeof(al_bp_bundle_payload_t));
 	memset(bundle_object.spec, 0, sizeof(al_bp_bundle_spec_t));
 	return al_bp_recv(handle, bundle_object.spec, payload_location, bundle_object.payload, timeout);
 }
@@ -420,6 +458,10 @@ al_bp_error_t al_bp_bundle_create(al_bp_bundle_object_t * bundle_object)
 		return BP_ENULLPNTR;
 	bundle_object->id = (al_bp_bundle_id_t*) malloc(sizeof(al_bp_bundle_id_t));
 	bundle_object->spec = (al_bp_bundle_spec_t*) malloc(sizeof(al_bp_bundle_spec_t));
+	bundle_object->spec->blocks.blocks_val =
+	                (al_bp_extension_block_t*) malloc(sizeof(al_bp_extension_block_t));
+	bundle_object->spec->metadata.metadata_val =
+	                (al_bp_extension_block_t*) malloc(sizeof(al_bp_extension_block_t));
 	bundle_object->payload = (al_bp_bundle_payload_t*) malloc(sizeof(al_bp_bundle_payload_t));
 	memset(bundle_object->id, 0, sizeof(al_bp_bundle_id_t));
 	memset(bundle_object->spec, 0, sizeof(al_bp_bundle_spec_t));

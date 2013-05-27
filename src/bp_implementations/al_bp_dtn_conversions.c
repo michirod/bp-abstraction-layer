@@ -172,6 +172,56 @@ dtn_bundle_spec_t al_dtn_bundle_spec(al_bp_bundle_spec_t bundle_spec)
 	dtn_bundle_spec.expiration = al_dtn_timeval(bundle_spec.expiration);
 	dtn_bundle_spec.creation_ts = al_dtn_timestamp(bundle_spec.creation_ts);
 	dtn_bundle_spec.delivery_regid = al_dtn_reg_id(bundle_spec.delivery_regid);
+	dtn_bundle_spec.blocks.blocks_len = bundle_spec.blocks.blocks_len;
+	dtn_bundle_spec.metadata.metadata_len = bundle_spec.metadata.metadata_len;
+	if(dtn_bundle_spec.blocks.blocks_len == 0)
+		dtn_bundle_spec.blocks.blocks_val = NULL;
+	else
+	{
+		dtn_bundle_spec.blocks.blocks_val =
+	    (dtn_extension_block_t*) malloc(bundle_spec.blocks.blocks_len);
+	    for(i=0; i<bundle_spec.blocks.blocks_len; i++)
+	    {
+	    	block = bundle_spec.blocks.blocks_val[i];
+	        dtn_bundle_spec.blocks.blocks_val[i].type = block.type;
+	        dtn_bundle_spec.blocks.blocks_val[i].flags = block.flags;
+	        dtn_bundle_spec.blocks.blocks_val[i].data.data_len = block.data.data_len;
+	        if(block.data.data_len == 0)
+	        	dtn_bundle_spec.blocks.blocks_val[i].data.data_val = NULL;
+	        else
+	        {
+	        	dtn_bundle_spec.blocks.blocks_val[i].data.data_val =
+	            (char*) malloc(block.data.data_len + 1);
+	            memcpy(dtn_bundle_spec.blocks.blocks_val[i].data.data_val,
+	            block.data.data_val, (block.data.data_len) + 1);
+	            dtn_bundle_spec.blocks.blocks_val[i].data.data_val = (char*)block.data.data_val;
+	        }
+	    }
+	}
+	if (dtn_bundle_spec.metadata.metadata_len == 0)
+		dtn_bundle_spec.metadata.metadata_val = NULL;
+	else
+	{
+		dtn_bundle_spec.metadata.metadata_val =
+	    (dtn_extension_block_t*) malloc(bundle_spec.metadata.metadata_len);
+	    for(i=0; i<bundle_spec.metadata.metadata_len; i++)
+	    {
+	    	block = bundle_spec.metadata.metadata_val[i];
+	        dtn_bundle_spec.metadata.metadata_val[i].type = block.type;
+	        dtn_bundle_spec.metadata.metadata_val[i].flags = block.flags;
+	        dtn_bundle_spec.metadata.metadata_val[i].data.data_len = block.data.data_len;
+	        if(block.data.data_len == 0)
+	        	dtn_bundle_spec.metadata.metadata_val[i].data.data_val = NULL;
+	        else
+	        {
+	        	dtn_bundle_spec.metadata.metadata_val[i].data.data_val =
+	            (char*) malloc(block.data.data_len + 1);
+	            memcpy(dtn_bundle_spec.metadata.metadata_val[i].data.data_val,
+	            block.data.data_val, (block.data.data_len) + 1);
+	            dtn_bundle_spec.metadata.metadata_val[i].data.data_val = (char*)block.data.data_val;
+	        }
+	    }
+	}
 	return dtn_bundle_spec;
 }
 al_bp_bundle_spec_t dtn_al_bundle_spec(dtn_bundle_spec_t bundle_spec)

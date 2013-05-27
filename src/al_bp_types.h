@@ -178,6 +178,20 @@ struct al_bp_bundle_priority_t {
 typedef struct al_bp_bundle_priority_t al_bp_bundle_priority_t;
 
 /**
+ * Extension block.
+ */
+
+struct al_bp_extension_block_t {
+	u32_t type;
+	u32_t flags;
+	struct {
+		u32_t data_len;
+		char *data_val;
+	} data;
+};
+typedef struct al_bp_extension_block_t al_bp_extension_block_t;
+
+/**
  * Bundle specifications. The delivery_regid is ignored when sending
  * bundles, but is filled in by the daemon with the registration
  * id where the bundle was received.
@@ -192,6 +206,14 @@ struct al_bp_bundle_spec_t {
 	al_bp_timeval_t expiration;
 	al_bp_timestamp_t creation_ts;
 	al_bp_reg_id_t delivery_regid;
+	struct {
+		u32_t blocks_len;
+		al_bp_extension_block_t *blocks_val;
+	} blocks;
+	struct {
+		u32_t metadata_len;
+		al_bp_extension_block_t *metadata_val;
+	} metadata;
 	boolean_t unreliable;
 	boolean_t critical;
 	u32_t flow_label;
