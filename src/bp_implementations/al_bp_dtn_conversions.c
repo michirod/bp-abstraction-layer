@@ -214,7 +214,7 @@ dtn_bundle_spec_t al_dtn_bundle_spec(al_bp_bundle_spec_t bundle_spec)
 	        dtn_bundle_spec.metadata.metadata_val[i].type = dtn_bundle_block.type;
 	        dtn_bundle_spec.metadata.metadata_val[i].flags = dtn_bundle_block.flags;
 	        dtn_bundle_spec.metadata.metadata_val[i].data.data_len = dtn_bundle_block.data.data_len;
-	        if(block.data.data_len == 0)
+	        if(dtn_bundle_block.data.data_len == 0)
 	        	dtn_bundle_spec.metadata.metadata_val[i].data.data_val = NULL;
 	        else
 	        {
