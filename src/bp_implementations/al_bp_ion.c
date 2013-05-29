@@ -294,9 +294,7 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	DtnTime ion_timeout = al_ion_timeval(timeout);
 	int second_timeout = (int) ion_timeout.seconds;
 	int result;
-	printf("\nAL-BP: Before receive\n");
 	result = bp_receive(bpSap,&dlv,second_timeout);
-	printf("\nAL-BP: After receive\n");
 	if(result < 0)
 	{
 		printf("\nAL-BP: Result 0\n");
