@@ -246,7 +246,7 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 		Object fileRef = sdr_find(bpSdr, bundle_payload.filename.filename_val, &type);
 		if(fileRef == 0)
 		{
-			fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, NULL);
+			fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "");
 			sdr_catlg(bpSdr, bundle_payload.filename.filename_val, 0, fileRef);
 		}
 		payload.content = zco_create(bpSdr, ZcoFileSource, fileRef, 0, (unsigned int) dimFile);
