@@ -294,13 +294,24 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	DtnTime ion_timeout = al_ion_timeval(timeout);
 	int second_timeout = (int) ion_timeout.seconds;
 	int result;
+	printf("\nAL-BP: Before receive\n");
 	result = bp_receive(bpSap,&dlv,second_timeout);
+	printf("\nAL-BP: After receive\n");
 	if(result < 0)
+	{
+		printf("\nAL-BP: Result 0\n");
 		return BP_ERECV;
+	}
 	if(dlv.result == BpReceptionTimedOut)
+	{
+		printf("\nAL-BP: Result Timeout\n");
 		return BP_ETIMEOUT;
+	}
 	if(dlv.result == BpReceptionInterrupted)
+	{
+		printf("\nAL-BP: Reception Interrupted\n");
 		return BP_ERECVINT;
+	}
 	/* Set Bundle Spec */
 	spec->creation_ts = ion_al_timestamp(dlv.bundleCreationTime);
 	spec->source = ion_al_endpoint_id(dlv.bundleSourceEid);
@@ -428,15 +439,9 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 		int type = 0;
 		Sdr bpSdr = bp_get_sdr();
 		sdr_begin_xn(bpSdr);
-		printf("\n\tFILE NAME: %s\n", payload->filename.filename_val);
 		Object fileRef = sdr_find(bpSdr, payload->filename.filename_val, &type);
 		if(fileRef != 0)
-		{
-			printf("\n\tFOUNDED IN CATALOG\n");
 			zco_destroy_file_ref(bpSdr, fileRef);
-		}
-		else
-			printf("\n\tNOT FOUNDED IN CATALOG\n");
 		sdr_end_xn(bpSdr);
 	}
 }
