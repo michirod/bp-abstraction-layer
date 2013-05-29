@@ -248,6 +248,7 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 		{
 			fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "");
 			sdr_catlg(bpSdr, bundle_payload.filename.filename_val, 0, fileRef);
+			printf("\n\tCATALOGUE Bundle\n");
 		}
 		payload.content = zco_create(bpSdr, ZcoFileSource, fileRef, 0, (unsigned int) dimFile);
 		payload.length = zco_length(bpSdr,payload.content);
