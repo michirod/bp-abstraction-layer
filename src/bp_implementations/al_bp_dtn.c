@@ -310,6 +310,16 @@ void bp_dtn_free_payload(al_bp_bundle_payload_t* payload)
 
 }
 
+void bp_dtn_free_extension_blocks(al_bp_bundle_spec_t* spec)
+{
+
+}
+
+void bp_dtn_free_metadata_blocks(al_bp_bundle_spec_t* spec)
+{
+
+}
+
 al_bp_error_t bp_dtn_error(int err)
 {
 	return BP_ENOTIMPL;
