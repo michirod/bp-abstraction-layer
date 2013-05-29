@@ -247,7 +247,7 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 		Object fileRef = sdr_find(bpSdr, bundle_payload.filename.filename_val, &type);
 		if(fileRef == 0)
 		{
-			fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "");
+			fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, NULL);
 			sdr_catlg(bpSdr, bundle_payload.filename.filename_val, 0, fileRef);
 			printf("\n\tCATALOGUE Bundle\n");
 		}
