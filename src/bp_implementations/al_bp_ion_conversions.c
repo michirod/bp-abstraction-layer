@@ -243,6 +243,7 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 		memset(&st, 0, sizeof(st));
 		stat(bundle_payload.filename.filename_val, &st);
 		dimFile = st.st_size;
+		printf("\n\t DIM FILE: %lu", dimFile);
 		Object fileRef = sdr_find(bpSdr, bundle_payload.filename.filename_val, &type);
 		if(fileRef == 0)
 		{
