@@ -140,17 +140,15 @@ endif
 endif
 
 ifeq ($(strip $(LIB)),static)
-SUFFIX=.a
-LIB_CC=ar crs
+LIB_CC=ar crs $(LIB_NAME).a
 else
-SUFFIX=.so
-LIB_CC=gcc -shared -o
+LIB_CC=gcc -shared -Wl,-soname,$(LIB_NAME).so -o $(LIB_NAME).so
 endif
 
 INSTALLED=$(wildcard /usr/lib/$(LIB_NAME)*)
 
 lib: objs
-	$(LIB_CC) $(LIB_NAME)$(SUFFIX) *.o
+	$(LIB_CC) *.o
 	
 install: 
 <<<<<<< HEAD
