@@ -14,6 +14,8 @@
 #define NULL      ((void*)0)
 #endif
 
+#include <stdint.h>
+
 typedef char char_t;
 typedef char * string_t;
 typedef const char* cstring_t;

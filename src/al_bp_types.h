@@ -318,6 +318,7 @@ struct al_bp_bundle_payload_t {
 		char *filename_val;
 	} filename;
 	struct {
+		uint32_t buf_crc;
 		u32_t buf_len;
 		char *buf_val;
 	} buf;
