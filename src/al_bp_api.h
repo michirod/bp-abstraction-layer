@@ -370,10 +370,4 @@ al_bp_error_t al_bp_bundle_set_delivery_opts(al_bp_bundle_object_t * bundle_obje
 al_bp_error_t al_bp_bundle_get_status_report(al_bp_bundle_object_t bundle_object,
 											al_bp_bundle_status_report_t ** status_report);
 
-// Automatically generated CRC function
-// polynomial: 0x104C11DB7
-extern uint32_t crc_table[];
-
-uint32_t calc_crc32_d8(uint32_t crc, uint8_t *data, int len);
-
 #endif /* BP_ABSTRACTION_API_H_ */
