@@ -242,23 +242,29 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	Object adu = ion_payload.content;
 	Object newBundleObj;
 	/* Create String for parse class of service */
-	if(spec->dopts != BP_DOPTS_CUSTODY)
-			tmpCustody = 0;
-	else
+	
+	if(spec->dopts & BP_DOPTS_CUSTODY)
+	{
 			tmpCustody = 1;
+	}
+	else
+	{
+			tmpCustody = 0;
+	}
 	tmpPriority = al_ion_bundle_priority(spec->priority);
 	if(tmpPriority == -1)
 		return BP_EINVAL;
 	tokenClassOfService = (char *)malloc(sizeof(char)*255);
-//	sprintf(tokenClassOfService,"%11u.%11u.%11u.%11u.%11u",tmpCustody,tmpPriority,
-//			spec->priority.ordinal, spec->unreliable, spec->critical, spec->flow_label);
-	sprintf(tokenClassOfService,"%11u.%11u",tmpCustody,tmpPriority,
-				spec->priority.ordinal);
+	sprintf(tokenClassOfService,"%1u.%1u.%u.%1u.%1u.%u", tmpCustody, tmpPriority, spec->priority.ordinal, 
+			spec->unreliable==TRUE?1:0, spec->critical==TRUE?1:0, spec->flow_label);
+	
+	//printf("COS is: %s\n", tokenClassOfService);
+
 	classOfService = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
 	if(classOfService == 0)
 		return BP_EINVAL;
 	/* Send Bundle*/
-	result = bp_send(bpSap,destEid,reportEid,lifespan,classOfService,
+	result = bp_send(bpSap,destEid,reportEid,lifespan,tmpPriority,
 			custodySwitch,srrFlags,ackRequested,&extendedCOS,adu,&newBundleObj);
 	if(result == 0)
 			return BP_ENOSPACE;
