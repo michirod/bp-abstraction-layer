@@ -120,21 +120,21 @@ ifeq ($(strip $(DTN_DIR)),)
 # ION
 LIB_NAME=$(LIB_NAME_BASE)_vION
 INC=-I$(ION_DIR) -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library -I$(ION_DIR)/ici/include
-OPT=-DION_IMPLEMENTATION -fPIC
+OPT=-DION_IMPLEMENTATION -fPIC -Wall -Werror
 endif
 else ifeq ($(strip $(ION_DIR)),)
 ifneq ($(strip $(DTN2_DIR)),)
 # DTN2
 LIB_NAME=$(LIB_NAME_BASE)_vDTN2
 INC=-I$(DTN2_DIR) -I$(DTN2_DIR)/applib/
-OPT=-DDTN2_IMPLEMENTATION -fPIC
+OPT=-DDTN2_IMPLEMENTATION -fPIC -Wall -Werror
 endif
 else ifneq ($(strip $(ION_DIR)),)
 ifneq ($(strip $(DTN2_DIR)),)
 # BOTH
 LIB_NAME=$(LIB_NAME_BASE)
 INC=-I$(DTN2_DIR) -I$(DTN2_DIR)/applib/ -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library -I$(ION_DIR)/ici/include
-OPT=-DION_IMPLEMENTATION -DDTN2_IMPLEMENTATION -fPIC
+OPT=-DION_IMPLEMENTATION -DDTN2_IMPLEMENTATION -fPIC -Wall -Werror
 endif
 #else ifeq ($(and $(strip $(DTN2_DIR)), $(strip $(ION_DIR))),)
 endif
@@ -142,7 +142,7 @@ endif
 ifeq ($(strip $(LIB)),static)
 LIB_CC=ar crs $(LIB_NAME).a
 else
-LIB_CC=gcc -shared -Wl,-soname,$(LIB_NAME).so -o $(LIB_NAME).so
+LIB_CC=$(CC) -shared -Wl,-soname,$(LIB_NAME).so -o $(LIB_NAME).so
 endif
 
 INSTALLED=$(wildcard /usr/lib/$(LIB_NAME)*)

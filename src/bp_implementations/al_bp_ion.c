@@ -73,10 +73,10 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 				if(result == 0)
 					return BP_EBUILDEID;
 			}
-			long int service_num = getpid();
+			unsigned long int service_num = getpid();
 			sprintf(eidString, "%s:%lu",
-							CBHESCHEMENAME,getOwnNodeNbr());
-			sprintf(eidString, "%s.%u",
+							CBHESCHEMENAME,(unsigned long int)getOwnNodeNbr());
+			sprintf(eidString, "%s.%lu",
 							eidString,service_num);
 			(*local_eid) = ion_al_endpoint_id(eidString);
 		}
@@ -112,7 +112,7 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 		}
 		long int service_num = strtol(service_tag,NULL,10);
 		sprintf(eidString, "%s:%lu",
-								CBHESCHEMENAME,getOwnNodeNbr());
+								CBHESCHEMENAME,(unsigned long int) getOwnNodeNbr());
 		sprintf(eidString, "%s.%lu",
 				eidString,service_num);
 		(*local_eid) = ion_al_endpoint_id(eidString);
@@ -150,7 +150,6 @@ al_bp_error_t bp_ion_register(al_bp_handle_t * handle,
 	int result;
 	BpSAP bpSap;
 	char * eid;
-	BpRecvRule rule;
 	bpSap = al_ion_handle(*handle);
 	eid = al_ion_endpoint_id(reginfo->endpoint);
 /*	switch(reginfo->flags)
@@ -255,8 +254,8 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	if(tmpPriority == -1)
 		return BP_EINVAL;
 	tokenClassOfService = (char *)malloc(sizeof(char)*255);
-	sprintf(tokenClassOfService,"%1u.%1u.%u.%1u.%1u.%u", tmpCustody, tmpPriority, spec->priority.ordinal, 
-			spec->unreliable==TRUE?1:0, spec->critical==TRUE?1:0, spec->flow_label);
+	sprintf(tokenClassOfService,"%1u.%1u.%lu.%1u.%1u.%lu", tmpCustody, tmpPriority, (unsigned long) spec->priority.ordinal, 
+			spec->unreliable==TRUE?1:0, spec->critical==TRUE?1:0, (unsigned long) spec->flow_label);
 	
 	//printf("COS is: %s\n", tokenClassOfService);
 
@@ -351,7 +350,7 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 		 * tmp_eid = "1.2222"
 		 * */
 	}
-	sprintf(filename,"/tmp/ion%s_%lu_%lu",tmp,
+	sprintf(filename,"/tmp/ion%s_%u_%u",tmp,
 			dlv.bundleCreationTime.seconds,dlv.bundleCreationTime.count);
 	(*payload)  = ion_al_bundle_payload(ion_payload,location,filename);
 	free(filename);
