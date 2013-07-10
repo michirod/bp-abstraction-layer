@@ -160,9 +160,11 @@ al_bp_error_t bp_ion_register(al_bp_handle_t * handle,
 	}*/
 	//If the eid is not registrated then it will be registrated
 	if(bp_ion_find_registration(*handle,&(reginfo->endpoint),newregid) ==  BP_ENOTFOUND)
+	{
 		result = addEndpoint(eid, DiscardBundle ,NULL);
-	if(result == 0)
-		return BP_EREG;
+		if(result == 0)
+			return BP_EREG;
+	}
 	result = bp_open(eid,&bpSap);
 	if(result == -1)
 		return BP_EREG;
@@ -227,7 +229,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	char * destEid = al_ion_endpoint_id(spec->dest);
 	char * reportEid = NULL;
 	char * tokenClassOfService;
-	int result, tmpCustody, tmpPriority, lifespan, classOfService, ackRequested;
+	int result, tmpCustody, tmpPriority, lifespan, ackRequested;
 	unsigned char srrFlags;
 	BpCustodySwitch custodySwitch;
 	BpExtendedCOS extendedCOS = { 0, 0, 0 };
@@ -259,8 +261,8 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	
 	//printf("COS is: %s\n", tokenClassOfService);
 
-	classOfService = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
-	if(classOfService == 0)
+	result = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
+	if(result == 0)
 		return BP_EINVAL;
 	/* Send Bundle*/
 	result = bp_send(bpSap,destEid,reportEid,lifespan,tmpPriority,
