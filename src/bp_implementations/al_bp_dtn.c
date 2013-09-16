@@ -184,7 +184,7 @@ void bp_dtn_free_extension_blocks(al_bp_bundle_spec_t* spec)
         int i;
         for ( i=0; i<spec->blocks.blocks_len; i++ ) {
             printf("Freeing extension block [%d].data at 0x%08X\n",
-                               i, spec->blocks.blocks_val[i].data.data_val);
+                               i, (unsigned int) *(spec->blocks.blocks_val[i].data.data_val));
             free(spec->blocks.blocks_val[i].data.data_val);
         }
         free(spec->blocks.blocks_val);
@@ -196,7 +196,7 @@ void bp_dtn_free_metadata_blocks(al_bp_bundle_spec_t* spec)
         int i;
         for ( i=0; i<spec->metadata.metadata_len; i++ ) {
             printf("Freeing metadata block [%d].data at 0x%08X\n",
-                               i, spec->metadata.metadata_val[i].data.data_val);
+                               i, (unsigned int) *(spec->metadata.metadata_val[i].data.data_val));
             free(spec->metadata.metadata_val[i].data.data_val);
         }
         free(spec->metadata.metadata_val);
