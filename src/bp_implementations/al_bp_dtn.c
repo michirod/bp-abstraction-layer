@@ -107,7 +107,9 @@ al_bp_error_t bp_dtn_send(al_bp_handle_t handle,
 	dtn_bundle_spec_t dtn_spec = al_dtn_bundle_spec(*spec);
 	dtn_bundle_payload_t dtn_payload = al_dtn_bundle_payload(*payload);
 	dtn_bundle_id_t dtn_id = al_dtn_bundle_id(*id);
+	printf("AL_BP: before send: METADATA_LEN "+dtn_bundle_spec.blocks.blocks_len);
 	int result = dtn_send(dtn_handle, dtn_regid, & dtn_spec, & dtn_payload, & dtn_id);
+	printf("AL_BP: after send: METADATA_LEN "+dtn_bundle_spec.blocks.blocks_len);
 	handle = dtn_al_handle(dtn_handle);
 	regid = dtn_al_reg_id(dtn_regid);
 	*spec = dtn_al_bundle_spec(dtn_spec);
