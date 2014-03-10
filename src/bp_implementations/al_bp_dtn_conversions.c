@@ -365,6 +365,7 @@ al_bp_bundle_status_report_t dtn_al_bundle_status_report(dtn_bundle_status_repor
 {
 	al_bp_bundle_status_report_t bp_bundle_status_report;
 	memset(&bp_bundle_status_report, 0, sizeof(al_bp_bundle_status_report_t));
+	printf("AL_BP: fragment offset %d\n",bundle_status_report.bundle_id.frag_offset)
 	bp_bundle_status_report.bundle_id = dtn_al_bundle_id(bundle_status_report.bundle_id);
 	bp_bundle_status_report.reason = dtn_al_status_report_reason(bundle_status_report.reason);
 	bp_bundle_status_report.flags = dtn_al_status_report_flags(bundle_status_report.flags);

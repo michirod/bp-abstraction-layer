@@ -105,10 +105,8 @@ al_bp_error_t bp_dtn_send(al_bp_handle_t handle,
 	dtn_handle_t dtn_handle = al_dtn_handle(handle);
 	dtn_reg_id_t dtn_regid = al_dtn_reg_id(regid);
 	dtn_bundle_spec_t dtn_spec = al_dtn_bundle_spec(*spec);
-	printf("AL_BP: offset al %lu\n", id->frag_offset);
 	dtn_bundle_payload_t dtn_payload = al_dtn_bundle_payload(*payload);
 	dtn_bundle_id_t dtn_id = al_dtn_bundle_id(*id);
-	printf("AL_BP: offset dtn %d\n", dtn_id.frag_offset);
 	int result = dtn_send(dtn_handle, dtn_regid, & dtn_spec, & dtn_payload, & dtn_id);
 	handle = dtn_al_handle(dtn_handle);
 	regid = dtn_al_reg_id(dtn_regid);
