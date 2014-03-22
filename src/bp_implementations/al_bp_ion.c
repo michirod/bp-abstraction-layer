@@ -73,7 +73,7 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 				if(result == 0)
 					return BP_EBUILDEID;
 			}
-			unsigned long int service_num = getpid()%3600;
+			unsigned long int service_num = getpid()%36000;
 			printf("AL_BP: pid-> %i - sn-> %lu",getpid(),service_num);
 			sprintf(eidString, "%s:%lu",
 							CBHESCHEMENAME,(unsigned long int)getOwnNodeNbr());
