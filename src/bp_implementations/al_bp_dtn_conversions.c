@@ -332,7 +332,10 @@ dtn_bundle_id_t al_dtn_bundle_id(al_bp_bundle_id_t bundle_id)
 	dtn_bundle_id_t dtn_bundle_id;
 	dtn_bundle_id.source = al_dtn_endpoint_id(bundle_id.source);
 	dtn_bundle_id.creation_ts = al_dtn_timestamp(bundle_id.creation_ts);
-	dtn_bundle_id.frag_offset = bundle_id.frag_offset;
+	if(bundle_id.frag_offset < 0)
+		dtn_bundle_id.frag_offset = -1;
+	else
+		dtn_bundle_id.frag_offset = bundle_id.frag_offset;
 	dtn_bundle_id.orig_length = bundle_id.orig_length;
 	return dtn_bundle_id;
 }
