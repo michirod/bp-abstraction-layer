@@ -341,7 +341,10 @@ al_bp_bundle_id_t dtn_al_bundle_id(dtn_bundle_id_t bundle_id)
 	al_bp_bundle_id_t bp_bundle_id;
 	bp_bundle_id.source = dtn_al_endpoint_id(bundle_id.source);
 	bp_bundle_id.creation_ts = dtn_al_timestamp(bundle_id.creation_ts);
-	bp_bundle_id.frag_offset = bundle_id.frag_offset;
+	if(bundle_id.frag_offset < 0)
+		bp_bundle_id.frag_offset = -1;
+	else
+		bp_bundle_id.frag_offset = bundle_id.frag_offset;
 	bp_bundle_id.orig_length = bundle_id.orig_length;
 	return bp_bundle_id;
 }
