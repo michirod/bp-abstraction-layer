@@ -59,8 +59,7 @@ al_bp_error_t al_bp_errno(al_bp_handle_t handle);
 al_bp_error_t al_bp_build_local_eid(al_bp_handle_t handle,
 									al_bp_endpoint_id_t* local_eid,
 									const char* service_tag,
-									char * type,
-									char * eid_destination);
+									al_bp_scheme_t type);
 
 
 /**

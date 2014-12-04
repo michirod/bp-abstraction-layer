@@ -52,61 +52,15 @@ al_bp_error_t bp_ion_errno(al_bp_handle_t handle)
 
 al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 								const char* service_tag,
-								const char * type,
-								char * eid_destination)
+								al_bp_scheme_t  type)
 {
 	char * eidString, * hostname;
 	int result;
 	VScheme * scheme;
 	PsmAddress psmAddress;
 	eidString = (char *)malloc(sizeof(char)*AL_BP_MAX_ENDPOINT_ID);
-/*Client*/
-	if(strcmp(type,"Client") == 0)
-	{
-		if(strncmp(eid_destination,CBHESCHEMENAME,3) == 0)
-		{
-			findScheme(CBHESCHEMENAME,&scheme,&psmAddress);
-			if(psmAddress == 0)
-			{
-				/*Unknow scheme*/
-				result = addScheme(CBHESCHEMENAME,"ipnfw","ipnadmin");
-				if(result == 0)
-					return BP_EBUILDEID;
-			}
-			unsigned long int service_num;
-			if (getpid()<10000)
-				service_num = getpid()+10000;
-			else
-				service_num = getpid();
 
-			printf("AL_BP: pid-> %i - sn-> %lu",getpid(),service_num);
-			sprintf(eidString, "%s:%lu",
-							CBHESCHEMENAME,(unsigned long int)getOwnNodeNbr());
-			sprintf(eidString, "%s.%lu",
-							eidString,service_num);
-			(*local_eid) = ion_al_endpoint_id(eidString);
-		}
-		else
-		{
-			findScheme(DTN2SCHEMENAME,&scheme,&psmAddress);
-			if(psmAddress == 0)
-			{
-				/*Unknow scheme*/
-				result = addScheme(DTN2SCHEMENAME,"dtn2fw","dtn2admin");
-				if(result == 0)
-					return BP_EBUILDEID;
-			}
-			hostname = (char *)malloc(sizeof(char)*50);
-			result = gethostname(hostname, sizeof(hostname));
-			if(result == -1)
-				return BP_EBUILDEID;
-			sprintf(eidString,"%s://%s.dtn%s",DTN2SCHEMENAME,hostname,service_tag);
-			(*local_eid) = ion_al_endpoint_id(eidString);
-			free(hostname);
-		}
-	}
-/* Server and Monitor CBHE*/
-	else if(strcmp(type,"Server-CBHE")==0 || strcmp(type,"Monitor-CBHE") == 0)
+	if(type == CBHE_SCHEME)
 	{
 		findScheme(CBHESCHEMENAME,&scheme,&psmAddress);
 		if(psmAddress == 0)
@@ -123,8 +77,7 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 				eidString,service_num);
 		(*local_eid) = ion_al_endpoint_id(eidString);
 	}
-/* Server and Monitor DTN*/
-	else if(strcmp(type,"Server-DTN")==0 || strcmp(type,"Monitor-DTN") == 0)
+	else if(type == DTN_SCHEME)
 	{
 		findScheme(DTN2SCHEMENAME,&scheme,&psmAddress);
 		if(psmAddress == 0)
@@ -134,7 +87,8 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 			if(result == 0)
 				return BP_EBUILDEID;
 		}
-		hostname = (char *)malloc(sizeof(char)*50);
+
+		hostname = (char *)malloc(sizeof(char)*100);
 		result = gethostname(hostname, sizeof(hostname));
 		if(result == -1)
 			return BP_EBUILDEID;
@@ -620,8 +574,7 @@ al_bp_error_t bp_ion_errno(al_bp_handle_t handle)
 
 al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 								const char* service_tag,
-								const char * type,
-								char * eid_destination)
+								al_bp_scheme_t type)
 {
 	return BP_ENOTIMPL;
 }
