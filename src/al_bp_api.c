@@ -98,7 +98,8 @@ al_bp_error_t al_bp_build_local_eid(al_bp_handle_t handle,
 	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
-		return bp_dtn_build_local_eid(handle, local_eid, service_tag);
+		//if type is CBHE, service_tag must be in the form ipn_local_number.service_number
+		return bp_dtn_build_local_eid(handle, local_eid, service_tag, type);
 
 	case BP_ION:
 		return bp_ion_build_local_eid(local_eid, service_tag,type);
