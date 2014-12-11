@@ -89,7 +89,7 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 		}
 
 		hostname = (char *)malloc(sizeof(char)*100);
-		result = gethostname(hostname, sizeof(hostname));
+		result = gethostname(hostname, 100);
 		if(result == -1)
 			return BP_EBUILDEID;
 		sprintf(eidString,"%s://%s.dtn%s",DTN2SCHEMENAME,hostname,service_tag);
