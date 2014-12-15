@@ -126,14 +126,14 @@ else ifeq ($(strip $(ION_DIR)),)
 ifneq ($(strip $(DTN2_DIR)),)
 # DTN2
 LIB_NAME=$(LIB_NAME_BASE)_vDTN2
-INC=-I$(DTN2_DIR) -I$(DTN2_DIR)/applib/
+INC=-I$(DTN2_DIR) -I$(DTN2_DIR)/applib/ -I$(DTN2_DIR)/oasys/include
 OPT=-DDTN2_IMPLEMENTATION -fPIC -Wall -Werror
 endif
 else ifneq ($(strip $(ION_DIR)),)
 ifneq ($(strip $(DTN2_DIR)),)
 # BOTH
 LIB_NAME=$(LIB_NAME_BASE)
-INC=-I$(DTN2_DIR) -I$(DTN2_DIR)/applib/ -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library -I$(ION_DIR)/ici/include
+INC=-I$(DTN2_DIR) -I$(DTN2_DIR)/applib/ -I$(DTN2_DIR)/oasys/include -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library -I$(ION_DIR)/ici/include
 OPT=-DION_IMPLEMENTATION -DDTN2_IMPLEMENTATION -fPIC -Wall -Werror
 endif
 #else ifeq ($(and $(strip $(DTN2_DIR)), $(strip $(ION_DIR))),)

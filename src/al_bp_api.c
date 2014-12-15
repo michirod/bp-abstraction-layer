@@ -15,12 +15,14 @@
 
 #include "includes.h"
 #include "al_bp_api.h"
+#include "al_bp_version.h"
 
 /* Implementations API */
 #include "al_bp_dtn.h"
 #include "al_bp_ion.h"
 
 static al_bp_implementation_t bp_implementation = BP_NONE;
+const char* al_bp_version = AL_BP_VERSION_STRING;
 
 al_bp_implementation_t al_bp_get_implementation()
 {
