@@ -302,6 +302,7 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 		if (access(filename,F_OK) != 0)
 			// if filename doesn't exist, exit
 			stop = TRUE;
+		i++;
 	}
 	(*payload)  = ion_al_bundle_payload(ion_payload,location,filename);
 	free(filename);
@@ -397,9 +398,10 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 		Object fileRef = sdr_find(bpSdr, payload->filename.filename_val, &type);
 		if(fileRef != 0)
 			zco_destroy_file_ref(bpSdr, fileRef);
-		sdr_end_xn(bpSdr);
+		else
 		//delete the payload file
-		unlink(payload->filename.filename_val);
+			unlink(payload->filename.filename_val);
+		sdr_end_xn(bpSdr);
 	}
 }
 
