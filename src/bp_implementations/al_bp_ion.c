@@ -253,7 +253,6 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	return BP_SUCCESS;
 }
 
-//XXX bp_ion_recv 256 controllare
 al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 					al_bp_bundle_spec_t* spec,
 					al_bp_bundle_payload_location_t location,
