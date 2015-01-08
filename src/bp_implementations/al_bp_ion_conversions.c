@@ -277,9 +277,9 @@ al_bp_bundle_payload_t ion_al_bundle_payload(Payload bundle_payload,
 	}
 	else
 	{
-		int fd = open(filename,O_CREAT|O_WRONLY);
-		write(fd,buffer,bundle_payload.length);
-		close(fd);
+		FILE * f = fopen(filename, "w+");
+		fwrite(buffer, bundle_payload.length, 1, f);
+		fclose(f);
 		payload.filename.filename_len = strlen(filename)+1;
 		payload.filename.filename_val = (char *)malloc(sizeof(char)*(strlen(filename)+1));
 		strcpy(payload.filename.filename_val,filename);

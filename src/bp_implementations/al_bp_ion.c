@@ -253,6 +253,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	return BP_SUCCESS;
 }
 
+//XXX bp_ion_recv 256 controllare
 al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 					al_bp_bundle_spec_t* spec,
 					al_bp_bundle_payload_location_t location,
@@ -290,33 +291,20 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	ion_payload.content = dlv.adu;
 	ion_payload.length = zco_source_data_length(bpSdr, dlv.adu);
 	/* File Name if payload is saved in a file */
+	char * filename_base = "/tmp/ion_";
 	char * filename = (char *) malloc(sizeof(char)*256);
-	char * tmp_eid = (char *) malloc(sizeof(char) * (strlen(dlv.bundleSourceEid)+1));
-	strcpy(tmp_eid,dlv.bundleSourceEid);
-	/* Take EID from Source*/
-	if(strncmp(dlv.bundleSourceEid,"ipn",3) != 0)
+	//check for existing files
+	int i = 0;
+	boolean_t stop = FALSE;
+	while (!stop)
 	{
-		strtok(tmp_eid, "/");
-		tmp = strtok(NULL, "/");
-		/* tmp_eid = "dtn://vm1.dtn/src_2222"
-		 * after
-		 * tmp_eid = "vm1.dtn"
-		 * */
+		sprintf(filename, "%s%d", filename_base, i);
+		if (access(filename,F_OK) != 0)
+			// if filename doesn't exist, exit
+			stop = TRUE;
 	}
-	else
-	{
-		strtok(tmp_eid,":");
-		tmp = strtok(NULL,":");
-		/* tmp_eid = "ipn:1.2222"
-		 * after
-		 * tmp_eid = "1.2222"
-		 * */
-	}
-	sprintf(filename,"/tmp/ion%s_%u_%u",tmp,
-			dlv.bundleCreationTime.seconds,dlv.bundleCreationTime.count);
 	(*payload)  = ion_al_bundle_payload(ion_payload,location,filename);
 	free(filename);
-	free(tmp_eid);
 	/* Status Report */
 	BpStatusRpt statusRpt;
 	BpCtSignal ctSignal;
@@ -410,6 +398,8 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 		if(fileRef != 0)
 			zco_destroy_file_ref(bpSdr, fileRef);
 		sdr_end_xn(bpSdr);
+		//delete the payload file
+		unlink(payload->filename.filename_val);
 	}
 }
 

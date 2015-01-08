@@ -12,6 +12,7 @@ CC=gcc
 DIR_BP_IMPL=./src/bp_implementations/
 SUFFIX=
 <<<<<<< HEAD
+<<<<<<< HEAD
 DEBUG=0
 ifeq ($(DEBUG),0)
 DEBUG_FLAG= -O2
@@ -46,6 +47,15 @@ ifeq ($(or $(ION_DIR),$(DTN_DIR)),)
 ifeq ($(or $(ION_DIR),$(DTN2_DIR)),)
 >>>>>>> 1c78e19... some fixes on Makefile
 =======
+=======
+DEBUG=0
+ifeq ($(DEBUG),0)
+DEBUG_FLAG=
+else
+DEBUG_FLAG=-g -fno-inline
+endif
+CFLAGS= $(DEBUG_FLAG) -Wall -fPIC -Werror
+>>>>>>> 5694fbd... Added DEBUG option to makefile and other changes
 
 ifeq ($(or $(ION_DIR),$(DTN2_DIR)),)
 >>>>>>> 9819fe9... reverted Makefile, fixed al_bp_dtn.h dtn-only includes
@@ -120,21 +130,21 @@ ifeq ($(strip $(DTN_DIR)),)
 # ION
 LIB_NAME=$(LIB_NAME_BASE)_vION
 INC=-I$(ION_DIR) -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library -I$(ION_DIR)/ici/include
-OPT=-DION_IMPLEMENTATION -fPIC -Wall -Werror
+OPT=-DION_IMPLEMENTATION $(CFLAGS)
 endif
 else ifeq ($(strip $(ION_DIR)),)
 ifneq ($(strip $(DTN2_DIR)),)
 # DTN2
 LIB_NAME=$(LIB_NAME_BASE)_vDTN2
 INC=-I$(DTN2_DIR) -I$(DTN2_DIR)/applib/ -I$(DTN2_DIR)/oasys/include
-OPT=-DDTN2_IMPLEMENTATION -fPIC -Wall -Werror
+OPT=-DDTN2_IMPLEMENTATION $(CFLAGS)
 endif
 else ifneq ($(strip $(ION_DIR)),)
 ifneq ($(strip $(DTN2_DIR)),)
 # BOTH
 LIB_NAME=$(LIB_NAME_BASE)
 INC=-I$(DTN2_DIR) -I$(DTN2_DIR)/applib/ -I$(DTN2_DIR)/oasys/include -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library -I$(ION_DIR)/ici/include
-OPT=-DION_IMPLEMENTATION -DDTN2_IMPLEMENTATION -fPIC -Wall -Werror
+OPT=-DION_IMPLEMENTATION -DDTN2_IMPLEMENTATION $(CFLAGS)
 endif
 #else ifeq ($(and $(strip $(DTN2_DIR)), $(strip $(ION_DIR))),)
 endif
@@ -212,7 +222,11 @@ help:
 	@echo "For DTN2:	make DTN2_DIR=<dtn2_dir>"
 	@echo "For ION:	make ION_DIR=<ion_dir>"
 	@echo "For both:	make DTN2_DIR=<dtn2_dir> ION_DIR=<ion_dir>"
+<<<<<<< HEAD
 >>>>>>> dc7e51f... fixed makefile help
+=======
+	@echo "To compile with debug symbols add DEBUG=1"
+>>>>>>> 5694fbd... Added DEBUG option to makefile and other changes
 
 clean:
 	@rm -rf *.o *.so *.a
