@@ -252,7 +252,8 @@ al_bp_bundle_spec_t dtn_al_bundle_spec(dtn_bundle_spec_t bundle_spec)
 	else
 	{
 		bp_bundle_spec.blocks.blocks_val =
-				(al_bp_extension_block_t*) malloc(bundle_spec.blocks.blocks_len);
+//dz debug				(al_bp_extension_block_t*) malloc(bundle_spec.blocks.blocks_len);
+				(al_bp_extension_block_t*) malloc(bundle_spec.blocks.blocks_len * sizeof(al_bp_extension_block_t));
 	    for(i=0; i<bundle_spec.blocks.blocks_len; i++)
 	    {
 	    	bp_bundle_block = bundle_spec.blocks.blocks_val[i];
@@ -263,12 +264,18 @@ al_bp_bundle_spec_t dtn_al_bundle_spec(dtn_bundle_spec_t bundle_spec)
 	        	bp_bundle_spec.blocks.blocks_val[i].data.data_val = NULL;
 	        else
 	        {
+//dz debug	        	bp_bundle_spec.blocks.blocks_val[i].data.data_val =
+//dz debug	        			(char*) malloc(bp_bundle_block.data.data_len + 1);
+//dz debug	            memcpy(bp_bundle_spec.blocks.blocks_val[i].data.data_val,
+//dz debug	            		bp_bundle_block.data.data_val, (bp_bundle_block.data.data_len) + 1);
 	        	bp_bundle_spec.blocks.blocks_val[i].data.data_val =
-	        			(char*) malloc(bp_bundle_block.data.data_len + 1);
+	        			(char*) malloc(bp_bundle_block.data.data_len);
 	            memcpy(bp_bundle_spec.blocks.blocks_val[i].data.data_val,
-	            		bp_bundle_block.data.data_val, (bp_bundle_block.data.data_len) + 1);
-	            bp_bundle_spec.blocks.blocks_val[i].data.data_val =
-	            		(char*)bp_bundle_block.data.data_val;
+	            		bp_bundle_block.data.data_val, bp_bundle_block.data.data_len);
+
+//XXX/dz - Just copied the data above so this is not needed and would overwrite the data_val pointerr 
+//dz debug	            bp_bundle_spec.blocks.blocks_val[i].data.data_val =
+//dz debug	            		(char*)bp_bundle_block.data.data_val;
 	        }
 	    }
 	}

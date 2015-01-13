@@ -297,7 +297,7 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	boolean_t stop = FALSE;
 	while (!stop)
 	{
-		sprintf(filename, "%s%d", filename_base, i);
+		sprintf(filename, "%s%d_%d", filename_base, getpid(), i);
 		if (access(filename,F_OK) != 0)
 			// if filename doesn't exist, exit
 			stop = TRUE;
