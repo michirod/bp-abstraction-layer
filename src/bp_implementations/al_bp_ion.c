@@ -233,17 +233,36 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 			return BP_ESEND;
 
 	/* Set Id Bundle Sent*/
+//dz debug --- It is not safe to use the newBundleObj "address" to access SDR because it may
+//dz debug --- have been released (or worse: reallocated) before bp_send returns. ION 3.3 should 
+//dz debug --- have a new feature bp_open_source() which will preserve the sent bundle until
+//dz debug --- it is released or expires. I am commenting out retrieving the dictionary because
+//dz debug --- that can lead to allocating 4GB of memory if the newBundleObj data was overwritten.
+//dz debug --- This should be updated after the new feature is available. 
+//dz debug
 	Bundle bundleION;
 	Sdr bpSdr = bp_get_sdr();
 	sdr_begin_xn(bpSdr);
 	sdr_read(bpSdr,(char*)&bundleION,(SdrAddress) newBundleObj,sizeof(Bundle));
 	sdr_end_xn(bpSdr);
-	char * tmpEidSource;
-	printEid(&(bundleION.id.source),retrieveDictionary(&bundleION),&tmpEidSource);
-	id->source = ion_al_endpoint_id(tmpEidSource);
+//dz debug	char * tmpEidSource;
+//dz debug	printEid(&(bundleION.id.source),retrieveDictionary(&bundleION),&tmpEidSource);
+//dz debug             --- Note that calling retrieveDictionary without releasing it results in
+//dz debug             --- an SDR "memory leak"
+//dz debug	id->source = ion_al_endpoint_id(tmpEidSource);
+	id->source = ion_al_endpoint_id("<TBD>");  //dz debug
+
+//dz debug --- Note that the following values may not always be valid by the time they are read here
+//dz debug --- but most of the time they should be okay and reading invalid values will not cause 
+//dz debug --- a crash. Just setting these values to zeroes prevents the client Window option from working
+//dz debug --- because ACKs from the server would never match. This compromise should work until invalid
+//dz debug --- values fill up the window.
 	id->creation_ts = ion_al_timestamp(bundleION.id.creationTime);
 	id->frag_offset = bundleION.id.fragmentOffset;
 	id->orig_length = bundleION.totalAduLength;
+
+
+
 	//
 	handle = ion_al_handle(bpSap);
 	//Free resource
