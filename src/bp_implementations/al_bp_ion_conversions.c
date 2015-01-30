@@ -113,6 +113,7 @@ int al_ion_bundle_priority(al_bp_bundle_priority_t bundle_priority){
 }
 al_bp_bundle_priority_t ion_al_bunlde_priority(int bundle_priority){
 	al_bp_bundle_priority_t bp_priority;
+	bp_priority.ordinal = 0;
 	switch(bundle_priority)
 	{
 		case BP_BULK_PRIORITY: bp_priority.priority = BP_PRIORITY_BULK; break;

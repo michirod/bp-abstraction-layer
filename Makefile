@@ -54,8 +54,12 @@ DEBUG_FLAG=
 else
 DEBUG_FLAG=-g -fno-inline
 endif
+<<<<<<< HEAD
 CFLAGS= $(DEBUG_FLAG) -Wall -fPIC -Werror
 >>>>>>> 5694fbd... Added DEBUG option to makefile and other changes
+=======
+CFLAGS= $(DEBUG_FLAG) -Wall -fPIC -Werror -O2
+>>>>>>> 0d6e8b6... Fixed compilation with ION Makefile
 
 ifeq ($(or $(ION_DIR),$(DTN2_DIR)),)
 >>>>>>> 9819fe9... reverted Makefile, fixed al_bp_dtn.h dtn-only includes
