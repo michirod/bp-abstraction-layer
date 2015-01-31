@@ -11,10 +11,13 @@
 #ifndef _AL_BP_VERSION_H_
 #define _AL_BP_VERSION_H_
 
+/*
 #define AL_BP_VERSION_MAJOR		1
-#define AL_BP_VERSION_MINOR		2
-#define AL_BP_VERSION_PATCH		0
-#define AL_BP_VERSION_STRING	"1.2.3"
+#define AL_BP_VERSION_MINOR		3
+#define AL_BP_VERSION_PATCH		3
+*/
+
+#define AL_BP_VERSION_STRING	"1.3.3"
 
 extern const char* al_bp_version;
 

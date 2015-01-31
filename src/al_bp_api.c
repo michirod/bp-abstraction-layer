@@ -24,6 +24,11 @@
 static al_bp_implementation_t bp_implementation = BP_NONE;
 const char* al_bp_version = AL_BP_VERSION_STRING;
 
+const char * get_al_bp_version()
+{
+	return al_bp_version;
+}
+
 al_bp_implementation_t al_bp_get_implementation()
 {
 	if (bp_implementation == BP_NONE)

@@ -19,6 +19,11 @@
 #include "al_bp_types.h"
 
 /**
+ * Get abstraction layer library version
+ */
+const char * get_al_bp_version();
+
+/**
  * Find the underlying implementation of bundle protocol
  */
 al_bp_implementation_t al_bp_get_implementation();
