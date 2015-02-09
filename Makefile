@@ -132,9 +132,14 @@ ifeq ($(strip $(DTN_DIR)),)
 =======
 >>>>>>> 9819fe9... reverted Makefile, fixed al_bp_dtn.h dtn-only includes
 # ION
+#ifneq ( $(ION_VERS_UP_3.3.0), yes )
+VERSION=-DNEW_ZCO
+#else
+#VERSION=
+#endif
 LIB_NAME=$(LIB_NAME_BASE)_vION
 INC=-I$(ION_DIR) -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library -I$(ION_DIR)/ici/include
-OPT=-DION_IMPLEMENTATION $(CFLAGS)
+OPT=-DION_IMPLEMENTATION $(VERSION) $(CFLAGS)
 endif
 else ifeq ($(strip $(ION_DIR)),)
 ifneq ($(strip $(DTN2_DIR)),)
@@ -148,7 +153,7 @@ ifneq ($(strip $(DTN2_DIR)),)
 # BOTH
 LIB_NAME=$(LIB_NAME_BASE)
 INC=-I$(DTN2_DIR) -I$(DTN2_DIR)/applib/ -I$(DTN2_DIR)/oasys/include -I$(ION_DIR)/bp/include -I$(ION_DIR)/bp/library -I$(ION_DIR)/ici/include
-OPT=-DION_IMPLEMENTATION -DDTN2_IMPLEMENTATION $(CFLAGS)
+OPT=-DION_IMPLEMENTATION -DDTN2_IMPLEMENTATION $(VERSION) $(CFLAGS)
 endif
 #else ifeq ($(and $(strip $(DTN2_DIR)), $(strip $(ION_DIR))),)
 endif
@@ -224,11 +229,16 @@ help:
 >>>>>>> 9819fe9... reverted Makefile, fixed al_bp_dtn.h dtn-only includes
 =======
 	@echo "For DTN2:	make DTN2_DIR=<dtn2_dir>"
+<<<<<<< HEAD
 	@echo "For ION:	make ION_DIR=<ion_dir>"
 	@echo "For both:	make DTN2_DIR=<dtn2_dir> ION_DIR=<ion_dir>"
 <<<<<<< HEAD
 >>>>>>> dc7e51f... fixed makefile help
 =======
+=======
+	@echo "For ION:		make ION_DIR=<ion_dir> ION_VERS_UP_3.3.0=<yes|no>"
+	@echo "For both:	make DTN2_DIR=<dtn2_dir> ION_DIR=<ion_dir> ION_VERS_UP_3.3.0=<yes|no>"
+>>>>>>> 0b0bfe5... AL_BP 1.3.3 NEW_ZCO
 	@echo "To compile with debug symbols add DEBUG=1"
 >>>>>>> 5694fbd... Added DEBUG option to makefile and other changes
 

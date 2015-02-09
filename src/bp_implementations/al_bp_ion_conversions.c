@@ -223,7 +223,7 @@ al_bp_bundle_status_report_t ion_al_bundle_status_report(BpStatusRpt bundle_stat
 	return bp_statusRpt;
 }
 
-Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
+Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload, int  priority,BpExtendedCOS extendedCOS)
 {
 	Payload payload;
 	memset(&payload,0,sizeof(Payload));
@@ -234,7 +234,12 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 		Object	buff;
 		buff = sdr_malloc(bpSdr, bundle_payload.buf.buf_len);
 		sdr_write(bpSdr, buff, bundle_payload.buf.buf_val, bundle_payload.buf.buf_len);
-		payload.content = zco_create(bpSdr, ZcoSdrSource, buff, 0, bundle_payload.buf.buf_len);
+		#ifdef NEW_ZCO
+			payload.content = ionCreateZco(ZcoSdrSource, buff, 0, bundle_payload.buf.buf_len, priority,
+				extendedCOS.ordinal, ZcoOutbound, NULL);
+		#else
+			payload.content = zco_create(bpSdr, ZcoSdrSource, buff, 0, bundle_payload.buf.buf_len);
+		#endif
 		payload.length = zco_length(bpSdr,payload.content);
 	}
 	else
@@ -248,10 +253,19 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload)
 		Object fileRef = sdr_find(bpSdr, bundle_payload.filename.filename_val, &type);
 		if(fileRef == 0)
 		{
-			fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "");
+			#ifdef NEW_ZCO
+				fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "", ZcoOutbound);
+			#else
+				fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "");				
+			#endif
 			sdr_catlg(bpSdr, bundle_payload.filename.filename_val, 0, fileRef);
 		}
-		payload.content = zco_create(bpSdr, ZcoFileSource, fileRef, 0, (unsigned int) dimFile);
+		#ifdef NEW_ZCO
+			payload.content = ionCreateZco(ZcoFileSource, fileRef, 0, (unsigned int) dimFile, priority,
+			extendedCOS.ordinal, ZcoOutbound, NULL);
+		#else
+			payload.content = zco_create(bpSdr, ZcoFileSource, fileRef, 0, (unsigned int) dimFile);
+		#endif
 		payload.length = zco_length(bpSdr,payload.content);
 	}
 	sdr_end_xn(bpSdr);

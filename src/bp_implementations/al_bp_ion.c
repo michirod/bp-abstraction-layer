@@ -199,11 +199,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	custodySwitch = NoCustodyRequested;
 	srrFlags = al_ion_bundle_srrFlags(spec->dopts);
 	ackRequested = 0;
-	Payload ion_payload = al_ion_bundle_payload((*payload));
-	Object adu = ion_payload.content;
-	Object newBundleObj;
-	/* Create String for parse class of service */
-	
+	/* Create String for parse class of service */	
 	if(spec->dopts & BP_DOPTS_CUSTODY)
 	{
 			tmpCustody = 1;
@@ -224,6 +220,10 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	result = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
 	if(result == 0)
 		return BP_EINVAL;
+	Payload ion_payload = al_ion_bundle_payload((*payload), tmpPriority, extendedCOS);
+	Object adu = ion_payload.content;
+	Object newBundleObj;
+
 	/* Send Bundle*/
 	result = bp_send(bpSap,destEid,reportEid,lifespan,tmpPriority,
 			custodySwitch,srrFlags,ackRequested,&extendedCOS,adu,&newBundleObj);
@@ -415,7 +415,11 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 		sdr_begin_xn(bpSdr);
 		Object fileRef = sdr_find(bpSdr, payload->filename.filename_val, &type);
 		if(fileRef != 0)
+		{
 			zco_destroy_file_ref(bpSdr, fileRef);
+//by David Zoller remove filename from catalog 
+                        sdr_uncatlg(bpSdr, payload->filename.filename_val);
+		}
 		else
 		//delete the payload file
 			unlink(payload->filename.filename_val);
