@@ -50,16 +50,20 @@ ifeq ($(or $(ION_DIR),$(DTN2_DIR)),)
 =======
 DEBUG=0
 ifeq ($(DEBUG),0)
-DEBUG_FLAG=
+DEBUG_FLAG= -O2
 else
-DEBUG_FLAG=-g -fno-inline
+DEBUG_FLAG=-g -fno-inline -O0
 endif
+<<<<<<< HEAD
 <<<<<<< HEAD
 CFLAGS= $(DEBUG_FLAG) -Wall -fPIC -Werror
 >>>>>>> 5694fbd... Added DEBUG option to makefile and other changes
 =======
 CFLAGS= $(DEBUG_FLAG) -Wall -fPIC -Werror -O2
 >>>>>>> 0d6e8b6... Fixed compilation with ION Makefile
+=======
+CFLAGS= $(DEBUG_FLAG) -Wall -fPIC -Werror
+>>>>>>> 3508bcd... test
 
 ifeq ($(or $(ION_DIR),$(DTN2_DIR)),)
 >>>>>>> 9819fe9... reverted Makefile, fixed al_bp_dtn.h dtn-only includes
@@ -230,6 +234,7 @@ help:
 =======
 	@echo "For DTN2:	make DTN2_DIR=<dtn2_dir>"
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@echo "For ION:	make ION_DIR=<ion_dir>"
 	@echo "For both:	make DTN2_DIR=<dtn2_dir> ION_DIR=<ion_dir>"
 <<<<<<< HEAD
@@ -239,6 +244,10 @@ help:
 	@echo "For ION:		make ION_DIR=<ion_dir> ION_VERS_UP_3.3.0=<yes|no>"
 	@echo "For both:	make DTN2_DIR=<dtn2_dir> ION_DIR=<ion_dir> ION_VERS_UP_3.3.0=<yes|no>"
 >>>>>>> 0b0bfe5... AL_BP 1.3.3 NEW_ZCO
+=======
+	@echo "For ION:		make ION_DIR=<ion_dir> ION_VERS_UP_3.3.0=<yes|no>"
+	@echo "For both:	make DTN2_DIR=<dtn2_dir> ION_DIR=<ion_dir> ION_VERS_UP_3.3.0=<yes|no>"
+>>>>>>> 3508bcd... test
 	@echo "To compile with debug symbols add DEBUG=1"
 >>>>>>> 5694fbd... Added DEBUG option to makefile and other changes
 

@@ -18,12 +18,17 @@
 
 #ifdef ION_IMPLEMENTATION
 
+#ifndef NEW_ZCO
+#define  NEW_ZCO 1
+#endif 
+
+
 #include "al_bp_ion_conversions.h"
 
-BpSAP al_ion_handle(al_bp_handle_t handle){
-	return (BpSAP) handle;
+al_ion_handle_t al_ion_handle(al_bp_handle_t handle){
+	return (al_ion_handle_t) handle;
 }
-al_bp_handle_t ion_al_handle(BpSAP handle){
+al_bp_handle_t ion_al_handle(al_ion_handle_t handle){
 
 	return (al_bp_handle_t) handle;
 }

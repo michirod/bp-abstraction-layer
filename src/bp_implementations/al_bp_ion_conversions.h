@@ -35,8 +35,14 @@
  * so the conversion is ion -> bp
  */
 
-BpSAP al_ion_handle(al_bp_handle_t handle);
-al_bp_handle_t ion_al_handle(BpSAP handle);
+struct al_ion_handle_t{
+	BpSAP *recv;
+	BpSAP *source;
+};
+typedef struct al_ion_handle_t * al_ion_handle_t;
+
+al_ion_handle_t al_ion_handle(al_bp_handle_t handle);
+al_bp_handle_t ion_al_handle(al_ion_handle_t handle);
 
 char * al_ion_endpoint_id(al_bp_endpoint_id_t endpoint_id);
 al_bp_endpoint_id_t ion_al_endpoint_id(char * endpoint_id);
