@@ -6,6 +6,10 @@
  **
  **  Copyright (c) 2013, Alma Mater Studiorum, University of Bologna
  **  All rights reserved.
+ **
+ ** This files contains the definitions of the functions that convert bp abstract types in dtn types and vice versa.
+ ** See the comment below.
+ **
  ********************************************************/
 
 /*
@@ -35,11 +39,18 @@
  * so the conversion is ion -> bp
  */
 
-struct al_ion_handle_t{
+/**
+ * Encapsulates in a structure 2 different SAPs:
+ * recv is the SAP used to receive bundles (initiated by bp_open())
+ * source is the SAP used to send bundles (initiated by bp_open_source()).
+ * If using ION < 3.3.0, only recv is used both to send and receive bundles
+ * Introducted with ION 3.3.0
+ */
+struct al_ion_handle_st{
 	BpSAP *recv;
 	BpSAP *source;
 };
-typedef struct al_ion_handle_t * al_ion_handle_t;
+typedef struct al_ion_handle_st * al_ion_handle_t;
 
 al_ion_handle_t al_ion_handle(al_bp_handle_t handle);
 al_bp_handle_t ion_al_handle(al_ion_handle_t handle);

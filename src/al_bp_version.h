@@ -6,6 +6,7 @@
  **
  **  Copyright (c) 2013, Alma Mater Studiorum, University of Bologna
  **  All rights reserved.
+ ** This file contains the version definition of the al_bp.
  ********************************************************/
 
 #ifndef _AL_BP_VERSION_H_
