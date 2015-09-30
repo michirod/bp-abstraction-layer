@@ -7,7 +7,7 @@
  **  Copyright (c) 2013, Alma Mater Studiorum, University of Bologna
  **  All rights reserved.
  **
- ** This files contains the definitions of the functions that convert bp abstract types in dtn types and vice versa.
+ ** This files contains the definitions of the functions that convert bp abstract types in ION types and vice versa.
  ** See the comment below.
  **
  ********************************************************/

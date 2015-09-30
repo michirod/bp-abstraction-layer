@@ -6,7 +6,7 @@
  **
  **  Copyright (c) 2013, Alma Mater Studiorum, University of Bologna
  **  All rights reserved.
- ** This file contains the functions that convert bp abstract types in ion types and vice versa.
+ ** This file contains the functions that convert bp abstract types in ION types and vice versa.
  ********************************************************/
 
 /*************

@@ -6,8 +6,8 @@
  **
  **  Copyright (c) 2013, Alma Mater Studiorum, University of Bologna
  **  All rights reserved.
- ** This file contains the functions interfacing dtn2
- ** (i.e. that will actually call the dtn2 APIs).
+ ** This file contains the functions interfacing ION
+ ** (i.e. that will actually call the ION APIs).
  ********************************************************/
 
 /*
