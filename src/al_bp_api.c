@@ -380,7 +380,7 @@ char* al_bp_status_report_flag_to_str(al_bp_status_report_flags_t flag)
 	if (flag & BP_STATUS_FORWARDED)
 		strcat(temp, "FORWARDED, ");
 	if (flag & BP_STATUS_DELIVERED)
-		strcat(temp, "DEILIVERED, ");
+		strcat(temp, "DELIVERED, ");
 	if (flag & BP_STATUS_DELETED)
 		strcat(temp, "DELETED");
 	if (flag & BP_STATUS_ACKED_BY_APP)
