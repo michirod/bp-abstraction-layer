@@ -4,18 +4,20 @@
  */
 
 #include "includes.h"
-#include "bp_abstraction_api.h"
-#include "bp_implementations/bp_dtn.h"
-#include "bp_implementations/bp_ion.h"
+#include "al_bp_api.h"
 
-static bp_implementation_t bp_implementation = BP_NONE;
+/* Implementations API */
+#include "al_bp_dtn.h"
+#include "al_bp_ion.h"
 
-bp_implementation_t bp_get_implementation()
+static al_bp_implementation_t bp_implementation = BP_NONE;
+
+al_bp_implementation_t al_bp_get_implementation()
 {
 	if (bp_implementation == BP_NONE)
 	{
 		char* find_dtnd = "ps ax | grep -w dtnd | grep -v grep > /dev/null";
-		char* find_ion = "ps ax | grep -w ion | grep -v grep > /dev/null";
+		char* find_ion = "ps ax | grep -w rfxclock | grep -v grep > /dev/null";
 		if (system(find_dtnd) == 0)
 			bp_implementation = BP_DTN;
 		else if (system(find_ion) == 0)
@@ -24,30 +26,30 @@ bp_implementation_t bp_get_implementation()
 	return bp_implementation;
 }
 
-bp_error_t bp_open(bp_handle_t* handle)
+al_bp_error_t al_bp_open(al_bp_handle_t* handle)
 {
 	if (handle == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_open(handle);
 
 	case BP_ION:
-		return bp_ion_open(handle);
+		return bp_ion_attach();
 
 	default: // cannot find bundle protocol implementation
 		return BP_ENOBPI;
 	}
 }
 
-bp_error_t bp_open_with_ip(char *daemon_api_IP,int daemon_api_port,bp_handle_t* handle)
+al_bp_error_t al_bp_open_with_ip(char *daemon_api_IP,int daemon_api_port,al_bp_handle_t* handle)
 {
 	if (handle == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_open_with_IP(daemon_api_IP, daemon_api_port, handle);
@@ -60,9 +62,9 @@ bp_error_t bp_open_with_ip(char *daemon_api_IP,int daemon_api_port,bp_handle_t* 
 	}
 }
 
-bp_error_t bp_errno(bp_handle_t handle)
+al_bp_error_t al_bp_errno(al_bp_handle_t handle)
 {
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_errno(handle);
@@ -75,41 +77,41 @@ bp_error_t bp_errno(bp_handle_t handle)
 	}
 }
 
-
-bp_error_t bp_build_local_eid(bp_handle_t handle,
-		bp_endpoint_id_t* local_eid,
-		const char* service_tag)
+al_bp_error_t al_bp_build_local_eid(al_bp_handle_t handle,
+									al_bp_endpoint_id_t* local_eid,
+									const char* service_tag,
+									char * type,
+									char * eid_destination)
 {
 	if (local_eid == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_build_local_eid(handle, local_eid, service_tag);
 
 	case BP_ION:
-		return bp_ion_build_local_eid(handle, local_eid, service_tag);
+		return bp_ion_build_local_eid(local_eid, service_tag,type,eid_destination);
 
 	default: // cannot find bundle protocol implementation
 		return BP_ENOBPI;
 	}
 }
 
-
-bp_error_t bp_register(bp_handle_t handle,
-		bp_reg_info_t* reginfo,
-		bp_reg_id_t* newregid)
+al_bp_error_t al_bp_register(al_bp_handle_t * handle,
+		al_bp_reg_info_t* reginfo,
+		al_bp_reg_id_t* newregid)
 {
 	if (reginfo == NULL)
 		return BP_ENULLPNTR;
 	if (newregid == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
-		return bp_dtn_register(handle, reginfo, newregid);
+		return bp_dtn_register(*handle, reginfo, newregid);
 
 	case BP_ION:
 		return bp_ion_register(handle, reginfo, newregid);
@@ -119,14 +121,14 @@ bp_error_t bp_register(bp_handle_t handle,
 	}
 }
 
-bp_error_t bp_find_registration(bp_handle_t handle,
-		bp_endpoint_id_t * eid,
-		bp_reg_id_t * newregid)
+al_bp_error_t al_bp_find_registration(al_bp_handle_t handle,
+		al_bp_endpoint_id_t * eid,
+		al_bp_reg_id_t * newregid)
 {
 	if (eid == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 		{
 		case BP_DTN:
 			return bp_dtn_find_registration(handle, eid, newregid);
@@ -139,11 +141,26 @@ bp_error_t bp_find_registration(bp_handle_t handle,
 		}
 }
 
-bp_error_t bp_send(bp_handle_t handle,
-		bp_reg_id_t regid,
-		bp_bundle_spec_t* spec,
-		bp_bundle_payload_t* payload,
-		bp_bundle_id_t* id)
+al_bp_error_t al_bp_unregister(al_bp_handle_t handle, al_bp_reg_id_t regid,al_bp_endpoint_id_t eid){
+
+	switch (al_bp_get_implementation())
+		{
+		case BP_DTN:
+			return bp_dtn_unregister(handle, regid);
+
+		case BP_ION:
+			return bp_ion_unregister(eid);
+
+		default: // cannot find bundle protocol implementation
+			return BP_ENOBPI;
+		}
+}
+
+al_bp_error_t al_bp_send(al_bp_handle_t handle,
+		al_bp_reg_id_t regid,
+		al_bp_bundle_spec_t* spec,
+		al_bp_bundle_payload_t* payload,
+		al_bp_bundle_id_t* id)
 {
 	if (spec == NULL)
 		return BP_ENULLPNTR;
@@ -152,7 +169,7 @@ bp_error_t bp_send(bp_handle_t handle,
 	if (id == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_send(handle, regid, spec, payload, id);
@@ -165,18 +182,18 @@ bp_error_t bp_send(bp_handle_t handle,
 	}
 }
 
-bp_error_t bp_recv(bp_handle_t handle,
-		bp_bundle_spec_t* spec,
-		bp_bundle_payload_location_t location,
-		bp_bundle_payload_t* payload,
-		bp_timeval_t timeout)
+al_bp_error_t al_bp_recv(al_bp_handle_t handle,
+		al_bp_bundle_spec_t* spec,
+		al_bp_bundle_payload_location_t location,
+		al_bp_bundle_payload_t* payload,
+		al_bp_timeval_t timeout)
 {
 	if (spec == NULL)
 		return BP_ENULLPNTR;
 	if (payload == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_recv(handle, spec, location, payload, timeout);
@@ -189,9 +206,9 @@ bp_error_t bp_recv(bp_handle_t handle,
 	}
 }
 
-bp_error_t bp_close(bp_handle_t handle)
+al_bp_error_t al_bp_close(al_bp_handle_t handle)
 {
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_close(handle);
@@ -204,12 +221,12 @@ bp_error_t bp_close(bp_handle_t handle)
 	}
 }
 
-bp_error_t bp_parse_eid_string(bp_endpoint_id_t* eid, const char* str)
+al_bp_error_t al_bp_parse_eid_string(al_bp_endpoint_id_t* eid, const char* str)
 {
 	if (eid == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_parse_eid_string(eid, str);
@@ -222,9 +239,9 @@ bp_error_t bp_parse_eid_string(bp_endpoint_id_t* eid, const char* str)
 	}
 }
 
-void bp_copy_eid(bp_endpoint_id_t* dst, bp_endpoint_id_t* src)
+void al_bp_copy_eid(al_bp_endpoint_id_t* dst, al_bp_endpoint_id_t* src)
 {
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
 		bp_dtn_copy_eid(dst, src);
@@ -239,9 +256,9 @@ void bp_copy_eid(bp_endpoint_id_t* dst, bp_endpoint_id_t* src)
 	}
 }
 
-bp_error_t bp_get_none_endpoint(bp_endpoint_id_t * eid_none)
+al_bp_error_t al_bp_get_none_endpoint(al_bp_endpoint_id_t * eid_none)
 {
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_parse_eid_string(eid_none, "dtn:none");
@@ -254,14 +271,14 @@ bp_error_t bp_get_none_endpoint(bp_endpoint_id_t * eid_none)
 	}
 }
 
-bp_error_t bp_set_payload(bp_bundle_payload_t* payload,
-		bp_bundle_payload_location_t location,
+al_bp_error_t al_bp_set_payload(al_bp_bundle_payload_t* payload,
+		al_bp_bundle_payload_location_t location,
 		char* val, int len)
 {
 	if (payload == NULL)
 		return BP_ENULLPNTR;
 
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
 		return bp_dtn_set_payload(payload, location, val, len);
@@ -274,10 +291,10 @@ bp_error_t bp_set_payload(bp_bundle_payload_t* payload,
 	}
 }
 
-void bp_free_payload(bp_bundle_payload_t* payload)
+void al_bp_free_payload(al_bp_bundle_payload_t* payload)
 {
 	payload->status_report = NULL;
-	switch (bp_get_implementation())
+	switch (al_bp_get_implementation())
 	{
 	case BP_DTN:
 		bp_dtn_free_payload(payload);
@@ -292,7 +309,7 @@ void bp_free_payload(bp_bundle_payload_t* payload)
 	}
 }
 
-const char* bp_status_report_reason_to_str(bp_status_report_reason_t err)
+const char* al_bp_status_report_reason_to_str(al_bp_status_report_reason_t err)
 {
 	switch (err) {
 	case BP_SR_REASON_NO_ADDTL_INFO:
@@ -326,6 +343,41 @@ const char* bp_status_report_reason_to_str(bp_status_report_reason_t err)
 		return "(unknown reason)";
 	}
 }
+char * al_bp_strerror(int err){
+	switch(err) {
+	    case BP_SUCCESS: 		return "success";
+	    case BP_EINVAL: 		return "invalid argument";
+	    case BP_ENULLPNTR:		return "operation on a null pointer";
+	    case BP_ECONNECT: 		return "error connecting to server";
+	    case BP_ETIMEOUT: 		return "operation timed out";
+	    case BP_ESIZE: 			return "payload too large";
+	    case BP_ENOTFOUND: 		return "not found";
+	    case BP_EINTERNAL: 		return "internal error";
+	    case BP_EBUSY:     		return "registration already in use";
+	    case BP_ENOSPACE:		return "no storage space";
+	    case BP_ENOTIMPL:		return "function not yet implemented";
+	    case BP_ENOBPI:			return "cannot find bundle protocol implementation";
+	    case BP_EATTACH:		return "cannot attach bundle protocol";
+	    case BP_EBUILDEID:		return "cannot build local eid";
+	    case BP_EOPEN :			return "cannot open the connection whit bp";
+	    case BP_EREG:			return "cannot register the eid";
+	    case BP_EPARSEEID:		return "cannot parse the endpoint string";
+	    case BP_ESEND:			return "cannot send Bundle";
+	    case BP_EUNREG:			return "cannot unregister eid";
+	    case BP_ERECV:			return "cannot receive bundle";
+	    case BP_ERECVINT:		return "receive bundle interrupted";
+	    case -1:				return "(invalid error code -1)";
+	    default:		   		break;
+	    }
+	    // there's a small race condition here in case there are two
+		// simultaneous calls that will clobber the same buffer, but this
+		// should be rare and the worst that happens is that the output
+		// string is garbled
+		static char buf[128];
+		snprintf(buf, sizeof(buf), "(unknown error %d)", err);
+		return buf;
+}
+
 
 /********************************************************************
  *
@@ -334,40 +386,44 @@ const char* bp_status_report_reason_to_str(bp_status_report_reason_t err)
  ********************************************************************
  */
 
-bp_error_t bp_bundle_send(bp_handle_t handle,
-		bp_reg_id_t regid,
-		bp_bundle_object_t * bundle_object)
+al_bp_error_t al_bp_bundle_send(al_bp_handle_t handle,
+		al_bp_reg_id_t regid,
+		al_bp_bundle_object_t * bundle_object)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
-	memset(bundle_object->id, 0, sizeof(bp_bundle_id_t));
-	return bp_send(handle, regid, bundle_object->spec, bundle_object->payload, bundle_object->id);
+	memset(bundle_object->id, 0, sizeof(al_bp_bundle_id_t));
+	return al_bp_send(handle, regid, bundle_object->spec, bundle_object->payload, bundle_object->id);
+}
+al_bp_error_t al_bp_bundle_receive(al_bp_handle_t handle,
+		al_bp_bundle_object_t bundle_object,
+		al_bp_bundle_payload_location_t payload_location,
+		al_bp_timeval_t timeout)
+{
+	al_bp_free_payload(bundle_object.payload);
+	memset(bundle_object.spec, 0, sizeof(al_bp_bundle_spec_t));
+	return al_bp_recv(handle, bundle_object.spec, payload_location, bundle_object.payload, timeout);
 }
 
-bp_error_t bp_bundle_receive(bp_handle_t handle,
-		bp_bundle_object_t bundle_object,
-		bp_bundle_payload_location_t payload_location,
-		bp_timeval_t timeout)
+al_bp_error_t al_bp_bundle_create(al_bp_bundle_object_t * bundle_object)
 {
-	bp_free_payload(bundle_object.payload);
-	memset(bundle_object.spec, 0, sizeof(bp_bundle_spec_t));
-	return bp_recv(handle, bundle_object.spec, payload_location, bundle_object.payload, timeout);
-}
-
-bp_error_t bp_bundle_create(bp_bundle_object_t * bundle_object)
-{
+	printf("Io ci sono\n");
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
-	bundle_object->id = (bp_bundle_id_t*) malloc(sizeof(bp_bundle_id_t));
-	bundle_object->spec = (bp_bundle_spec_t*) malloc(sizeof(bp_bundle_spec_t));
-	bundle_object->payload = (bp_bundle_payload_t*) malloc(sizeof(bp_bundle_payload_t));
-	memset(bundle_object->id, 0, sizeof(bp_bundle_id_t));
-	memset(bundle_object->spec, 0, sizeof(bp_bundle_spec_t));
-	memset(bundle_object->payload, 0, sizeof(bp_bundle_payload_t));
+	printf("Non è null punt\n");
+	bundle_object->id = (al_bp_bundle_id_t*) malloc(sizeof(al_bp_bundle_id_t));
+	printf("malloc id ok\n");
+	bundle_object->spec = (al_bp_bundle_spec_t*) malloc(sizeof(al_bp_bundle_spec_t));
+	printf("malloc id spec\n");
+	bundle_object->payload = (al_bp_bundle_payload_t*) malloc(sizeof(al_bp_bundle_payload_t));
+	printf("malloc id payload\n");
+	memset(bundle_object->id, 0, sizeof(al_bp_bundle_id_t));
+	memset(bundle_object->spec, 0, sizeof(al_bp_bundle_spec_t));
+	memset(bundle_object->payload, 0, sizeof(al_bp_bundle_payload_t));
+	printf("memset ok\n");
 	return BP_SUCCESS;
 }
-
-bp_error_t bp_bundle_free(bp_bundle_object_t * bundle_object)
+al_bp_error_t al_bp_bundle_free(al_bp_bundle_object_t * bundle_object)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
@@ -377,15 +433,14 @@ bp_error_t bp_bundle_free(bp_bundle_object_t * bundle_object)
 	return BP_SUCCESS;
 }
 
-bp_error_t bp_bundle_get_id(bp_bundle_object_t bundle_object, bp_bundle_id_t ** bundle_id)
+al_bp_error_t al_bp_bundle_get_id(al_bp_bundle_object_t bundle_object, al_bp_bundle_id_t ** bundle_id)
 {
 	if (bundle_object.id == NULL)
 		return BP_ENULLPNTR;
 	*bundle_id = bundle_object.id;
 	return BP_SUCCESS;
 }
-
-bp_error_t bp_bundle_get_payload_location(bp_bundle_object_t bundle_object, bp_bundle_payload_location_t * location)
+al_bp_error_t al_bp_bundle_get_payload_location(al_bp_bundle_object_t bundle_object, al_bp_bundle_payload_location_t * location)
 {
 	if (bundle_object.payload == NULL)
 		return BP_ENULLPNTR;
@@ -395,7 +450,7 @@ bp_error_t bp_bundle_get_payload_location(bp_bundle_object_t bundle_object, bp_b
 	return BP_SUCCESS;
 }
 
-bp_error_t bp_bundle_set_payload_location(bp_bundle_object_t * bundle_object, bp_bundle_payload_location_t location)
+al_bp_error_t al_bp_bundle_set_payload_location(al_bp_bundle_object_t * bundle_object, al_bp_bundle_payload_location_t location)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
@@ -405,8 +460,7 @@ bp_error_t bp_bundle_set_payload_location(bp_bundle_object_t * bundle_object, bp
 	bundle_object->payload->location = location;
 	return BP_SUCCESS;
 }
-
-bp_error_t bp_bundle_get_payload_size(bp_bundle_object_t bundle_object, u32_t * size)
+al_bp_error_t al_bp_bundle_get_payload_size(al_bp_bundle_object_t bundle_object, u32_t * size)
 {
 	if (bundle_object.payload == NULL)
 		return BP_ENULLPNTR;
@@ -445,7 +499,7 @@ bp_error_t bp_bundle_get_payload_size(bp_bundle_object_t bundle_object, u32_t * 
 	}
 }
 
-bp_error_t bp_bundle_get_payload_file(bp_bundle_object_t bundle_object, char_t ** filename, u32_t * filename_len)
+al_bp_error_t al_bp_bundle_get_payload_file(al_bp_bundle_object_t bundle_object, char_t ** filename, u32_t * filename_len)
 {
 	if (bundle_object.payload->location == BP_PAYLOAD_FILE
 			|| bundle_object.payload->location == BP_PAYLOAD_TEMP_FILE)
@@ -461,8 +515,7 @@ bp_error_t bp_bundle_get_payload_file(bp_bundle_object_t bundle_object, char_t *
 	else // bundle location is not file
 		return BP_EINVAL;
 }
-
-bp_error_t bp_bundle_get_payload_mem(bp_bundle_object_t bundle_object, char ** buf, u32_t * buf_len)
+al_bp_error_t al_bp_bundle_get_payload_mem(al_bp_bundle_object_t bundle_object, char ** buf, u32_t * buf_len)
 {
 	if (bundle_object.payload->location == BP_PAYLOAD_MEM)
 	{
@@ -481,7 +534,7 @@ bp_error_t bp_bundle_get_payload_mem(bp_bundle_object_t bundle_object, char ** b
 		return BP_EINVAL;
 }
 
-bp_error_t bp_bundle_set_payload_file(bp_bundle_object_t * bundle_object, char_t * filename, u32_t filename_len)
+al_bp_error_t al_bp_bundle_set_payload_file(al_bp_bundle_object_t * bundle_object, char_t * filename, u32_t filename_len)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
@@ -490,47 +543,46 @@ bp_error_t bp_bundle_set_payload_file(bp_bundle_object_t * bundle_object, char_t
 	if (filename_len <= 0 )
 		return BP_EINVAL;
 
-	bp_error_t err;
+	al_bp_error_t err;
 
 	if (bundle_object->payload == NULL){
-		bp_bundle_payload_t bundle_payload;
+		al_bp_bundle_payload_t bundle_payload;
 		memset(&bundle_payload, 0, sizeof(bundle_payload));
-		err = bp_set_payload(& bundle_payload, BP_PAYLOAD_FILE, filename, filename_len);
+		err = al_bp_set_payload(& bundle_payload, BP_PAYLOAD_FILE, filename, filename_len);
 		bundle_object->payload = & bundle_payload;
 	}
 	else // payload not null
 	{
-		memset(bundle_object->payload, 0, sizeof(bp_bundle_payload_t));
-		err = bp_set_payload(bundle_object->payload, BP_PAYLOAD_FILE, filename, filename_len);
+		memset(bundle_object->payload, 0, sizeof(al_bp_bundle_payload_t));
+		err = al_bp_set_payload(bundle_object->payload, BP_PAYLOAD_FILE, filename, filename_len);
 	}
 	return err;
 }
-
-bp_error_t bp_bundle_set_payload_mem(bp_bundle_object_t * bundle_object, char * buf, u32_t buf_len)
+al_bp_error_t al_bp_bundle_set_payload_mem(al_bp_bundle_object_t * bundle_object, char * buf, u32_t buf_len)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
 	if (buf_len < 0)
 		return BP_EINVAL;
 
-	bp_error_t err;
+	al_bp_error_t err;
 
 	if (bundle_object->payload == NULL){
-		bp_bundle_payload_t bundle_payload;
+		al_bp_bundle_payload_t bundle_payload;
 		memset(&bundle_payload, 0, sizeof(bundle_payload));
-		err = bp_set_payload(& bundle_payload, BP_PAYLOAD_MEM, buf, buf_len);
+		err = al_bp_set_payload(& bundle_payload, BP_PAYLOAD_MEM, buf, buf_len);
 		bundle_object->payload = & bundle_payload;
 	}
 	else //payload not null
 	{
-		memset(bundle_object->payload, 0, sizeof(bp_bundle_payload_t));
-		err = bp_set_payload(bundle_object->payload, BP_PAYLOAD_MEM, buf, buf_len);
+		memset(bundle_object->payload, 0, sizeof(al_bp_bundle_payload_t));
+		err = al_bp_set_payload(bundle_object->payload, BP_PAYLOAD_MEM, buf, buf_len);
 	}
 	return err;
 
 }
 
-bp_error_t bp_bundle_get_source(bp_bundle_object_t bundle_object, bp_endpoint_id_t * source)
+al_bp_error_t al_bp_bundle_get_source(al_bp_bundle_object_t bundle_object, al_bp_endpoint_id_t * source)
 {
 	if (bundle_object.spec == NULL)
 		return BP_ENULLPNTR;
@@ -538,18 +590,17 @@ bp_error_t bp_bundle_get_source(bp_bundle_object_t bundle_object, bp_endpoint_id
 	return BP_SUCCESS;
 
 }
-
-bp_error_t bp_bundle_set_source(bp_bundle_object_t * bundle_object, bp_endpoint_id_t source)
+al_bp_error_t al_bp_bundle_set_source(al_bp_bundle_object_t * bundle_object, al_bp_endpoint_id_t source)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
 	if (bundle_object->spec == NULL)
 		return BP_ENULLPNTR;
-	bp_copy_eid(&(bundle_object->spec->source), &source);
+	al_bp_copy_eid(&(bundle_object->spec->source), &source);
 	return BP_SUCCESS;
 }
 
-bp_error_t bp_bundle_get_dest(bp_bundle_object_t bundle_object, bp_endpoint_id_t * dest)
+al_bp_error_t al_bp_bundle_get_dest(al_bp_bundle_object_t bundle_object, al_bp_endpoint_id_t * dest)
 {
 	if (bundle_object.spec == NULL)
 		return BP_ENULLPNTR;
@@ -557,18 +608,17 @@ bp_error_t bp_bundle_get_dest(bp_bundle_object_t bundle_object, bp_endpoint_id_t
 	return BP_SUCCESS;
 
 }
-
-bp_error_t bp_bundle_set_dest(bp_bundle_object_t * bundle_object, bp_endpoint_id_t dest)
+al_bp_error_t al_bp_bundle_set_dest(al_bp_bundle_object_t * bundle_object, al_bp_endpoint_id_t dest)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
 	if (bundle_object->spec == NULL)
 		return BP_ENULLPNTR;
-	bp_copy_eid(&(bundle_object->spec->dest), &dest);
+	al_bp_copy_eid(&(bundle_object->spec->dest), &dest);
 	return BP_SUCCESS;
 }
 
-bp_error_t bp_bundle_get_replyto(bp_bundle_object_t bundle_object, bp_endpoint_id_t * replyto)
+al_bp_error_t al_bp_bundle_get_replyto(al_bp_bundle_object_t bundle_object, al_bp_endpoint_id_t * replyto)
 {
 	if (bundle_object.spec == NULL)
 		return BP_ENULLPNTR;
@@ -576,26 +626,24 @@ bp_error_t bp_bundle_get_replyto(bp_bundle_object_t bundle_object, bp_endpoint_i
 	return BP_SUCCESS;
 
 }
-
-bp_error_t bp_bundle_set_replyto(bp_bundle_object_t * bundle_object, bp_endpoint_id_t replyto)
+al_bp_error_t al_bp_bundle_set_replyto(al_bp_bundle_object_t * bundle_object, al_bp_endpoint_id_t replyto)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
 	if (bundle_object->spec == NULL)
 		return BP_ENULLPNTR;
-	bp_copy_eid(&(bundle_object->spec->replyto), &replyto);
+	al_bp_copy_eid(&(bundle_object->spec->replyto), &replyto);
 	return BP_SUCCESS;
 }
 
-bp_error_t bp_bundle_get_priority(bp_bundle_object_t bundle_object, bp_bundle_priority_t * priority)
+al_bp_error_t al_bp_bundle_get_priority(al_bp_bundle_object_t bundle_object,al_bp_bundle_priority_t * priority)
 {
 	if (bundle_object.spec == NULL)
 		return BP_ENULLPNTR;
 	* priority = bundle_object.spec->priority;
 	return BP_SUCCESS;
 }
-
-bp_error_t bp_bundle_set_priority(bp_bundle_object_t * bundle_object, bp_bundle_priority_t priority)
+al_bp_error_t al_bp_bundle_set_priority(al_bp_bundle_object_t * bundle_object, al_bp_bundle_priority_t priority)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
@@ -605,14 +653,14 @@ bp_error_t bp_bundle_set_priority(bp_bundle_object_t * bundle_object, bp_bundle_
 	return BP_SUCCESS;
 }
 
-bp_error_t bp_bundle_get_expiration(bp_bundle_object_t bundle_object, bp_timeval_t * exp)
+al_bp_error_t al_bp_bundle_get_expiration(al_bp_bundle_object_t bundle_object, al_bp_timeval_t * exp)
 {
 	if (bundle_object.spec == NULL)
 		return BP_ENULLPNTR;
 	*exp = bundle_object.spec->expiration;
 	return BP_SUCCESS;
 }
-bp_error_t bp_bundle_set_expiration(bp_bundle_object_t * bundle_object, bp_timeval_t exp)
+al_bp_error_t al_bp_bundle_set_expiration(al_bp_bundle_object_t * bundle_object, al_bp_timeval_t exp)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
@@ -622,15 +670,14 @@ bp_error_t bp_bundle_set_expiration(bp_bundle_object_t * bundle_object, bp_timev
 	return BP_SUCCESS;
 }
 
-
-bp_error_t bp_bundle_get_creation_timestamp(bp_bundle_object_t bundle_object, bp_timestamp_t * ts)
+al_bp_error_t al_bp_bundle_get_creation_timestamp(al_bp_bundle_object_t bundle_object, al_bp_timestamp_t * ts)
 {
 	if (bundle_object.spec == NULL)
 		return BP_ENULLPNTR;
 	*ts = bundle_object.spec->creation_ts;
 	return BP_SUCCESS;
 }
-bp_error_t bp_bundle_set_creation_timestamp(bp_bundle_object_t * bundle_object, bp_timestamp_t ts)
+al_bp_error_t al_bp_bundle_set_creation_timestamp(al_bp_bundle_object_t * bundle_object, al_bp_timestamp_t ts)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
@@ -640,16 +687,14 @@ bp_error_t bp_bundle_set_creation_timestamp(bp_bundle_object_t * bundle_object, 
 	return BP_SUCCESS;
 }
 
-
-bp_error_t bp_bundle_get_delivery_opts(bp_bundle_object_t bundle_object, bp_bundle_delivery_opts_t * dopts)
+al_bp_error_t al_bp_bundle_get_delivery_opts(al_bp_bundle_object_t bundle_object, al_bp_bundle_delivery_opts_t * dopts)
 {
 	if (bundle_object.spec == NULL)
 		return BP_ENULLPNTR;
 	* dopts = bundle_object.spec->dopts;
 	return BP_SUCCESS;
 }
-
-bp_error_t bp_bundle_set_delivery_opts(bp_bundle_object_t * bundle_object, bp_bundle_delivery_opts_t dopts)
+al_bp_error_t al_bp_bundle_set_delivery_opts(al_bp_bundle_object_t * bundle_object, al_bp_bundle_delivery_opts_t dopts)
 {
 	if (bundle_object == NULL)
 		return BP_ENULLPNTR;
@@ -659,7 +704,7 @@ bp_error_t bp_bundle_set_delivery_opts(bp_bundle_object_t * bundle_object, bp_bu
 	return BP_SUCCESS;
 }
 
-bp_error_t bp_bundle_get_status_report(bp_bundle_object_t bundle_object, bp_bundle_status_report_t ** status_report)
+al_bp_error_t al_bp_bundle_get_status_report(al_bp_bundle_object_t bundle_object, al_bp_bundle_status_report_t ** status_report)
 {
 	*status_report = bundle_object.payload->status_report;
 	return BP_SUCCESS;
