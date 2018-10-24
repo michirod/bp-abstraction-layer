@@ -7,10 +7,10 @@ last modified on 20/10/2012
                         *                      *
                         *         infos        *
                         ************************
-                        
-The library bp_abstraction_layer was created to provide a middle layer 
+
+The library bp_abstraction_layer was created to provide a middle layer
 between the Bundle Protocol implementation and the application.
-It was created to permit the dtnperf_3 application to run in the same 
+It was created to permit the dtnperf_3 application to run in the same
 way on DTN2 an on ION, but I think that it can be useful to every application
 that want to run indipendently of the running BP implementation.
 
@@ -22,7 +22,7 @@ be implemented in the next few months.
 
 
          ---------------        COMPILE         ---------------
-         
+
 To compile the library it is provided a script file compile.sh
 To compile it is necessary to tell the compiler where are the headers of
 the DTN2 or ION code, or both.
@@ -47,9 +47,9 @@ If the compiler throws errors regarding the file "oasys-config.h", make a
 symbolic link to the file oasys-src/oasys-config.h in the dir DTN2-src/oasys/
 
 Example:
-$ ls 
+$ ls
 	oasys-src DTN2-src
-	
+
 $ cd oasys-src
 
 $ ./configure
@@ -75,7 +75,7 @@ TO BE DEFINED
 
          ---------------         INSTALL        ---------------
 
-To install the library in the system simply do the following command with 
+To install the library in the system simply do the following command with
 root privileges:
 
 # install libbp_abstraction_layer.so -m 644 /usr/lib/
@@ -86,7 +86,7 @@ or / and
 
 
 NOTE:
-This is a temporary compiling solution, it will be provided a better 
+This is a temporary compiling solution, it will be provided a better
 way to compile the source using configure and make.
 
 

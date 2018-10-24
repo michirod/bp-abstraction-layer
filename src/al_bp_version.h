@@ -14,11 +14,11 @@
 
 /*
 #define AL_BP_VERSION_MAJOR		1
-#define AL_BP_VERSION_MINOR		4
-#define AL_BP_VERSION_PATCH		0
+#define AL_BP_VERSION_MINOR		5
+#define AL_BP_VERSION_PATCH		1
 */
 
-#define AL_BP_VERSION_STRING	"1.4.0"
+#define AL_BP_VERSION_STRING	"1.5.1"
 
 extern const char* al_bp_version;
 

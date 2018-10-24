@@ -219,14 +219,14 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	int result, tmpCustody, tmpPriority, lifespan, ackRequested;
 	unsigned char srrFlags;
 	BpCustodySwitch custodySwitch;
-	BpExtendedCOS extendedCOS = { 0, 0, 0 };
+	BpAncillaryData extendedCOS = { 0, 0, 0 };
 	/* Set option bundle */
 	reportEid = al_ion_endpoint_id(spec->replyto);
 	lifespan = (int) spec->expiration;
 	custodySwitch = NoCustodyRequested;
 	srrFlags = al_ion_bundle_srrFlags(spec->dopts);
 	ackRequested = 0;
-	/* Create String for parse class of service */	
+	/* Create String for parse class of service */
 	if(spec->dopts & BP_DOPTS_CUSTODY)
 	{
 			tmpCustody = 1;
@@ -239,9 +239,9 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	if(tmpPriority == -1)
 		return BP_EINVAL;
 	tokenClassOfService = (char *)malloc(sizeof(char)*255);
-	sprintf(tokenClassOfService,"%1u.%1u.%lu.%1u.%1u.%lu", tmpCustody, tmpPriority, (unsigned long) spec->priority.ordinal, 
+	sprintf(tokenClassOfService,"%1u.%1u.%lu.%1u.%1u.%lu", tmpCustody, tmpPriority, (unsigned long) spec->priority.ordinal,
 			spec->unreliable==TRUE?1:0, spec->critical==TRUE?1:0, (unsigned long) spec->flow_label);
-	
+
 	//printf("COS is: %s\n", tokenClassOfService);
 
 	result = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
@@ -261,11 +261,11 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 
 	/* Set Id Bundle Sent*/
 //dz debug --- It is not safe to use the newBundleObj "address" to access SDR because it may
-//dz debug --- have been released (or worse: reallocated) before bp_send returns. ION 3.3 should 
+//dz debug --- have been released (or worse: reallocated) before bp_send returns. ION 3.3 should
 //dz debug --- have a new feature bp_open_source() which will preserve the sent bundle until
 //dz debug --- it is released or expires. I am commenting out retrieving the dictionary because
 //dz debug --- that can lead to allocating 4GB of memory if the newBundleObj data was overwritten.
-//dz debug --- This should be updated after the new feature is available. 
+//dz debug --- This should be updated after the new feature is available.
 //dz debug
 	Bundle bundleION;
 	Sdr bpSdr = bp_get_sdr();
@@ -285,7 +285,7 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 #endif
 
 //dz debug --- Note that the following values may not always be valid by the time they are read here
-//dz debug --- but most of the time they should be okay and reading invalid values will not cause 
+//dz debug --- but most of the time they should be okay and reading invalid values will not cause
 //dz debug --- a crash. Just setting these values to zeroes prevents the client Window option from working
 //dz debug --- because ACKs from the server would never match. This compromise should work until invalid
 //dz debug --- values fill up the window.
@@ -457,7 +457,7 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 		if(fileRef != 0)
 		{
 			zco_destroy_file_ref(bpSdr, fileRef);
-//by David Zoller remove filename from catalog 
+//by David Zoller remove filename from catalog
                         sdr_uncatlg(bpSdr, payload->filename.filename_val);
 		}
 		else
