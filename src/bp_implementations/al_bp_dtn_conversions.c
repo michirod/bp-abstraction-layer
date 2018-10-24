@@ -281,7 +281,7 @@ al_bp_bundle_spec_t dtn_al_bundle_spec(dtn_bundle_spec_t bundle_spec)
 	            memcpy(bp_bundle_spec.blocks.blocks_val[i].data.data_val,
 	            		bp_bundle_block.data.data_val, bp_bundle_block.data.data_len);
 
-//XXX/dz - Just copied the data above so this is not needed and would overwrite the data_val pointerr 
+//XXX/dz - Just copied the data above so this is not needed and would overwrite the data_val pointerr
 //dz debug	            bp_bundle_spec.blocks.blocks_val[i].data.data_val =
 //dz debug	            		(char*)bp_bundle_block.data.data_val;
 	        }

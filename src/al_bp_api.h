@@ -8,7 +8,7 @@
  **  All rights reserved.
  This file contains all the API definitions of the al_bp (al_bp prefix).
  ** These are called directly from the application.
- ** In DTNperf_3 These are the sole al_bp_ APIs called. 
+ ** In DTNperf_3 These are the sole al_bp_ APIs called.
  ** Each API consists of a switch between DTN2 and ION API implementations (bp prefix)
  ********************************************************/
 

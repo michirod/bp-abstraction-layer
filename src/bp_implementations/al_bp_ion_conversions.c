@@ -28,7 +28,7 @@
 
 #ifndef NEW_ZCO
 #define  NEW_ZCO 1
-#endif 
+#endif
 
 
 #include "al_bp_ion_conversions.h"
@@ -236,7 +236,7 @@ al_bp_bundle_status_report_t ion_al_bundle_status_report(BpStatusRpt bundle_stat
 	return bp_statusRpt;
 }
 
-Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload, int  priority,BpExtendedCOS extendedCOS)
+Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload, int  priority,BpAncillaryData ancillaryData)
 {
 	Payload payload;
 	memset(&payload,0,sizeof(Payload));
@@ -249,7 +249,7 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload, int  priori
 		sdr_write(bpSdr, buff, bundle_payload.buf.buf_val, bundle_payload.buf.buf_len);
 		#ifdef NEW_ZCO
 			payload.content = ionCreateZco(ZcoSdrSource, buff, 0, bundle_payload.buf.buf_len, priority,
-				extendedCOS.ordinal, ZcoOutbound, NULL);
+				ancillaryData.ordinal, ZcoOutbound, NULL);
 		#else
 			payload.content = zco_create(bpSdr, ZcoSdrSource, buff, 0, bundle_payload.buf.buf_len);
 		#endif
@@ -269,13 +269,13 @@ Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload, int  priori
 			#ifdef NEW_ZCO
 				fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "", ZcoOutbound);
 			#else
-				fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "");				
+				fileRef = zco_create_file_ref(bpSdr, bundle_payload.filename.filename_val, "");
 			#endif
 			sdr_catlg(bpSdr, bundle_payload.filename.filename_val, 0, fileRef);
 		}
 		#ifdef NEW_ZCO
 			payload.content = ionCreateZco(ZcoFileSource, fileRef, 0, (unsigned int) dimFile, priority,
-			extendedCOS.ordinal, ZcoOutbound, NULL);
+			ancillaryData.ordinal, ZcoOutbound, NULL);
 		#else
 			payload.content = zco_create(bpSdr, ZcoFileSource, fileRef, 0, (unsigned int) dimFile);
 		#endif
