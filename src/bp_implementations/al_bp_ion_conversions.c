@@ -300,8 +300,9 @@ al_bp_bundle_payload_t ion_al_bundle_payload(Payload bundle_payload,
 	if(location == BP_PAYLOAD_MEM)
 	{
 		payload.buf.buf_len = bundle_payload.length;
-		payload.buf.buf_val = (char *)malloc(sizeof(char)*bundle_payload.length);
-		memcpy(payload.buf.buf_val, buffer, bundle_payload.length);
+		payload.buf.buf_val = buffer;
+		//payload.buf.buf_val = (char *)malloc(sizeof(char)*bundle_payload.length);
+		//memcpy(payload.buf.buf_val, buffer, bundle_payload.length);
 	}
 	else
 	{
@@ -311,10 +312,130 @@ al_bp_bundle_payload_t ion_al_bundle_payload(Payload bundle_payload,
 		payload.filename.filename_len = strlen(filename)+1;
 		payload.filename.filename_val = (char *)malloc(sizeof(char)*(strlen(filename)+1));
 		strcpy(payload.filename.filename_val,filename);
+		free(buffer);
 	}
 
-	free(buffer);
+	//free(buffer);
 	return payload;
 }
-#endif /* ION_IMPLEMENTATION */
 
+/* Author: Laura Mazzuca, laura.mazzuca@studio.unibo.it
+ *
+ * The conversion only supports one metadata extesion block to be added. (As of September 2018)
+ * The metadata_len signature parameter is for future extension to support multiple metadata
+ * extension blocks to be added.
+ *
+ * In case it ever happens by only making every metadata var an array, the only thing to do
+ * is add the index to the extendedCOS.
+ */
+int al_ion_metadata(u32_t metadata_len, al_bp_extension_block_t *metadata_val, BpAncillaryData* extendedCOS) {
+
+	int i = 0;
+
+	for (i = 0; i < metadata_len; i++)
+	{
+		u32_t datalen = metadata_val[i].data.data_len;
+
+		/*
+		 * check if datalen doesn't exceed ion maximum metadata length
+		 */
+		if (datalen >= BP_MAX_METADATA_LEN)
+		{	return 0;	}
+
+		/*
+		 * assign metadata type (check on valid types is in parsing function)...
+		 */
+		extendedCOS->metadataType = metadata_val[i].type;
+
+		/*
+		 * ...and check if a string has been specified by command line.
+		 * If yes, assign its value to BPAncillaryData variable.
+		 */
+		if (datalen != 0)
+		{
+			//use of this syntax because extendedCOS->metadataLen is unsigned char
+			extendedCOS->metadataLen = datalen & 0xFF;
+
+			//use of memcpy because extendedCOS->metadata is array of unsigned char
+			memcpy(extendedCOS->metadata, metadata_val[i].data.data_val, datalen + 1);
+		}
+		else
+		{
+			/*
+			 * otherwise just initialize variables to null values.
+			 */
+			extendedCOS->metadataLen = 0;
+			memset(extendedCOS->metadata, 0, sizeof(extendedCOS->metadata));
+		}
+	}
+	return 1;
+}
+
+/* Author: Laura Mazzuca, laura.mazzuca@studio.unibo.it
+ *
+ * The conversion supports, in part, the possibility for more than one meb to be specified.
+ *
+ * If ION ever adds support for more than one metadata extension block, the assigment
+ * from the AncillaryData contained in the BpDelivery bundle has to be modified accordingly.
+ *
+ * If it ever happens by only making each metadata variable an array, simply add index
+ * and for loop.
+ *
+ */
+void ion_al_metadata(BpDelivery dlvBundle, al_bp_bundle_spec_t * spec) {
+
+	int i = 0;
+
+	spec->metadata.metadata_len = 1;
+
+	/*
+	 * This re-initialization of metadata_val is to avoid eventual segmentation faluts.
+	 */
+	free(spec->metadata.metadata_val);
+	spec->metadata.metadata_val = (al_bp_extension_block_t*)malloc(sizeof(al_bp_extension_block_t));
+
+	/*
+	 * metadata variables are of type unsigned char, so we must cast them to unsigned integers.
+	 */
+	spec->metadata.metadata_val[i].type = (unsigned int)dlvBundle.metadataType;
+	spec->metadata.metadata_val[i].flags=0;
+
+	spec->metadata.metadata_val[i].data.data_len = (unsigned int) dlvBundle.metadataLen;
+	if (dlvBundle.metadataLen > 0)
+	{
+		spec->metadata.metadata_val[i].data.data_val = malloc(BP_MAX_METADATA_LEN * sizeof(char));
+		memcpy(spec->metadata.metadata_val[i].data.data_val, dlvBundle.metadata, dlvBundle.metadataLen + 1);
+	}
+	else
+	{
+		spec->metadata.metadata_val[0].data.data_val = NULL;
+	}
+}
+
+/* Author: Laura Mazzuca, laura.mazzuca@studio.unibo.it
+ *
+ * This is a to-do function to read extension blocks from ion
+ * Problem is, as of October 2018 BpDelivery doesn't have a variable to save extblocks
+ *
+ */
+//void ion_al_extension_block(BpDelivery dlvBundle, al_bp_bundle_spec_t * spec) {
+//
+//	spec->blocks.blocks_len = sizeof(dlvBundle.);
+//	free(spec->metadata.metadata_val);
+//	spec->metadata.metadata_val = (al_bp_extension_block_t*)malloc(sizeof(al_bp_extension_block_t));
+//
+//	spec->metadata.metadata_val[0].type = (unsigned int)dlvBundle.metadataType;
+//	spec->metadata.metadata_val[0].flags=0;
+//
+//	spec->metadata.metadata_val[0].data.data_len = (unsigned int) dlvBundle.metadataLen;
+//	if (dlvBundle.metadataLen > 0)
+//	{
+//		spec->metadata.metadata_val[0].data.data_val = malloc(BP_MAX_METADATA_LEN * sizeof(char));
+//		memcpy(spec->metadata.metadata_val[0].data.data_val, dlvBundle.metadata, dlvBundle.metadataLen + 1);
+//	}
+//	else
+//	{
+//		spec->metadata.metadata_val[0].data.data_val = NULL;
+//	}
+//}
+#endif /* ION_IMPLEMENTATION */

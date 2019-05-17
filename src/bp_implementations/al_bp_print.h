@@ -29,15 +29,15 @@ const char* al_bp_print_tabs(int tabs);
 void al_bp_print_null(const char* Tname, const char* name, size_t indent, FILE* stream);
 
 // template<typename T>
-// void al_bp_print_array(const T* array, size_t size, void (*al_bp_print_T)(T, const char*, size_t, FILE*), const char* Tname,
+// void al_bp_print_array(const T* array, size_t size, void (*al_bp_print_T)(T, const char*, size_t, FILE*), const char* Tname, 
                        // const char* name, size_t indent, FILE* stream);
-
+				  
 #define al_bp_print_array(array, size, al_bp_print_T, Tname, name, indent, stream) \
 	if ((size) > 0) { \
 		fprintf(stream, "%s%s %s[%zu]:\n", al_bp_print_tabs(indent), Tname, name, (size_t) (size)); \
 		size_t i; \
 		for (i = 0; i < (size); ++i) { \
-			char index[8]; sprintf(index, "[%zu]", i); \
+			char index[23]; sprintf(index, "[%zu]", i); \
 			al_bp_print_T((array)[i], index, (indent)+1, stream); \
 		} \
 	} else fprintf(stream, "%s%s %s[%zu]: (empty)\n", al_bp_print_tabs(indent), Tname, name, (size_t) (size));

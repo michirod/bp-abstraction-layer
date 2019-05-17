@@ -148,6 +148,11 @@ void al_bp_copy_eid(al_bp_endpoint_id_t* dst, al_bp_endpoint_id_t* src);
 al_bp_error_t al_bp_parse_eid_string(al_bp_endpoint_id_t* eid, const char* str);
 
 /**
+ * Returns the pointer to the well-formatted string of dtn:none
+ */
+const char* al_bp_get_none_endpoint_string();
+
+/**
  * Returns the null endpoint
  */
 al_bp_error_t al_bp_get_none_endpoint(al_bp_endpoint_id_t * eid_none);

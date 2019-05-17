@@ -85,6 +85,9 @@ al_bp_error_t bp_ion_set_payload(al_bp_bundle_payload_t* payload,
 
 void bp_ion_free_payload(al_bp_bundle_payload_t* payload);
 
+void bp_ion_free_extension_blocks(al_bp_bundle_spec_t* spec);
+
+void bp_ion_free_metadata_blocks(al_bp_bundle_spec_t* spec);
 
 /**
  * converts DTN errors in the corresponding al_bp_error_t values

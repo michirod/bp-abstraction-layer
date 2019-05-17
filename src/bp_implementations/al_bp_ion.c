@@ -1,6 +1,7 @@
 /********************************************************
  **  Authors: Michele Rodolfi, michele.rodolfi@studio.unibo.it
  **           Anna d'Amico, anna.damico@studio.unibo.it
+ **           Andrea Bisacchi, andrea.bisacchi5@studio.unibo.it
  **           Carlo Caini (DTNperf_3 project supervisor), carlo.caini@unibo.it
  **
  **
@@ -74,8 +75,10 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 		{
 			/*Unknow scheme*/
 			result = addScheme(CBHESCHEMENAME,"ipnfw","ipnadmin");
-			if(result == 0)
+			if(result == 0) {
+				free(eidString);
 				return BP_EBUILDEID;
+			}
 		}
 		long int service_num = strtol(service_tag,NULL,10);
 		sprintf(eidString, "%s:%lu",
@@ -91,20 +94,27 @@ al_bp_error_t bp_ion_build_local_eid(al_bp_endpoint_id_t* local_eid,
 		{
 			/*Unknow scheme*/
 			result = addScheme(DTN2SCHEMENAME,"dtn2fw","dtn2admin");
-			if(result == 0)
+			if(result == 0) {
+				free(eidString);
 				return BP_EBUILDEID;
+			}
 		}
 
 		hostname = (char *)malloc(sizeof(char)*100);
 		result = gethostname(hostname, 100);
-		if(result == -1)
+		if(result == -1) {
+			free(eidString);
+			free(hostname);
 			return BP_EBUILDEID;
+		}
 		sprintf(eidString,"%s://%s.dtn%s",DTN2SCHEMENAME,hostname,service_tag);
 		(*local_eid) = ion_al_endpoint_id(eidString);
 		free(hostname);
 	}
-	else
+	else {
+		free(eidString);
 		return BP_EBUILDEID;
+	}
 	//Free resource
 	free(eidString);
 	return BP_SUCCESS;
@@ -136,18 +146,24 @@ al_bp_error_t bp_ion_register(al_bp_handle_t * handle,
 	if(bp_ion_find_registration(*handle,&(reginfo->endpoint),newregid) ==  BP_ENOTFOUND)
 	{
 		result = addEndpoint(eid, DiscardBundle ,NULL);
-		if(result == 0)
+		if(result == 0) {
+			free(eid);
 			return BP_EREG;
+		}
 	}
 #ifdef BP_OPEN_SOURCE
 	//result = bp_open(eid, (ion_handle->source));
 	result = bp_open_source(eid, (ion_handle->source), 1);
-	if(result == -1)
+	if(result == -1) {
+		free(eid);
 		return BP_EREG;
+	}
 #endif
 	result = bp_open(eid, (ion_handle->recv));
-	if(result == -1)
+	if(result == -1) {
+		free(eid);
 		return BP_EREG;
+	}
 	//Free resource
 	free(eid);
 	(*handle) = ion_al_handle(ion_handle);
@@ -170,14 +186,25 @@ al_bp_error_t bp_ion_find_registration(al_bp_handle_t handle,
 	else
 		strncpy(schemeName,"dtn",4);
 	if(parseEidString(endpoint,&metaEid,&vscheme,&psmAddress) == 0)
+	{
+		free(schemeName);
+		free(endpoint);
 		return BP_EPARSEEID;
+	}
 	findEndpoint(schemeName,metaEid.nss,vscheme,&veid,&psmAddress);
 	if(psmAddress == 0)
+	{
+		free(schemeName);
+		free(endpoint);
 		return BP_ENOTFOUND;
+	}
 	if (sm_TaskExists(veid->appPid))
 	{
-		if (veid->appPid != -1)
+		if (veid->appPid != -1) {
+			free(schemeName);
+			free(endpoint);
 			return BP_EBUSY;
+		}
 	}
 	//Free resource
 	free(schemeName);
@@ -243,10 +270,24 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 			spec->unreliable==TRUE?1:0, spec->critical==TRUE?1:0, (unsigned long) spec->flow_label);
 
 	//printf("COS is: %s\n", tokenClassOfService);
+	if (spec->metadata.metadata_len > 0)
+	{
+		result = al_ion_metadata(spec->metadata.metadata_len, spec->metadata.metadata_val, &extendedCOS);
+		if(result == 0) {
+			free(destEid);
+			free(reportEid);
+			free(tokenClassOfService);
+			return BP_EINVAL;
+		}
+	}
 
 	result = bp_parse_class_of_service(tokenClassOfService,&extendedCOS,&custodySwitch,&tmpPriority);
-	if(result == 0)
+	if(result == 0) {
+		free(destEid);
+		free(reportEid);
+		free(tokenClassOfService);
 		return BP_EINVAL;
+	}
 	Payload ion_payload = al_ion_bundle_payload((*payload), tmpPriority, extendedCOS);
 	Object adu = ion_payload.content;
 	Object newBundleObj;
@@ -254,10 +295,18 @@ al_bp_error_t bp_ion_send(al_bp_handle_t handle,
 	/* Send Bundle*/
 	result = bp_send(*bpSap,destEid,reportEid,lifespan,tmpPriority,
 			custodySwitch,srrFlags,ackRequested,&extendedCOS,adu,&newBundleObj);
-	if(result == 0)
-			return BP_ENOSPACE;
-	if(result == -1)
-			return BP_ESEND;
+	if(result == 0) {
+		free(destEid);
+		free(reportEid);
+		free(tokenClassOfService);
+		return BP_ENOSPACE;
+	}
+	if(result == -1) {
+		free(destEid);
+		free(reportEid);
+		free(tokenClassOfService);
+		return BP_ESEND;
+	}
 
 	/* Set Id Bundle Sent*/
 //dz debug --- It is not safe to use the newBundleObj "address" to access SDR because it may
@@ -328,14 +377,23 @@ al_bp_error_t bp_ion_recv(al_bp_handle_t handle,
 	}
 	if(dlv.result == BpReceptionInterrupted)
 	{
-		printf("\nAL-BP: Reception Interrupted\n");
+		//printf("\nAL-BP: Reception Interrupted\n");
 		return BP_ERECVINT;
+	}
+	if (dlv.result == BpEndpointStopped) {
+		return BP_ERECV;
 	}
 	/* Set Bundle Spec */
 	spec->creation_ts = ion_al_timestamp(dlv.bundleCreationTime);
 	spec->source = ion_al_endpoint_id(dlv.bundleSourceEid);
 	char * tmp = "dtn:none";
 	spec->replyto = ion_al_endpoint_id(tmp);
+	//Laura Mazzuca: added support to metadata read
+	//printf("--------------metada len: %u\n", dlv.metadataLen);
+	if (dlv.metadataType) {
+		//spec->metadata.metadata_len = 1;
+		ion_al_metadata(dlv, spec);
+	}
 	/* Payload */
 	Sdr bpSdr = bp_get_sdr();
 	Payload ion_payload;
@@ -416,8 +474,10 @@ al_bp_error_t bp_ion_parse_eid_string(al_bp_endpoint_id_t* eid, const char* str)
 	VScheme * vscheme;
 	endpoint = (char *) malloc(sizeof(char)*AL_BP_MAX_ENDPOINT_ID);
 	strncpy(endpoint,str,strlen(str)+1);
-	if(parseEidString(endpoint,&metaEid,&vscheme,&psmAddress) == 0)
+	if(parseEidString(endpoint,&metaEid,&vscheme,&psmAddress) == 0) {
+		free(endpoint);
 		return BP_EPARSEEID;
+	}
 	(*eid) = ion_al_endpoint_id((char *)str);
 	free(endpoint);
 	return BP_SUCCESS;
@@ -465,6 +525,34 @@ void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
 			unlink(payload->filename.filename_val);
 		sdr_end_xn(bpSdr);
 	}
+}
+
+void bp_ion_free_extension_blocks(al_bp_bundle_spec_t* spec)
+{
+	 int i;
+	for ( i=0; i<spec->blocks.blocks_len; i++ ) {
+//		printf("Freeing extension block [%d].data at 0x%08X\n",
+//						   i, (unsigned int) *(spec->blocks.blocks_val[i].data.data_val));
+		if (spec->blocks.blocks_val[i].data.data_len > 0)
+			free(spec->blocks.blocks_val[i].data.data_val);
+	}
+	free(spec->blocks.blocks_val);
+	spec->blocks.blocks_val = NULL;
+	spec->blocks.blocks_len = 0;
+}
+
+void bp_ion_free_metadata_blocks(al_bp_bundle_spec_t* spec)
+{
+	int i;
+	for ( i=0; i< spec->metadata.metadata_len; i++ ) {
+//		printf("Freeing metadata block [%d].data at 0x%08X\n",
+//						   i, (unsigned int) *(spec->metadata.metadata_val[i].data.data_val));
+		if (spec->metadata.metadata_val[i].data.data_len > 0)
+			free(spec->metadata.metadata_val[i].data.data_val);
+	}
+	free(spec->metadata.metadata_val);
+	spec->metadata.metadata_val = NULL;
+	spec->metadata.metadata_len = 0;
 }
 
 al_bp_error_t bp_ion_error(int err)
@@ -693,6 +781,16 @@ al_bp_error_t bp_ion_set_payload(al_bp_bundle_payload_t* payload,
 }
 
 void bp_ion_free_payload(al_bp_bundle_payload_t* payload)
+{
+
+}
+
+void bp_ion_free_extension_blocks(al_bp_bundle_spec_t* spec)
+{
+
+}
+
+void bp_ion_free_metadata_blocks(al_bp_bundle_spec_t* 	spec)
 {
 
 }

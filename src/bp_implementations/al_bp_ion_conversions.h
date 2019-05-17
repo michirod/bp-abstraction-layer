@@ -86,5 +86,19 @@ al_bp_bundle_status_report_t ion_al_bundle_status_report(BpStatusRpt bundle_stat
 
 al_bp_bundle_payload_t ion_al_bundle_payload(Payload bundle_payload,al_bp_bundle_payload_location_t location,char * filename);
 Payload al_ion_bundle_payload(al_bp_bundle_payload_t bundle_payload, int  priority, BpAncillaryData extendedCOS);
+
+/* Author: Laura Mazzuca, laura.mazzuca@studio.unibo.it
+ *
+ * This function converts al_bp metadata type into ion metadata type, BPAncillaryData.
+ *
+ */
+int al_ion_metadata(u32_t metadata_len, al_bp_extension_block_t *metadata_val, BpAncillaryData* extendedCOS);
+
+/* Author: Laura Mazzuca, laura.mazzuca@studio.unibo.it
+ *
+ * This function converts the metadata found in the ion bundle structure BPDelivery
+ * into abstract layer metadata
+ */
+void ion_al_metadata(BpDelivery dlvBundle, al_bp_bundle_spec_t * spec);
 #endif  /* AL_BP_DTN_CONVERSIONS_H_ */
 #endif /* ION_IMPLEMENTAION */

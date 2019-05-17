@@ -41,7 +41,7 @@ typedef enum
 {
 	CBHE_SCHEME = 0,
 	DTN_SCHEME,
-}al_bp_scheme_t;
+} al_bp_scheme_t;
 
 /**
  * Specification of a bp endpoint id, i.e. a URI, implemented as a
@@ -52,10 +52,9 @@ typedef enum
  * ids would require malloc / free which is more prone to leaks / bugs.
  */
 
-struct al_bp_endpoint_id_t {
+typedef struct al_bp_endpoint_id_t {
 	char uri[AL_BP_MAX_ENDPOINT_ID]; //256
-};
-typedef struct al_bp_endpoint_id_t al_bp_endpoint_id_t;
+} al_bp_endpoint_id_t;
 
 /**
  * *************************************************************************CONTROLLA DESCRIZIONE
@@ -69,11 +68,10 @@ typedef int * al_bp_handle_t;
 
 typedef u32_t al_bp_timeval_t;
 
-struct al_bp_timestamp_t {
+typedef struct al_bp_timestamp_t {
 	u32_t secs;
 	u32_t seqno;
-};
-typedef struct al_bp_timestamp_t al_bp_timestamp_t;
+} al_bp_timestamp_t;
 
 typedef u32_t al_bp_reg_token_t;
 
@@ -87,7 +85,7 @@ typedef u32_t al_bp_reg_id_t;
  * Registration state.
  */
 
-struct al_bp_reg_info_t {
+typedef struct al_bp_reg_info_t {
 	al_bp_endpoint_id_t endpoint;
 	al_bp_reg_id_t regid;
 	u32_t flags;
@@ -99,8 +97,8 @@ struct al_bp_reg_info_t {
 		u32_t script_len;
 		char *script_val;
 	} script;
-};
-typedef struct al_bp_reg_info_t al_bp_reg_info_t;
+} al_bp_reg_info_t;
+
 /**
  * Registration flags are a bitmask of the following:
 
@@ -120,7 +118,7 @@ typedef struct al_bp_reg_info_t al_bp_reg_info_t;
  *
  */
 
-enum al_bp_reg_flags_t {
+typedef enum al_bp_reg_flags_t {
 	BP_REG_DROP = 1,
 	BP_REG_DEFER = 2,
 	BP_REG_EXEC = 3,
@@ -128,8 +126,8 @@ enum al_bp_reg_flags_t {
 	BP_SESSION_PUBLISH = 8,
 	BP_SESSION_SUBSCRIBE = 16,
 	BP_DELIVERY_ACKS = 32,
-};
-typedef enum al_bp_reg_flags_t al_bp_reg_flags_t;
+} al_bp_reg_flags_t;
+
 /**
  * Value for an unspecified registration cookie (i.e. indication that
  * the daemon should allocate a new unique id).
@@ -152,7 +150,7 @@ typedef enum al_bp_reg_flags_t al_bp_reg_flags_t;
  *     BP_DOPTS_DO_NOT_FRAGMENT - set the do not fragment bit
  */
 
-enum al_bp_bundle_delivery_opts_t {
+typedef enum al_bp_bundle_delivery_opts_t {
 	BP_DOPTS_NONE = 0,
 	BP_DOPTS_CUSTODY = 1,
 	BP_DOPTS_DELIVERY_RCPT = 2,
@@ -163,8 +161,7 @@ enum al_bp_bundle_delivery_opts_t {
 	BP_DOPTS_SINGLETON_DEST = 64,
 	BP_DOPTS_MULTINODE_DEST = 128,
 	BP_DOPTS_DO_NOT_FRAGMENT = 256,
-};
-typedef enum al_bp_bundle_delivery_opts_t al_bp_bundle_delivery_opts_t;
+} al_bp_bundle_delivery_opts_t;
 
 /**
  * Bundle priority specifier.
@@ -176,33 +173,30 @@ typedef enum al_bp_bundle_delivery_opts_t al_bp_bundle_delivery_opts_t;
  * 	   ordinal [0 - AL_MAX_ORDINAL_NBR]
  */
 
-enum al_bp_bundle_priority_enum {
+typedef enum al_bp_bundle_priority_enum {
 	BP_PRIORITY_BULK = 0,
 	BP_PRIORITY_NORMAL = 1,
 	BP_PRIORITY_EXPEDITED = 2,
 	BP_PRIORITY_RESERVED = 3,
-};
-typedef enum al_bp_bundle_priority_enum al_bp_bundle_priority_enum;
+} al_bp_bundle_priority_enum;
 
-struct al_bp_bundle_priority_t {
+typedef struct al_bp_bundle_priority_t {
 	al_bp_bundle_priority_enum priority;
 	u32_t ordinal;
-};
-typedef struct al_bp_bundle_priority_t al_bp_bundle_priority_t;
+} al_bp_bundle_priority_t;
 
 /**
  * Extension block.
  */
 
-struct al_bp_extension_block_t {
+typedef struct al_bp_extension_block_t {
 	u32_t type;
 	u32_t flags;
 	struct {
 		u32_t data_len;
 		char *data_val;
 	} data;
-};
-typedef struct al_bp_extension_block_t al_bp_extension_block_t;
+} al_bp_extension_block_t;
 
 /**
  * Bundle specifications. The delivery_regid is ignored when sending
@@ -210,7 +204,7 @@ typedef struct al_bp_extension_block_t al_bp_extension_block_t;
  * id where the bundle was received.
  */
 
-struct al_bp_bundle_spec_t {
+typedef struct al_bp_bundle_spec_t {
 	al_bp_endpoint_id_t source;
 	al_bp_endpoint_id_t dest;
 	al_bp_endpoint_id_t replyto;
@@ -230,8 +224,7 @@ struct al_bp_bundle_spec_t {
 	boolean_t unreliable;
 	boolean_t critical;
 	u32_t flow_label;
-};
-typedef struct al_bp_bundle_spec_t al_bp_bundle_spec_t;
+} al_bp_bundle_spec_t;
 
 /**
  * The payload of a bundle can be sent or received either in a file,
@@ -253,17 +246,17 @@ typedef struct al_bp_bundle_spec_t al_bp_bundle_spec_t;
  *     BP_PAYLOAD_TEMP_FILE   - in file, assume ownership (send only)
  */
 
-enum al_bp_bundle_payload_location_t {
+typedef enum al_bp_bundle_payload_location_t {
 	BP_PAYLOAD_FILE = 0,
 	BP_PAYLOAD_MEM = 1,
 	BP_PAYLOAD_TEMP_FILE = 2,
-};
-typedef enum al_bp_bundle_payload_location_t al_bp_bundle_payload_location_t;
+} al_bp_bundle_payload_location_t;
+
 /**
  * Bundle Status Report "Reason Code" flags
  */
 
-enum al_bp_status_report_reason_t {
+typedef enum al_bp_status_report_reason_t {
 	BP_SR_REASON_NO_ADDTL_INFO = 0x00,
 	BP_SR_REASON_LIFETIME_EXPIRED = 0x01,
 	BP_SR_REASON_FORWARDED_UNIDIR_LINK = 0x02,
@@ -273,22 +266,21 @@ enum al_bp_status_report_reason_t {
 	BP_SR_REASON_NO_ROUTE_TO_DEST = 0x06,
 	BP_SR_REASON_NO_TIMELY_CONTACT = 0x07,
 	BP_SR_REASON_BLOCK_UNINTELLIGIBLE = 0x08,
-};
-typedef enum al_bp_status_report_reason_t al_bp_status_report_reason_t;
+} al_bp_status_report_reason_t;
+
 /**
  * Bundle Status Report status flags that indicate which timestamps in
  * the status report structure are valid.
  */
 
-enum al_bp_status_report_flags_t {
+typedef enum al_bp_status_report_flags_t {
 	BP_STATUS_RECEIVED = 0x01,
 	BP_STATUS_CUSTODY_ACCEPTED = 0x02,
 	BP_STATUS_FORWARDED = 0x04,
 	BP_STATUS_DELIVERED = 0x08,
 	BP_STATUS_DELETED = 0x10,
 	BP_STATUS_ACKED_BY_APP = 0x20,
-};
-typedef enum al_bp_status_report_flags_t al_bp_status_report_flags_t;
+} al_bp_status_report_flags_t;
 
 /**
  * Type definition for a unique bundle identifier. Returned from bp_send
@@ -298,20 +290,18 @@ typedef enum al_bp_status_report_flags_t al_bp_status_report_flags_t;
  * fragmented.
  */
 
-struct al_bp_bundle_id_t {
+typedef struct al_bp_bundle_id_t {
 	al_bp_endpoint_id_t source;
 	al_bp_timestamp_t creation_ts;
 	u32_t frag_offset;
 	u32_t orig_length;
-};
-
-typedef struct al_bp_bundle_id_t al_bp_bundle_id_t;
+} al_bp_bundle_id_t;
 
 /**
  * Type definition for a bundle status report.
  */
 
-struct al_bp_bundle_status_report_t {
+typedef struct al_bp_bundle_status_report_t {
 	al_bp_bundle_id_t bundle_id;
 	al_bp_status_report_reason_t reason;
 	al_bp_status_report_flags_t flags;
@@ -321,10 +311,9 @@ struct al_bp_bundle_status_report_t {
 	al_bp_timestamp_t delivery_ts;
 	al_bp_timestamp_t deletion_ts;
 	al_bp_timestamp_t ack_by_app_ts;
-};
-typedef struct al_bp_bundle_status_report_t al_bp_bundle_status_report_t;
+} al_bp_bundle_status_report_t;
 
-struct al_bp_bundle_payload_t {
+typedef struct al_bp_bundle_payload_t {
 	al_bp_bundle_payload_location_t location;
 	struct {
 		u32_t filename_len;
@@ -336,8 +325,7 @@ struct al_bp_bundle_payload_t {
 		char *buf_val;
 	} buf;
 	al_bp_bundle_status_report_t *status_report;
-};
-typedef struct al_bp_bundle_payload_t al_bp_bundle_payload_t;
+} al_bp_bundle_payload_t;
 
 /**
  * AL BP API error codes
@@ -376,12 +364,10 @@ typedef enum al_bp_error_t
  ****************************************************************/
 
 
-struct al_bp_bundle_object_t {
+typedef struct al_bp_bundle_object_t {
 	al_bp_bundle_id_t * id;
 	al_bp_bundle_spec_t * spec;
 	al_bp_bundle_payload_t * payload;
-};
-typedef struct al_bp_bundle_object_t al_bp_bundle_object_t;
-
+} al_bp_bundle_object_t;
 
 #endif /* BP_TYPES_H_ */
