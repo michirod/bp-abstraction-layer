@@ -8,22 +8,24 @@ stages:
 variables:
     ION_VERSION: '3.6.2'
     DTN2_VERSION: '2.9.0'
+    OASYS_VERSION: '1.6.0'
 
 dtn2:
     stage: prepare
     script:
         - apt-get update && apt-get install -y tcl8.5-dev libdb5.3-dev
         - mkdir -p dtn2 && cd dtn2/
-        - wget 'https://iweb.dl.sourceforge.net/project/dtn/oasys/oasys-1.6.0/oasys-1.6.0.tgz'
-        - wget 'https://datapacket.dl.sourceforge.net/project/dtn/DTN2/dtn-2.9.0/dtn-2.9.0.tgz'
-        - tar xvaf 'oasys-1.6.0.tgz' 
-        - tar xvaf 'dtn-2.9.0.tgz'
-        - cd oasys-1.6.0
+        - wget 'https://iweb.dl.sourceforge.net/project/dtn/oasys/oasys-${OASYS_VERSION}/oasys-${OASYS_VERSION}.tgz'
+        - wget 'https://datapacket.dl.sourceforge.net/project/dtn/DTN2/dtn-${DTN2_VERSION}/dtn-${DTN2_VERSION}.tgz'
+        - tar xvaf 'oasys-${OASYS_VERSION}.tgz' 
+        - tar xvaf 'dtn-${DTN2_VERSION}.tgz'
+        - mv oasys-${OASYS_VERSION} dtn-${DTN_VERSION}/oasys
+        - cd dtn-${DTN2_VERSION}/oasys
         - sed -i -e 's/3.*|4.*)/3.*|4.*|5.*|6.*)/' configure
         - ./configure --with-extra-cflags=-std=c++03 && make && make install
-        - cd ../dtn-2.9.0
+        - cd ..
         - sed -i -e 's/3.*|4.*)/3.*|4.*|5.*|6.*)/' configure
-        - ./configure --disable-ecl --disable-edp --with-extra-cflags=-std=c++03 && make
+        - ./configure --disable-ecl --disable-edp --with-extra-cflags=-std=c++03 && make && make install
     artifacts:
         paths:
             - dtn2/dtn-${DTN2_VERSION}
