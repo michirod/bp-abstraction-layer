@@ -12,7 +12,7 @@ variables:
 dtn2:
     stage: prepare
     script:
-        - apt-get install -y tcl8.5-dev libdb5.3-dev
+        - apt-get update && apt-get install -y tcl8.5-dev libdb5.3-dev
         - mkdir -p dtn2 && cd dtn2/
         - wget 'https://iweb.dl.sourceforge.net/project/dtn/oasys/oasys-1.6.0/oasys-1.6.0.tgz'
         - wget 'https://datapacket.dl.sourceforge.net/project/dtn/DTN2/dtn-2.9.0/dtn-2.9.0.tgz'
