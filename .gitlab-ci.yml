@@ -5,8 +5,8 @@ stages:
     - build
 
 variables:
-    - ION_VERSION: 3.6.2
-    - DTN2_VERSION: 2.9.0
+    ION_VERSION: '3.6.2'
+    DTN2_VERSION: '2.9.0'
 
 #dtn2:
 #    stage: prepare
@@ -33,8 +33,8 @@ ion:
         - cd ion-${ION_VERSION}
         - ./configure && make
     artifacts:
-        - paths:
-            - ion/ion-${ION_VERSION}/
+        paths:
+          - ion/ion-${ION_VERSION}/
 
 al_bp:
     stage: build
