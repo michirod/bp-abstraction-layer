@@ -1,7 +1,12 @@
 image: gcc:6
 
 stages:
+    - prepare
     - build
+
+variables:
+    - ION_VERSION: 3.6.2
+    - DTN2_VERSION: 2.9.0
 
 #dtn2:
 #    stage: prepare
@@ -20,12 +25,19 @@ stages:
 #        - ./configure --disable-ecl --disable-edp --with-extra-cflags=-std=c++03 && make
 
 ion:
-    stage: build
+    stage: prepare
     script:
         - mkdir -p ion && cd ion/
-        - wget 'https://netcologne.dl.sourceforge.net/project/ion-dtn/ion-3.6.2.tar.gz'
-        - tar xvaf 'ion-3.6.2.tar.gz'
-        - cd ion-3.6.2
+        - wget "https://netcologne.dl.sourceforge.net/project/ion-dtn/ion-${ION_VERSION}.tar.gz"
+        - tar xvaf 'ion-${ION_VERSION}.tar.gz'
+        - cd ion-${ION_VERSION}
         - ./configure && make
+    artifacts:
+        - paths:
+            - ion/ion-${ION_VERSION}/
+
+al_bp:
+    stage: build
+    script:
         - cd ${CI_PROJECT_DIR}
-        - make ION_DIR=ion/ion-3.6.2
+        - make ION_DIR=ion/ion-${ION_VERSION}
