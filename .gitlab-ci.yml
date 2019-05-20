@@ -1,4 +1,5 @@
-image: gcc:6
+#image: gcc:6
+image: debian:stretch
 
 stages:
     - prepare
