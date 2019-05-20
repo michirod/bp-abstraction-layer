@@ -4,21 +4,21 @@ stages:
     - prepare
     - build
 
-dtn2:
-    stage: prepare
-    script:
-        - apt-get install -y tcl8.5-dev libdb5.3-dev
-        - mkdir -p dtn2 && cd dtn2/
-        - wget 'https://iweb.dl.sourceforge.net/project/dtn/oasys/oasys-1.6.0/oasys-1.6.0.tgz'
-        - wget 'https://datapacket.dl.sourceforge.net/project/dtn/DTN2/dtn-2.9.0/dtn-2.9.0.tgz'
-        - tar xvaf 'oasys-1.6.0.tgz' 
-        - tar xvaf 'dtn-2.9.0.tgz'
-        - cd oasys-1.6.0
-        - sed -i -e 's/3.*|4.*)/3.*|4.*|5.*|6.*)/' configure
-        - ./configure --with-extra-cflags=-std=c++03 && make && make install
-        - cd ../dtn-2.9.0
-        - sed -i -e 's/3.*|4.*)/3.*|4.*|5.*|6.*)/' configure
-        - ./configure --disable-ecl --disable-edp --with-extra-cflags=-std=c++03 && make
+#dtn2:
+#    stage: prepare
+#    script:
+#        - apt-get install -y tcl8.5-dev libdb5.3-dev
+#        - mkdir -p dtn2 && cd dtn2/
+#        - wget 'https://iweb.dl.sourceforge.net/project/dtn/oasys/oasys-1.6.0/oasys-1.6.0.tgz'
+#        - wget 'https://datapacket.dl.sourceforge.net/project/dtn/DTN2/dtn-2.9.0/dtn-2.9.0.tgz'
+#        - tar xvaf 'oasys-1.6.0.tgz' 
+#        - tar xvaf 'dtn-2.9.0.tgz'
+#        - cd oasys-1.6.0
+#        - sed -i -e 's/3.*|4.*)/3.*|4.*|5.*|6.*)/' configure
+#        - ./configure --with-extra-cflags=-std=c++03 && make && make install
+#        - cd ../dtn-2.9.0
+#        - sed -i -e 's/3.*|4.*)/3.*|4.*|5.*|6.*)/' configure
+#        - ./configure --disable-ecl --disable-edp --with-extra-cflags=-std=c++03 && make
 
 ion:
     stage: prepare
@@ -33,4 +33,4 @@ al_bp:
     stage: build
     script:
         - cd ${CI_PROJECT_DIR}
-        - make ION_DIR=ion/ion-3.6.2 DTN2_DIR=dtn2/dtn-2.9.0
+        - make ION_DIR=ion/ion-3.6.2
