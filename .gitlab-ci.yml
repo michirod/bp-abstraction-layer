@@ -29,7 +29,7 @@ ion:
     script:
         - mkdir -p ion && cd ion/
         - wget "https://netcologne.dl.sourceforge.net/project/ion-dtn/ion-${ION_VERSION}.tar.gz"
-        - tar xvaf 'ion-${ION_VERSION}.tar.gz'
+        - tar xvaf "ion-${ION_VERSION}.tar.gz"
         - cd ion-${ION_VERSION}
         - ./configure && make
     artifacts:
