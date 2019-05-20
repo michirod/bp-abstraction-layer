@@ -15,10 +15,10 @@ dtn2:
     script:
         - apt-get update && apt-get install -y tcl8.5-dev libdb5.3-dev
         - mkdir -p dtn2 && cd dtn2/
-        - wget 'https://iweb.dl.sourceforge.net/project/dtn/oasys/oasys-${OASYS_VERSION}/oasys-${OASYS_VERSION}.tgz'
-        - wget 'https://datapacket.dl.sourceforge.net/project/dtn/DTN2/dtn-${DTN2_VERSION}/dtn-${DTN2_VERSION}.tgz'
-        - tar xvaf 'oasys-${OASYS_VERSION}.tgz' 
-        - tar xvaf 'dtn-${DTN2_VERSION}.tgz'
+        - wget "https://iweb.dl.sourceforge.net/project/dtn/oasys/oasys-${OASYS_VERSION}/oasys-${OASYS_VERSION}.tgz"
+        - wget "https://datapacket.dl.sourceforge.net/project/dtn/DTN2/dtn-${DTN2_VERSION}/dtn-${DTN2_VERSION}.tgz"
+        - tar xvaf "oasys-${OASYS_VERSION}.tgz" 
+        - tar xvaf "dtn-${DTN2_VERSION}.tgz"
         - mv oasys-${OASYS_VERSION} dtn-${DTN_VERSION}/oasys
         - cd dtn-${DTN2_VERSION}/oasys
         - sed -i -e 's/3.*|4.*)/3.*|4.*|5.*|6.*)/' configure
