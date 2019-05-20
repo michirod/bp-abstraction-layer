@@ -27,6 +27,7 @@ variables:
 ion:
     stage: prepare
     script:
+        - wget ${CI_PROJECT_URL}/-/jobs/artifacts/${CI_COMMIT_REF_NAME}/download?job=${CI_JOB_NAME} && exit 0
         - mkdir -p ion && cd ion/
         - wget "https://netcologne.dl.sourceforge.net/project/ion-dtn/ion-${ION_VERSION}.tar.gz"
         - tar xvaf "ion-${ION_VERSION}.tar.gz"
