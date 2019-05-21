@@ -26,6 +26,7 @@ dtn2:
         - cd ..
         - sed -i -e 's/3.*|4.*)/3.*|4.*|5.*|6.*)/' configure
         - ./configure --disable-ecl --disable-edp --with-extra-cflags=-std=c++03 && make && make install
+        - [ -e oasys/oasys-config.h ]
     artifacts:
         paths:
             - dtn2/dtn-${DTN2_VERSION}
