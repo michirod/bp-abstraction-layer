@@ -32,7 +32,7 @@ ion:
         - mkdir ${pkg_name}
         - install -d ${pkg_name}/usr/local/lib
         - install -d ${pkg_name}/usr/local/include
-        - install libal_bp.* ${pkg_name}/usr/local/lib/
+        - install libal_bp* ${pkg_name}/usr/local/lib/
         - install src/*.h ${pkg_name}/usr/local/include/
     artifacts:
         name: ${pkg_name}
@@ -50,7 +50,7 @@ dtn2:
         - mkdir ${pkg_name}
         - install -d ${pkg_name}/usr/local/lib
         - install -d ${pkg_name}/usr/local/include
-        - install libal_bp.* ${pkg_name}/usr/local/lib/
+        - install libal_bp* ${pkg_name}/usr/local/lib/
         - install src/*.h ${pkg_name}/usr/local/include/
     artifacts:
         name: ${pkg_name}
@@ -68,7 +68,7 @@ ion-dtn2:
         - mkdir ${pkg_name}
         - install -d ${pkg_name}/usr/local/lib
         - install -d ${pkg_name}/usr/local/include
-        - install libal_bp.* ${pkg_name}/usr/local/lib/
+        - install libal_bp* ${pkg_name}/usr/local/lib/
         - install src/*.h ${pkg_name}/usr/local/include/
     artifacts:
         name: ${pkg_name}
