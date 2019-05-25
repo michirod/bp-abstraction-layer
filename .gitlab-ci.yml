@@ -2,48 +2,21 @@ image: gcc:6
 #image: debian:stretch
 
 stages:
-    - prepare
     - build
 
 variables:
     ION_VERSION: '3.6.2'
     DTN2_VERSION: '2.9.0'
     OASYS_VERSION: '1.6.0'
-
-dtn2:
-    stage: prepare
-    script:
-        - apt-get update && apt-get install -y tcl8.5-dev libdb5.3-dev
-        - mkdir -p dtn2 && cd dtn2/
-        - wget "https://iweb.dl.sourceforge.net/project/dtn/oasys/oasys-${OASYS_VERSION}/oasys-${OASYS_VERSION}.tgz"
-        - wget "https://datapacket.dl.sourceforge.net/project/dtn/DTN2/dtn-${DTN2_VERSION}/dtn-${DTN2_VERSION}.tgz"
-        - tar xvaf "oasys-${OASYS_VERSION}.tgz" 
-        - tar xvaf "dtn-${DTN2_VERSION}.tgz"
-        - mv oasys-${OASYS_VERSION} dtn-${DTN2_VERSION}/oasys
-        - cd dtn-${DTN2_VERSION}/oasys
-        - sed -i -e 's/3.*|4.*)/3.*|4.*|5.*|6.*)/' configure
-        - ./configure --with-extra-cflags=-std=c++03 && make && make install
-        - cd ..
-        - sed -i -e 's/3.*|4.*)/3.*|4.*|5.*|6.*)/' configure
-        - ./configure --disable-ecl --disable-edp --with-extra-cflags=-std=c++03 && make && make install
-        - test -e oasys/oasys-config.h
-    artifacts:
-        paths:
-            - dtn2/dtn-${DTN2_VERSION}
-
-ion:
-    stage: prepare
-    script:
-        - mkdir -p ion && cd ion/
-        - wget "https://netcologne.dl.sourceforge.net/project/ion-dtn/ion-${ION_VERSION}.tar.gz"
-        - tar xvaf "ion-${ION_VERSION}.tar.gz"
-        - cd ion-${ION_VERSION}
-        - ./configure && make
-    artifacts:
-        paths:
-            - ion/ion-${ION_VERSION}/
+    ion-build-url: 'https://gitlab.com/michirod/ion-build'
+    dtn2-build-url: 'https://gitlab.com/michirod/dtn2-build'
 
 al_bp:
     stage: build
     script:
+        - wget ${ion_build_url}/-/jobs/artifacts/${ION_VERSION}/download?job=build -O ion-${ION_VERSION}.zip
+        - wget ${dtn2_build_url}/-/jobs/artifacts/${DTN2_VERSION}/download?job=build -O dtn2-${DTN2_VERSION}.zip
+        - unzip ion-${ION_VERSION}.zip
+        - unzip dtn2-${DTN2_VERSION}.zip
+        - cp -rv package-*/* /
         - make ION_DIR=ion/ion-${ION_VERSION} DTN2_DIR=dtn2/dtn-${DTN2_VERSION}
