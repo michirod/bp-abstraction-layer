@@ -8,8 +8,8 @@ variables:
     ION_VERSION: '3.6.2'
     DTN2_VERSION: '2.9.0'
     OASYS_VERSION: '1.6.0'
-    ion-build-url: 'https://gitlab.com/michirod/ion-build'
-    dtn2-build-url: 'https://gitlab.com/michirod/dtn2-build'
+    ion_build_url: 'https://gitlab.com/michirod/ion-build'
+    dtn2_build_url: 'https://gitlab.com/michirod/dtn2-build'
 
 al_bp:
     stage: build
