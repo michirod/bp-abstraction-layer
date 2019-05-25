@@ -14,10 +14,10 @@ variables:
 al_bp:
     stage: build
     script:
-        - wget -O ion-${ION_VERSION}.zip ${ion_build_url}/-/jobs/artifacts/${ION_VERSION}/download?job=build
-        - wget -O dtn2-${DTN2_VERSION}.zip ${dtn2_build_url}/-/jobs/artifacts/${DTN2_VERSION}/download?job=build
-          #- curl -o ion-${ION_VERSION}.zip ${ion_build_url}/-/jobs/artifacts/${ION_VERSION}/download?job=build
-          #- curl -o dtn2-${DTN2_VERSION}.zip ${dtn2_build_url}/-/jobs/artifacts/${DTN2_VERSION}/download?job=build
+        #- wget -O ion-${ION_VERSION}.zip ${ion_build_url}/-/jobs/artifacts/${ION_VERSION}/download?job=build
+        #- wget -O dtn2-${DTN2_VERSION}.zip ${dtn2_build_url}/-/jobs/artifacts/${DTN2_VERSION}/download?job=build
+        - curl --location -o ion-${ION_VERSION}.zip ${ion_build_url}/-/jobs/artifacts/${ION_VERSION}/download?job=build
+        - curl --location -o dtn2-${DTN2_VERSION}.zip ${dtn2_build_url}/-/jobs/artifacts/${DTN2_VERSION}/download?job=build
         - unzip ion-${ION_VERSION}.zip
         - unzip dtn2-${DTN2_VERSION}.zip
         - cp -rv package-*/* /
