@@ -21,9 +21,29 @@ before_script:
     # install the build artifacts
     - cp -rv package-*/* /
 
+all:
+    stage: build
+    variables:
+        pkg_name: package-${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}
+    script:
+        - make ION_DIR=foo
+        - make DTN2_DIR=bar
+        - make ION_DIR=foo DTN2_DIR=bar
+        #create the installation package
+        - mkdir ${pkg_name}
+        - install -d ${pkg_name}/usr/local/lib
+        - install -d ${pkg_name}/usr/local/include
+        - install libal_bp* ${pkg_name}/usr/local/lib/
+        - install src/*.h ${pkg_name}/usr/local/include/
+    artifacts:
+        name: ${pkg_name}
+        paths:
+            - ${pkg_name}
+
+
 # Test compilation for ION only
 ion:
-    stage: build
+    stage: pre-build
     variables:
         pkg_name: package-${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_JOB_NAME}
     script:
@@ -41,7 +61,7 @@ ion:
 
 # Test compilation for DTN2 only
 dtn2:
-    stage: build
+    stage: pre-build
     variables:
         pkg_name: package-${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_JOB_NAME}
     script:
@@ -59,7 +79,7 @@ dtn2:
 
 # Test compilation for ION and DTN2
 ion-dtn2:
-    stage: build
+    stage: pre-build
     variables:
         pkg_name: package-${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_JOB_NAME}
     script:
