@@ -43,7 +43,7 @@ all:
 
 # Test compilation for ION only
 ion:
-    stage: pre-build
+    stage: build
     variables:
         pkg_name: package-${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_JOB_NAME}
     script:
@@ -61,7 +61,7 @@ ion:
 
 # Test compilation for DTN2 only
 dtn2:
-    stage: pre-build
+    stage: build
     variables:
         pkg_name: package-${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_JOB_NAME}
     script:
@@ -79,7 +79,7 @@ dtn2:
 
 # Test compilation for ION and DTN2
 ion-dtn2:
-    stage: pre-build
+    stage: build
     variables:
         pkg_name: package-${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_JOB_NAME}
     script:
